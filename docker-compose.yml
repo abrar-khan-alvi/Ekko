@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=ekkoloop_db
+      - POSTGRES_USER=ekko_user
+      - POSTGRES_PASSWORD=ekko_pass
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DB_NAME=ekkoloop_db
+      - DB_USER=ekko_user
+      - DB_PASS=ekko_pass
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SECRET_KEY=django-insecure-j+w4&xaih#ky=uf0gc(zflr#0=uk9rf5!uue3rg1t-7yu#ng%2
+      - EMAIL_HOST_USER=abrar1khan2@gmail.com
+      - EMAIL_HOST_PASSWORD=fevfszrpsfnzrack
+      - DEFAULT_FROM_EMAIL=abrar1khan2@gmail.com
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

@@ -1,0 +1,5 @@
+{
+  "name": "Ekko Loop Auth",
+  "description": "Authentication flow for Ekko Loop including login, signup, and password recovery screens.",
+  "requestFramePermissions": []
+}

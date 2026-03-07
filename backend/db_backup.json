@@ -1,0 +1,331 @@
+[
+{
+    "model": "sessions.session",
+    "pk": "ydl7arwuets6xwblkoo41x8jzyv0vwsg",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERGsXpdwwUH1x3ku5Ub03GVtdlDnJX5EG7nFri5_Vw_w4K9fKtEQgZ0BKas2Vnh2ysw5ytSQkU4Gh1iJojhKQggzasgIPGAUelwZF4fwDxRjdS:1vyndi:St6BBM88AGT-bsYHapgv9nS2BtCfBFAJdR-OVC8FeBQ",
+        "expire_date": "2026-03-21T09:08:02.058Z"
+    }
+},
+{
+    "model": "authentication.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$PKF4261vBsfpFX6uwoOEFI$ERZXAapCZlVjST6ntWb2q3DXLqZe/MNxYj2HASSWhMI=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "test@example.com",
+        "full_name": "",
+        "address": "",
+        "phone_number": "",
+        "is_active": true,
+        "is_verified": false,
+        "is_paid": false,
+        "is_staff": false,
+        "date_joined": "2026-03-07T03:14:28.541Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authentication.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$4iXv4BpSmud6yEtMmOF4Rk$HOtjCpjDieSlSBdfZ6CCLMsvVDK673jb6mNrkUTT7Dg=",
+        "last_login": "2026-03-07T09:08:02.048Z",
+        "is_superuser": true,
+        "email": "admin@example.com",
+        "full_name": "Admin",
+        "address": "Admin",
+        "phone_number": "01816249770",
+        "is_active": true,
+        "is_verified": true,
+        "is_paid": false,
+        "is_staff": true,
+        "date_joined": "2026-03-07T06:26:20.985Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authentication.user",
+    "fields": {
+        "password": "pbkdf2_sha256$600000$fRyeUmX23B791TKEyuXVuV$86WRN77h3CoLLrD//HjvvBcCWS6hj/GU58r1pVKYCbM=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "abrar1khan2@gmail.com",
+        "full_name": "Abrar Khan Alvi",
+        "address": "rupali r/a,chandgaon",
+        "phone_number": "+8801816249770",
+        "is_active": true,
+        "is_verified": true,
+        "is_paid": false,
+        "is_staff": false,
+        "date_joined": "2026-03-07T07:45:01.203Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authentication.businessprofile",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "test@example.com"
+        ],
+        "name": "",
+        "email": "",
+        "business_name": "Test Business",
+        "business_hours": "9-5",
+        "services_offered": "Test Services",
+        "booking_policies": "Test Policies"
+    }
+},
+{
+    "model": "authentication.businessprofile",
+    "pk": 44,
+    "fields": {
+        "user": [
+            "abrar1khan2@gmail.com"
+        ],
+        "name": "Abrar Khan Alvi",
+        "email": "abrar1khan2@gmail.com",
+        "business_name": "ekko",
+        "business_hours": "ekkoekko",
+        "services_offered": "ekkoekko",
+        "booking_policies": "ekkoekkoekko"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2026-03-07T06:28:28.761Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "2",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2026-03-07T06:35:22.131Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "36",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2026-03-07T06:38:26.665Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "37",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2026-03-07T06:41:27.413Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "businessprofile"
+        ],
+        "object_id": "37",
+        "object_repr": "ekko",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2026-03-07T06:43:04.687Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "38",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2026-03-07T07:23:08.171Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "39",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2026-03-07T07:25:47.019Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "40",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2026-03-07T07:27:33.388Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "41",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2026-03-07T07:31:37.329Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "42",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2026-03-07T07:32:32.831Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "43",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2026-03-07T07:44:19.085Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "44",
+        "object_repr": "abrar1khan2@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2026-03-07T07:58:17.783Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "35",
+        "object_repr": "admin@example.com",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Is verified\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2026-03-07T07:58:47.919Z",
+        "user": [
+            "admin@example.com"
+        ],
+        "content_type": [
+            "authentication",
+            "user"
+        ],
+        "object_id": "35",
+        "object_repr": "admin@example.com",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Full name\", \"Address\", \"Phone number\"]}}]"
+    }
+}
+]

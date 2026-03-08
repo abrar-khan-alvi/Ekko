@@ -53,10 +53,12 @@ export default function Settings() {
     setProfileLoading(true);
 
     try {
+      // Exclude business_name — it cannot be changed after registration
+      const { business_name: _excluded, ...updatableFields } = businessData;
       const data = await apiFetch('/user/', {
         method: 'PATCH',
         body: JSON.stringify({
-          business_profile: businessData
+          business_profile: updatableFields
         })
       });
       setUser(data);
@@ -293,14 +295,20 @@ export default function Settings() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Trading Name</label>
+                        <div className="flex items-center gap-2 mb-1">
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Public Trading Name</label>
+                          <span className="flex items-center gap-1 text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            <Lock size={9} /> Locked
+                          </span>
+                        </div>
                         <input
                           type="text"
                           name="business_name"
                           value={businessData.business_name}
-                          onChange={handleBusinessInputChange}
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all"
+                          readOnly
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-500 font-medium cursor-not-allowed select-none"
                         />
+                        <p className="text-[11px] text-gray-400">Business name is locked after registration. Contact support to request a change.</p>
                       </div>
 
                       <div className="space-y-2">

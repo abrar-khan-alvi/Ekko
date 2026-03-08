@@ -2,6 +2,11 @@ from rest_framework import serializers, exceptions
 from .models import User, BusinessProfile
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
+    business_name = serializers.CharField(required=False, allow_blank=True)
+    business_hours = serializers.CharField(required=False, allow_blank=True)
+    services_offered = serializers.CharField(required=False, allow_blank=True)
+    booking_policies = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = BusinessProfile
         fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies']
@@ -67,22 +72,30 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('business_profile', None)
         has_business_change = False
-        
-        if profile_data:
-            profile = instance.business_profile
+
+        if profile_data is not None:
+            try:
+                profile = instance.business_profile
+            except BusinessProfile.DoesNotExist:
+                profile = BusinessProfile.objects.create(user=instance, business_name='', business_hours='', services_offered='', booking_policies='')
+
+            changed_fields = []
             for attr, value in profile_data.items():
                 if getattr(profile, attr) != value:
                     setattr(profile, attr, value)
+                    changed_fields.append(attr)
                     has_business_change = True
-            profile.save()
-        
+
+            if changed_fields:
+                profile.save(update_fields=changed_fields)
+
         # Other fields are read_only, so they won't be in validated_data unless forced
         user = super().update(instance, validated_data)
-        
+
         # Trigger webhook if business profile changed
         if has_business_change:
             self._trigger_update_webhook(user)
-            
+
         return user
 
     def _trigger_update_webhook(self, user):

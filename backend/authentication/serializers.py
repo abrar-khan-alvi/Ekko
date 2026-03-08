@@ -79,8 +79,8 @@ class UserSerializer(serializers.ModelSerializer):
         # Other fields are read_only, so they won't be in validated_data unless forced
         user = super().update(instance, validated_data)
         
-        # Trigger webhook if business profile changed and user is paid
-        if has_business_change and user.is_paid:
+        # Trigger webhook if business profile changed
+        if has_business_change:
             self._trigger_update_webhook(user)
             
         return user
@@ -94,16 +94,16 @@ class UserSerializer(serializers.ModelSerializer):
             try:
                 business = user.business_profile
                 payload = {
+                    "email": user.email,
                     "businessName": business.business_name if business else getattr(user, 'full_name', ''),
                     "businessHours": business.business_hours if business else '',
                     "services": business.services_offered if business else '',
-                    "bookingPolicies": business.booking_policies if business else '',
-                    "isActive": user.is_active
+                    "bookingPolicies": business.booking_policies if business else ''
                 }
                 
                 headers = {
                     "Content-Type": "application/json",
-                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', 'make-up-a-strong-secret-key-here')
+                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', '')
                 }
                 
                 # Using the update endpoint provided by the user
@@ -168,18 +168,19 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
                         "isActive": user.is_active
                     }
                 
-                # Fetch headers from settings (or securely hardcoded for now based on prompt)
                 headers = {
                     "Content-Type": "application/json",
-                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', 'make-up-a-strong-secret-key-here')
+                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', '')
                 }
                 
                 webhook_url = getattr(settings, f'N8N_{endpoint.upper().replace("-", "_")}_WEBHOOK_URL', f'https://ekkoflow.app.n8n.cloud/webhook/{endpoint}')
                 
-                requests.post(webhook_url, json=payload, headers=headers, timeout=5)
+                print(f"[n8n] Firing '{endpoint}' webhook → {webhook_url}")
+                print(f"[n8n] Payload: {payload}")
+                response = requests.post(webhook_url, json=payload, headers=headers, timeout=5)
+                print(f"[n8n] Response: {response.status_code} — {response.text[:300]}")
             except Exception as e:
-                # Log error but don't crash the admin request
-                print(f"Failed to trigger n8n {endpoint} webhook: {e}")
+                print(f"[n8n] FAILED to trigger '{endpoint}' webhook: {e}")
 
         # Run in background to avoid blocking the API response
         threading.Thread(target=send_webhook).start()

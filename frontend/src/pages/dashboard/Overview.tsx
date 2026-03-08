@@ -1,5 +1,6 @@
-import { Calendar, MessageSquare, AlertTriangle, TrendingUp } from 'lucide-react';
+import { Calendar, MessageSquare, AlertTriangle, TrendingUp, CheckCircle2, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useOutletContext } from 'react-router-dom';
 
 const data = [
   { name: 'Mon', bookings: 24 },
@@ -27,11 +28,27 @@ const StatCard = ({ title, value, subtext, icon: Icon, iconColor, bgColor }: any
 );
 
 export default function Overview() {
+  const { user } = useOutletContext<{ user: any }>();
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-500 mt-1">overview of bookings, conversations and business performance.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+          <p className="text-gray-500 mt-1">overview of bookings, conversations and business performance.</p>
+        </div>
+
+        {user?.is_paid && (
+          <div className="flex items-center gap-3 bg-[#4355FF]/10 border border-[#4355FF]/20 px-4 py-3 rounded-2xl">
+            <div className="w-10 h-10 bg-[#4355FF] text-white rounded-xl flex items-center justify-center shadow-lg shadow-[#4355FF]/20 animate-pulse">
+              <Zap size={20} fill="currentColor" />
+            </div>
+            <div>
+              <p className="text-[#4355FF] font-bold text-sm">Account Verified & Paid</p>
+              <p className="text-[#4355FF]/70 text-xs font-medium">You can now start using all automation flows.</p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -48,10 +48,10 @@ export default function Customers() {
   const toggleCustomerStatus = async (customerId: number, currentStatus: string) => {
     // If pending, they need to verify email first ideally, but admin can force activate
     const willBeActive = currentStatus !== 'Active';
-    const confirmMessage = willBeActive 
+    const confirmMessage = willBeActive
       ? `Are you sure you want to ACTIVATE this business account?`
       : `Are you sure you want to SUSPEND this business account? They will no longer be able to log in.`;
-      
+
     if (!window.confirm(confirmMessage)) return;
 
     setUpdatingId(customerId);
@@ -160,26 +160,6 @@ export default function Customers() {
                             >
                               <Eye size={18} />
                             </button>
-                            
-                            {updatingId === customer.id ? (
-                               <Loader2 className="w-5 h-5 animate-spin text-gray-400 mx-2" />
-                            ) : status === 'Active' ? (
-                              <button
-                                onClick={() => toggleCustomerStatus(customer.id, status)}
-                                className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
-                                title="Suspend Account"
-                              >
-                                <Ban size={18} />
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => toggleCustomerStatus(customer.id, status)}
-                                className="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors border border-transparent hover:border-green-100"
-                                title="Activate Account"
-                              >
-                                <CheckCircle size={18} />
-                              </button>
-                            )}
                           </div>
                         </td>
                       </tr>

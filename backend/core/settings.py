@@ -177,3 +177,8 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'abrar1khan2@gmail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'nitvtcrypcxirrpo')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# n8n Webhook Settings
+N8N_WEBHOOK_SECRET = os.environ.get('N8N_WEBHOOK_SECRET', '')
+N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/activate-business')
+N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/deactivate-business')
+N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/update-business')

@@ -21,6 +21,7 @@ interface UserProfile {
   full_name: string;
   email: string;
   is_superuser: boolean;
+  is_paid: boolean;
 }
 
 export default function DashboardLayout() {
@@ -174,10 +175,15 @@ export default function DashboardLayout() {
 
           <div className="flex items-center gap-3 ml-auto cursor-pointer hover:bg-white/50 p-1.5 rounded-full transition-colors">
             <div className="text-right hidden sm:block mr-1">
-              <p className="text-[13px] font-bold text-gray-900 leading-tight">
-                {user?.full_name || 'Loading...'}
-              </p>
-              <p className="text-[11px] text-[#6B7280] font-medium uppercase">
+              <div className="flex items-center justify-end gap-2 leading-tight">
+                {user?.is_paid && (
+                  <span className="bg-[#4355FF] text-[9px] text-white px-1.5 py-0.5 rounded-md font-black tracking-tighter uppercase">PRO</span>
+                )}
+                <p className="text-[13px] font-bold text-gray-900">
+                  {user?.full_name || 'Loading...'}
+                </p>
+              </div>
+              <p className="text-[11px] text-[#6B7280] font-medium uppercase text-right">
                 {user?.is_superuser ? 'Super Admin' : 'Member'}
               </p>
             </div>
@@ -190,7 +196,7 @@ export default function DashboardLayout() {
         {/* Page Content */}
         <div className="flex-1 p-6 lg:p-10 pt-2 lg:pt-4 overflow-x-hidden overflow-y-auto custom-scrollbar">
           <div className="max-w-[1400px] mx-auto w-full h-full">
-            <Outlet />
+            <Outlet context={{ user }} />
           </div>
         </div>
       </main>

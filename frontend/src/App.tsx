@@ -21,9 +21,12 @@ import Notifications from './pages/dashboard/Notifications';
 import Settings from './pages/dashboard/Settings';
 import CustomerDetails from './pages/dashboard/CustomerDetails';
 
+import { Toaster } from 'react-hot-toast';
+
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" />
       <Routes>
         {/* Auth Routes */}
         <Route path="/" element={<Login />} />

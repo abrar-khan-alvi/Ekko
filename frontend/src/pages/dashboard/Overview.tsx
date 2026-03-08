@@ -51,7 +51,7 @@ export default function Overview() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <StatCard
           title="Total Appointments"
           value="1,283"
@@ -75,14 +75,6 @@ export default function Overview() {
           icon={AlertTriangle}
           iconColor="text-red-600"
           bgColor="bg-red-50"
-        />
-        <StatCard
-          title="Monthly Revenue"
-          value="1,283"
-          subtext="Estimated earnings"
-          icon={TrendingUp}
-          iconColor="text-green-600"
-          bgColor="bg-green-50"
         />
       </div>
 

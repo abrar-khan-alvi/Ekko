@@ -18,7 +18,6 @@ import Appointments from './pages/dashboard/Appointments';
 import Analytics from './pages/dashboard/Analytics';
 import UserRoles from './pages/dashboard/UserRoles';
 import Notifications from './pages/dashboard/Notifications';
-import Billing from './pages/dashboard/Billing';
 import Settings from './pages/dashboard/Settings';
 import CustomerDetails from './pages/dashboard/CustomerDetails';
 
@@ -44,7 +43,6 @@ export default function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="users" element={<UserRoles />} />
           <Route path="notifications" element={<Notifications />} />
-          <Route path="billing" element={<Billing />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 

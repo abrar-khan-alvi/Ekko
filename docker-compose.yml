@@ -27,9 +27,9 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - SECRET_KEY=django-insecure-j+w4&xaih#ky=uf0gc(zflr#0=uk9rf5!uue3rg1t-7yu#ng%2
-      - EMAIL_HOST_USER=abrar1khan2@gmail.com
-      - EMAIL_HOST_PASSWORD=fevfszrpsfnzrack
-      - DEFAULT_FROM_EMAIL=abrar1khan2@gmail.com
+      - EMAIL_HOST_USER=systems@ekkoltd.co.uk
+      - EMAIL_HOST_PASSWORD=nitvtcrypcxirrpo
+      - DEFAULT_FROM_EMAIL=systems@ekkoltd.co.uk
     depends_on:
       - db
 

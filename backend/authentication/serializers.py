@@ -61,24 +61,128 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'full_name', 'address', 'phone_number', 'is_superuser', 'business_profile', 'is_verified', 'is_active', 'is_paid', 'date_joined']
-        read_only_fields = ['email', 'full_name', 'address', 'phone_number', 'is_superuser', 'is_verified', 'is_active', 'date_joined']
+        fields = ['id', 'email', 'full_name', 'address', 'phone_number', 'is_superuser', 'is_staff', 'last_login', 'business_profile', 'is_verified', 'is_active', 'is_paid', 'date_joined']
+        read_only_fields = ['email', 'full_name', 'address', 'phone_number', 'is_superuser', 'is_staff', 'last_login', 'is_verified', 'is_active', 'date_joined']
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('business_profile', None)
+        has_business_change = False
+        
         if profile_data:
             profile = instance.business_profile
             for attr, value in profile_data.items():
-                setattr(profile, attr, value)
+                if getattr(profile, attr) != value:
+                    setattr(profile, attr, value)
+                    has_business_change = True
             profile.save()
         
         # Other fields are read_only, so they won't be in validated_data unless forced
-        return super().update(instance, validated_data)
+        user = super().update(instance, validated_data)
+        
+        # Trigger webhook if business profile changed and user is paid
+        if has_business_change and user.is_paid:
+            self._trigger_update_webhook(user)
+            
+        return user
+
+    def _trigger_update_webhook(self, user):
+        import requests
+        import threading
+        from django.conf import settings
+
+        def send_webhook():
+            try:
+                business = user.business_profile
+                payload = {
+                    "businessName": business.business_name if business else getattr(user, 'full_name', ''),
+                    "businessHours": business.business_hours if business else '',
+                    "services": business.services_offered if business else '',
+                    "bookingPolicies": business.booking_policies if business else '',
+                    "isActive": user.is_active
+                }
+                
+                headers = {
+                    "Content-Type": "application/json",
+                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', 'make-up-a-strong-secret-key-here')
+                }
+                
+                # Using the update endpoint provided by the user
+                webhook_url = getattr(settings, 'N8N_UPDATE_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/update-business')
+                
+                requests.post(webhook_url, json=payload, headers=headers, timeout=5)
+            except Exception as e:
+                print(f"Failed to trigger n8n update webhook: {e}")
+
+        threading.Thread(target=send_webhook).start()
 
 class AdminUserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['is_paid', 'is_active']
+        fields = ['is_paid', 'is_active', 'is_staff', 'is_superuser']
+
+    def update(self, instance, validated_data):
+        # Check if is_paid is being toggled
+        was_paid = instance.is_paid
+        becomes_paid = validated_data.get('is_paid', was_paid)
+        
+        was_active = instance.is_active
+        becomes_active = validated_data.get('is_active', was_active)
+        
+        # Call super to actually update the user
+        user = super().update(instance, validated_data)
+
+        # Trigger webhook if newly paid
+        if not was_paid and becomes_paid:
+            self._trigger_n8n_webhook(user, endpoint='activate-business')
+        
+        # Trigger webhook if unpaid
+        elif was_paid and not becomes_paid:
+            self._trigger_n8n_webhook(user, endpoint='deactivate-business')
+            
+        # Trigger update if status changes while paid
+        elif was_paid and becomes_paid and (was_active != becomes_active):
+            self._trigger_n8n_webhook(user, endpoint='update-business')
+            
+        return user
+
+    def _trigger_n8n_webhook(self, user, endpoint):
+        import requests
+        import threading
+        from django.conf import settings
+
+        def send_webhook():
+            try:
+                business = user.business_profile
+                business_name = business.business_name if business else getattr(user, 'full_name', '')
+                
+                if endpoint == 'deactivate-business':
+                    payload = {
+                        "businessName": business_name
+                    }
+                else:
+                    payload = {
+                        "businessName": business_name,
+                        "businessHours": business.business_hours if business else '',
+                        "services": business.services_offered if business else '',
+                        "bookingPolicies": business.booking_policies if business else '',
+                        "isActive": user.is_active
+                    }
+                
+                # Fetch headers from settings (or securely hardcoded for now based on prompt)
+                headers = {
+                    "Content-Type": "application/json",
+                    "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', 'make-up-a-strong-secret-key-here')
+                }
+                
+                webhook_url = getattr(settings, f'N8N_{endpoint.upper().replace("-", "_")}_WEBHOOK_URL', f'https://ekkoflow.app.n8n.cloud/webhook/{endpoint}')
+                
+                requests.post(webhook_url, json=payload, headers=headers, timeout=5)
+            except Exception as e:
+                # Log error but don't crash the admin request
+                print(f"Failed to trigger n8n {endpoint} webhook: {e}")
+
+        # Run in background to avoid blocking the API response
+        threading.Thread(target=send_webhook).start()
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)

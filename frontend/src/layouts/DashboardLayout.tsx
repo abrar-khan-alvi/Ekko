@@ -6,7 +6,6 @@ import {
   BarChart2,
   UserCog,
   Bell,
-  CreditCard,
   Settings,
   LogOut,
   Menu,
@@ -74,7 +73,6 @@ export default function DashboardLayout() {
       items: [
         { icon: UserCog, label: "User & Roles", path: "/dashboard/users", adminOnly: true },
         { icon: Bell, label: "Notifications", path: "/dashboard/notifications", adminOnly: false },
-        { icon: CreditCard, label: "Billing", path: "/dashboard/billing", adminOnly: false },
         { icon: Settings, label: "Settings", path: "/dashboard/settings", adminOnly: false },
       ]
     }

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="white" rx="10"/>
+  <text
+    x="32"
+    y="38"
+    text-anchor="middle"
+    font-family="'Arial Black', 'Helvetica Neue', sans-serif"
+    font-weight="900"
+    font-size="34"
+    fill="#4355FF"
+    letter-spacing="-1"
+  >EKKO</text>
+  <text
+    x="32"
+    y="52"
+    text-anchor="middle"
+    font-family="'Arial', 'Helvetica Neue', sans-serif"
+    font-weight="600"
+    font-size="10"
+    fill="#4355FF"
+    letter-spacing="3"
+  >LOOP</text>
+</svg>

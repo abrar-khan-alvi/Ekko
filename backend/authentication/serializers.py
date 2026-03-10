@@ -1,5 +1,15 @@
 from rest_framework import serializers, exceptions
+import re
 from .models import User, BusinessProfile
+
+# Matches: Mon-Fri 09:00-17:00 | Monday-Friday 09:00-17:00 etc.
+_HOURS_RE = re.compile(
+    r'^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)'
+    r'[\s\-]+'
+    r'(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)'
+    r'\s+\d{2}:\d{2}-\d{2}:\d{2}$',
+    re.IGNORECASE
+)
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
     business_name = serializers.CharField(required=False, allow_blank=True)
@@ -10,6 +20,39 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessProfile
         fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies']
+
+    def validate_business_name(self, value):
+        if value and len(value.strip()) > 100:
+            raise serializers.ValidationError("Business name must be 100 characters or fewer.")
+        if value and value.strip().isdigit():
+            raise serializers.ValidationError("Business name cannot be purely numeric.")
+        return value
+
+    def validate_business_hours(self, value):
+        if value and not _HOURS_RE.match(value.strip()):
+            raise serializers.ValidationError(
+                "Use format: Mon-Fri 09:00-17:00 or Sun-Sat 10:00-18:00"
+            )
+        return value
+
+    def validate_services_offered(self, value):
+        if value:
+            services = [s.strip() for s in value.split(',') if s.strip()]
+            if not services:
+                raise serializers.ValidationError("At least one service must be listed.")
+            if any(len(s) < 2 for s in services):
+                raise serializers.ValidationError(
+                    "Each service must be at least 2 characters, separated by commas."
+                )
+        return value
+
+    def validate_booking_policies(self, value):
+        if value and len(value.strip()) < 5:
+            raise serializers.ValidationError(
+                "Booking policy description must be at least 5 characters (e.g. Monday to Saturday)."
+            )
+        return value
+
 
 class UserSignupSerializer(serializers.ModelSerializer):
     business_profile = BusinessProfileSerializer()
@@ -134,28 +177,33 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
         fields = ['is_paid', 'is_active', 'is_staff', 'is_superuser']
 
     def update(self, instance, validated_data):
-        # Check if is_paid is being toggled
+        from .utils import send_subscription_activated_email, send_subscription_deactivated_email
+
+        # Capture state before saving
         was_paid = instance.is_paid
         becomes_paid = validated_data.get('is_paid', was_paid)
-        
+
         was_active = instance.is_active
         becomes_active = validated_data.get('is_active', was_active)
-        
+
         # Call super to actually update the user
         user = super().update(instance, validated_data)
 
-        # Trigger webhook if newly paid
+        # ── Subscription status changed → fire webhook + email ──
         if not was_paid and becomes_paid:
+            # Newly activated
             self._trigger_n8n_webhook(user, endpoint='activate-business')
-        
-        # Trigger webhook if unpaid
+            send_subscription_activated_email(user)
+
         elif was_paid and not becomes_paid:
+            # Deactivated
             self._trigger_n8n_webhook(user, endpoint='deactivate-business')
-            
-        # Trigger update if status changes while paid
+            send_subscription_deactivated_email(user)
+
         elif was_paid and becomes_paid and (was_active != becomes_active):
+            # Still paid but active flag changed
             self._trigger_n8n_webhook(user, endpoint='update-business')
-            
+
         return user
 
     def _trigger_n8n_webhook(self, user, endpoint):

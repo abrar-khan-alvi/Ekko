@@ -1,9 +1,11 @@
 import random
 import string
 import logging
+import threading
 from django.utils import timezone
 from datetime import timedelta
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.cache import cache
 from .models import OTP
@@ -58,3 +60,47 @@ def send_otp_email(email, code, purpose):
     except Exception as e:
         print(f"Error sending email: {str(e)}")
         logger.error(f"Failed to send {purpose} OTP to {email}: {str(e)}")
+
+
+# ─── Subscription notification emails ─────────────────────────────────────────
+
+def _send_subscription_email(email, name, subject, html_body):
+    """Internal helper — sends an HTML email in a background thread."""
+    def _send():
+        try:
+            msg = EmailMultiAlternatives(
+                subject=subject,
+                body=html_body,  # fallback plain-text (browsers strip tags)
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[email],
+            )
+            msg.attach_alternative(html_body, "text/html")
+            msg.send(fail_silently=False)
+            logger.info(f"[email] Subscription email '{subject}' sent to {email}")
+        except Exception as e:
+            logger.error(f"[email] Failed to send subscription email to {email}: {e}")
+
+    threading.Thread(target=_send).start()
+
+
+def send_subscription_activated_email(user):
+    """Notify a user that their subscription has been activated."""
+    name = user.full_name or user.email
+    subject = "🎉 Your Ekko Loop Subscription is Active!"
+    html = render_to_string('authentication/email_subscription_activated.html', {
+        'name': name,
+        'subject': subject,
+    })
+    _send_subscription_email(user.email, name, subject, html)
+
+
+def send_subscription_deactivated_email(user):
+    """Notify a user that their subscription has been deactivated."""
+    name = user.full_name or user.email
+    subject = "Your Ekko Loop Subscription Has Ended"
+    html = render_to_string('authentication/email_subscription_deactivated.html', {
+        'name': name,
+        'subject': subject,
+    })
+    _send_subscription_email(user.email, name, subject, html)
+

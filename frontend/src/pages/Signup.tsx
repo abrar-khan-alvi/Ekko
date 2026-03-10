@@ -9,25 +9,128 @@ import signupBg from '../assets/signup.png';
 
 import { apiFetch } from '../utils/api';
 
+// ─── Validation helpers ────────────────────────────────────────────────────────
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NAME_RE  = /^[a-zA-Z\s'\-\.]{2,100}$/;
+const PHONE_RE = /^[\d\s\+\(\)\-]{7,20}$/;
+
+// Accepts: Mon-Fri 09:00-17:00 | Monday-Friday 09:00-17:00 | Sun-Fri 09:00-17:00 etc.
+const HOURS_RE =
+  /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[\s\-]+(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+\d{2}:\d{2}-\d{2}:\d{2}$/i;
+
+// Business name: letters, digits, spaces, & . , ' -
+const BIZ_NAME_RE = /^[\w\s&.,'\-]{2,100}$/;
+
+type FieldErrors = {
+  email?: string;
+  fullName?: string;
+  phoneNumber?: string;
+  address?: string;
+  password?: string;
+  confirmPassword?: string;
+  businessName?: string;
+  businessHours?: string;
+  servicesOffered?: string;
+  bookingPolicies?: string;
+};
+
+function validateStep1(formData: typeof initialFormData): FieldErrors {
+  const errs: FieldErrors = {};
+
+  if (!formData.email) {
+    errs.email = 'Email is required.';
+  } else if (!EMAIL_RE.test(formData.email)) {
+    errs.email = 'Enter a valid email address (e.g. user@example.com).';
+  }
+
+  if (!formData.fullName) {
+    errs.fullName = 'Full name is required.';
+  } else if (!NAME_RE.test(formData.fullName)) {
+    errs.fullName = 'Name must be 2–100 characters and contain only letters, spaces or hyphens.';
+  }
+
+  if (!formData.phoneNumber) {
+    errs.phoneNumber = 'Phone number is required.';
+  } else if (!PHONE_RE.test(formData.phoneNumber)) {
+    errs.phoneNumber = 'Enter a valid phone number (e.g. +1 555 000-0000).';
+  }
+
+  if (!formData.address || formData.address.trim().length < 5) {
+    errs.address = 'Enter a full address (at least 5 characters).';
+  }
+
+  if (!formData.password) {
+    errs.password = 'Password is required.';
+  } else if (formData.password.length < 8) {
+    errs.password = 'Password must be at least 8 characters.';
+  } else if (!/[A-Z]/.test(formData.password)) {
+    errs.password = 'Password must contain at least one uppercase letter.';
+  } else if (!/\d/.test(formData.password)) {
+    errs.password = 'Password must contain at least one number.';
+  }
+
+  if (!formData.confirmPassword) {
+    errs.confirmPassword = 'Please confirm your password.';
+  } else if (formData.password !== formData.confirmPassword) {
+    errs.confirmPassword = 'Passwords do not match.';
+  }
+
+  return errs;
+}
+
+function validateStep2(formData: typeof initialFormData): FieldErrors {
+  const errs: FieldErrors = {};
+
+  if (!formData.businessName) {
+    errs.businessName = 'Business name is required.';
+  } else if (!BIZ_NAME_RE.test(formData.businessName)) {
+    errs.businessName = 'Business name must be 2–100 characters (letters, digits, spaces, & . , \' -)';
+  }
+
+  if (!formData.businessHours) {
+    errs.businessHours = 'Business hours are required.';
+  } else if (!HOURS_RE.test(formData.businessHours.trim())) {
+    errs.businessHours = 'Use format: Mon-Fri 09:00-17:00 or Sun-Sat 10:00-18:00';
+  }
+
+  if (!formData.servicesOffered || formData.servicesOffered.trim().length === 0) {
+    errs.servicesOffered = 'Please list the services you offer (e.g. Haircut, Beard Trim).';
+  } else {
+    const services = formData.servicesOffered.split(',').map(s => s.trim()).filter(Boolean);
+    if (services.length === 0 || services.some(s => s.length < 2)) {
+      errs.servicesOffered = 'Each service must be at least 2 characters, separated by commas.';
+    }
+  }
+
+  if (!formData.bookingPolicies || formData.bookingPolicies.trim().length < 5) {
+    errs.bookingPolicies = 'Please describe your booking policy (e.g. Monday to Saturday).';
+  }
+
+  return errs;
+}
+
+// ─── Component ─────────────────────────────────────────────────────────────────
+
+const initialFormData = {
+  email: '',
+  fullName: '',
+  address: '',
+  phoneNumber: '',
+  password: '',
+  confirmPassword: '',
+  businessName: '',
+  businessHours: '',
+  servicesOffered: '',
+  bookingPolicies: ''
+};
+
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-
-  // Form state
-  const [formData, setFormData] = useState({
-    email: '',
-    fullName: '',
-    address: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: '',
-    businessName: '',
-    businessHours: '',
-    servicesOffered: '',
-    bookingPolicies: ''
-  });
-
+  const [formData, setFormData] = useState(initialFormData);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -35,23 +138,31 @@ export default function Signup() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear the error for this field as the user types
+    if (fieldErrors[name as keyof FieldErrors]) {
+      setFieldErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.email && formData.fullName && formData.password && formData.confirmPassword) {
-      if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-      }
-      setCurrentStep(2);
-    } else {
-      alert("Please fill in all required fields.");
+    const errs = validateStep1(formData);
+    if (Object.keys(errs).length > 0) {
+      setFieldErrors(errs);
+      return;
     }
+    setFieldErrors({});
+    setCurrentStep(2);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errs = validateStep2(formData);
+    if (Object.keys(errs).length > 0) {
+      setFieldErrors(errs);
+      return;
+    }
+    setFieldErrors({});
     setLoading(true);
     setError('');
 
@@ -72,7 +183,6 @@ export default function Signup() {
           }
         }),
       });
-      // Redirect to verification page with email in state
       navigate('/verify-email', { state: { email: formData.email, purpose: 'signup' } });
     } catch (err: any) {
       setError(err.data?.email?.[0] || err.data?.detail || 'An error occurred during signup');
@@ -114,7 +224,7 @@ export default function Signup() {
           )}
 
           {currentStep === 1 ? (
-            <form onSubmit={handleNext} className="space-y-6">
+            <form onSubmit={handleNext} className="space-y-6" noValidate>
               <Input
                 name="email"
                 label="Email address"
@@ -122,7 +232,7 @@ export default function Signup() {
                 placeholder="esteban_schiller@gmail.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                required
+                error={fieldErrors.email}
               />
 
               <Input
@@ -132,7 +242,7 @@ export default function Signup() {
                 placeholder="Esteban Schiller"
                 value={formData.fullName}
                 onChange={handleInputChange}
-                required
+                error={fieldErrors.fullName}
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -143,7 +253,7 @@ export default function Signup() {
                   placeholder="+1 (555) 000-0000"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.phoneNumber}
                 />
 
                 <Input
@@ -153,7 +263,7 @@ export default function Signup() {
                   placeholder="123 Main St, City, Country"
                   value={formData.address}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.address}
                 />
               </div>
 
@@ -167,7 +277,7 @@ export default function Signup() {
                   onIconClick={() => setShowPassword(!showPassword)}
                   value={formData.password}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.password}
                 />
 
                 <Input
@@ -179,7 +289,7 @@ export default function Signup() {
                   onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.confirmPassword}
                 />
               </div>
 
@@ -203,7 +313,7 @@ export default function Signup() {
               </div>
             </form>
           ) : (
-            <form onSubmit={handleSignup} className="space-y-6">
+            <form onSubmit={handleSignup} className="space-y-6" noValidate>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <Input
                   name="businessName"
@@ -212,37 +322,37 @@ export default function Signup() {
                   placeholder="EKKO Solutions"
                   value={formData.businessName}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.businessName}
                 />
 
                 <Input
                   name="businessHours"
                   label="Business hours"
                   type="text"
-                  placeholder="Mon-Fri: 9AM - 6PM"
+                  placeholder="Mon-Fri 09:00-17:00"
                   value={formData.businessHours}
                   onChange={handleInputChange}
-                  required
+                  error={fieldErrors.businessHours}
                 />
               </div>
 
               <Textarea
                 name="servicesOffered"
                 label="Services offered"
-                placeholder="List the services you provide..."
+                placeholder="Haircut, Beard Trim, Consultation"
                 value={formData.servicesOffered}
                 onChange={handleInputChange}
-                required
+                error={fieldErrors.servicesOffered}
                 className="min-h-[100px]"
               />
 
               <Textarea
                 name="bookingPolicies"
                 label="Booking policies"
-                placeholder="Outline your cancellation and booking terms..."
+                placeholder="Monday to Saturday"
                 value={formData.bookingPolicies}
                 onChange={handleInputChange}
-                required
+                error={fieldErrors.bookingPolicies}
                 className="min-h-[100px]"
               />
 

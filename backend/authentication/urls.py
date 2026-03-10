@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     SignupView, UserProfileView, VerifyEmailView, 
     ForgotPasswordView, ResetPasswordView, MyTokenObtainPairView, ChangePasswordView,
-    UserListView, UserDetailView
+    UserListView, UserDetailView, n8nWebhookReceiverView, NotificationListView, NotificationReadView, NotificationMarkAllReadView
 )
 
 urlpatterns = [
@@ -17,4 +17,10 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    
+    # Notifications and Webhooks
+    path('webhooks/n8n/reminder/', n8nWebhookReceiverView.as_view(), name='n8n-webhook-reminder'),
+    path('notifications/', NotificationListView.as_view(), name='notification-list'),
+    path('notifications/<int:pk>/read/', NotificationReadView.as_view(), name='notification-read'),
+    path('notifications/read-all/', NotificationMarkAllReadView.as_view(), name='notification-mark-all-read'),
 ]

@@ -85,9 +85,9 @@ export default function Customers() {
         <p className="text-gray-500 mt-1">Manage Ekko's paying business owners.</p>
       </div>
 
-      <div className="flex justify-between items-center gap-4">
-        <div className="flex items-center gap-3 flex-1">
-          <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex items-center gap-3 w-full md:w-auto flex-1">
+          <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"

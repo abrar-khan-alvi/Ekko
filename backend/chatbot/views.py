@@ -229,11 +229,11 @@ class DashboardStatsView(APIView):
             total_convs = ConversationLog.objects.count()
             total_customers = ConversationLog.objects.values('contact_number').distinct().count()
             
-            # Booking trend (last 7 days)
+            # Booking trend (today + next 6 days)
             today = timezone.now().date()
             booking_trend = []
-            for i in range(6, -1, -1):
-                day = today - timedelta(days=i)
+            for i in range(0, 7):
+                day = today + timedelta(days=i)
                 count = Appointment.objects.filter(appointment_datetime__date=day).count()
                 booking_trend.append({
                     'name': day.strftime('%a'),
@@ -259,11 +259,11 @@ class DashboardStatsView(APIView):
             total_convs = ConversationLog.objects.filter(conv_filter).count()
             total_customers = ConversationLog.objects.filter(conv_filter).values('contact_number').distinct().count()
 
-            # Booking trend (last 7 days)
+            # Booking trend (today + next 6 days)
             today = timezone.now().date()
             booking_trend = []
-            for i in range(6, -1, -1):
-                day = today - timedelta(days=i)
+            for i in range(0, 7):
+                day = today + timedelta(days=i)
                 count = Appointment.objects.filter(appt_filter, appointment_datetime__date=day).count()
                 booking_trend.append({
                     'name': day.strftime('%a'),

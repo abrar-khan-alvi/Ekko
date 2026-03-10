@@ -1,7 +1,15 @@
 const API_BASE_URL = 'http://localhost:8000/api/auth';
 
 export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
-    const url = `${API_BASE_URL}${endpoint}`;
+    // If it's a full URL, use it directly.
+    // If it starts with /api/, it's already a full relative path (e.g. from Vite proxy or direct to backend).
+    // Otherwise, assume it's an auth endpoint and prepend API_BASE_URL.
+    const url = endpoint.startsWith('http') 
+        ? endpoint 
+        : endpoint.startsWith('/api/')
+            ? `http://localhost:8000${endpoint}`
+            : `${API_BASE_URL}${endpoint}`;
+    
     const token = localStorage.getItem('access_token');
 
     const headers: HeadersInit = {

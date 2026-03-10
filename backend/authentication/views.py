@@ -5,9 +5,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import (
     UserSignupSerializer, UserSerializer, VerifyOTPSerializer,
     ForgotPasswordSerializer, ResetPasswordSerializer, MyTokenObtainPairSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer, NotificationSerializer
 )
-from .models import User, OTP
+from .models import User, OTP, Notification
 from .utils import generate_otp, send_otp_email
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -59,12 +59,10 @@ class VerifyEmailView(APIView):
             try:
                 otp = OTP.objects.get(user__email=email, code=code, purpose=purpose)
                 if otp.is_valid():
-                    user = otp.user
-                    if purpose == 'signup': # This branch should technically be unreachable now for signup
-                        user.is_verified = True
-                        user.is_active = True
-                        user.save()
-                    otp.delete()
+                    # For 'reset': do NOT delete the OTP here — ResetPasswordView
+                    # needs it to authorise the actual password change.
+                    if purpose != 'reset':
+                        otp.delete()
                     return Response({"message": "Verification successful"}, status=status.HTTP_200_OK)
                 else:
                     return Response({"error": "OTP expired"}, status=status.HTTP_400_BAD_REQUEST)
@@ -93,6 +91,7 @@ class ResetPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        print(f"[reset-password] incoming data: {request.data}")
         serializer = ResetPasswordSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
@@ -108,9 +107,12 @@ class ResetPasswordView(APIView):
                     otp.delete()
                     return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
                 else:
+                    print(f"[reset-password] OTP expired for {email}")
                     return Response({"error": "OTP expired"}, status=status.HTTP_400_BAD_REQUEST)
             except OTP.DoesNotExist:
+                print(f"[reset-password] OTP DoesNotExist for email={email} code={code}")
                 return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
+        print(f"[reset-password] serializer errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ChangePasswordView(APIView):
@@ -149,3 +151,200 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
             from .serializers import AdminUserUpdateSerializer
             return AdminUserUpdateSerializer
         return UserSerializer
+
+from rest_framework.decorators import action
+from django.db import models
+import logging
+
+logger = logging.getLogger(__name__)
+
+class n8nWebhookReceiverView(APIView):
+    """
+    Accepts POST requests from n8n for 'Reminder Sent' events.
+    Expected payload matches what n8n sends:
+    [
+        { "businessName": "...", "customerName": "...", "customerPhone": "...", "AppointmentTIme": "..." },
+        ...
+    ]
+    """
+    permission_classes = [permissions.AllowAny] # You may want to secure this with a secret header in production
+
+    def post(self, request):
+        payload = request.data
+        if not isinstance(payload, list):
+            payload = [payload]
+            
+        created_count = 0
+        for item in payload:
+            business_name = item.get('businessName')
+            customer_name = item.get('customerName')
+            customer_phone = str(item.get('customerPhone', ''))
+            appointment_time = item.get('AppointmentTIme')
+            
+            # Try to associate with a user based on businessName. This is an approximation.
+            # If the user can't be found, we still save the notification unattached, 
+            # but ideally the webhook should send a businessId or user email.
+            user = None
+            if business_name:
+                try:
+                    from .models import BusinessProfile
+                    profile = BusinessProfile.objects.filter(business_name=business_name).first()
+                    if profile:
+                        user = profile.user
+                except Exception as e:
+                    logger.error(f"Error finding user for business '{business_name}': {e}")
+
+            Notification.objects.create(
+                user=user,
+                title="Reminder Sent",
+                message=f"Reminder sent to {customer_name} for their appointment at {business_name} on {appointment_time}.",
+                notification_type="reminder",
+                business_name=business_name,
+                customer_name=customer_name,
+                customer_phone=customer_phone,
+                appointment_time=appointment_time
+            )
+            created_count += 1
+            
+        return Response({"message": f"Successfully processed {created_count} notifications"}, status=status.HTTP_201_CREATED)
+
+from rest_framework.pagination import PageNumberPagination
+import threading
+
+_n8n_sync_lock = threading.Lock()
+
+class NotificationPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = NotificationPagination
+    def get_queryset(self):
+        import requests
+        import threading
+        from django.utils import dateparse
+        from .models import Notification
+        
+        user = self.request.user
+
+        def sync_n8n_data():
+            try:
+                response = requests.get('https://ekkoflow.app.n8n.cloud/webhook/remider', timeout=5)
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    if not isinstance(data, list):
+                        data = [data]
+                        
+                    for item in data:
+                        raw_date = item.get('AppointmentTIme')
+                        parsed_date = dateparse.parse_datetime(raw_date) if raw_date else None
+                        appt_str = parsed_date.strftime("%b %d, %Y at %I:%M %p") if parsed_date else raw_date
+                        
+                        business_name = item.get('businessName', '')
+                        customer_name = item.get('customerName', '')
+                        
+                        title = f"Reminder for {customer_name}"
+                        message = f"Reminder sent to {customer_name} for their appointment at {business_name} on {appt_str}."
+                        
+                        exists = Notification.objects.filter(
+                            title=title, 
+                            business_name=business_name, 
+                            customer_name=customer_name,
+                            appointment_time=appt_str
+                        ).exists()
+                        
+                        if not exists:
+                            Notification.objects.create(
+                                title=title,
+                                message=message,
+                                notification_type='reminder',
+                                business_name=business_name,
+                                customer_name=customer_name,
+                                customer_phone=str(item.get('customerPhone', '')),
+                                appointment_time=appt_str
+                            )
+            except Exception as e:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Failed to sync n8n notifications: {e}")
+
+        def run_sync_with_lock():
+            if not _n8n_sync_lock.acquire(blocking=False):
+                return
+            try:
+                sync_n8n_data()
+            finally:
+                _n8n_sync_lock.release()
+
+        # Run the sync in the background so it doesn't block the page from loading instantly
+        threading.Thread(target=run_sync_with_lock).start()
+
+        # Admin users see all notifications
+        if user.is_staff or user.is_superuser:
+            return Notification.objects.all().order_by('-created_at')
+            
+        # Business owners see notifications matching their business profile or user ID
+        try:
+            from .models import BusinessProfile
+            profile = BusinessProfile.objects.filter(user=user).first()
+            if profile and profile.business_name:
+                return Notification.objects.filter(
+                    models.Q(user=user) | models.Q(business_name=profile.business_name)
+                ).order_by('-created_at')
+        except Exception:
+            pass
+            
+        # Fallback to only user-assigned notifications
+        return Notification.objects.filter(user=user).order_by('-created_at')
+
+class NotificationReadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            notification = Notification.objects.get(pk=pk)
+            # Make sure the user owns the notification, or it's a global one
+            # Admin can read anything
+            if not (request.user.is_staff or request.user.is_superuser):
+                if notification.user and notification.user != request.user:
+                    # Allow if it's matching their business profile
+                    from .models import BusinessProfile
+                    profile = BusinessProfile.objects.filter(user=request.user).first()
+                    if not (profile and profile.business_name == notification.business_name):
+                        return Response(status=status.HTTP_403_FORBIDDEN)
+                
+            notification.read_by.add(request.user)
+            return Response({"status": "read"}, status=status.HTTP_200_OK)
+        except Notification.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class NotificationMarkAllReadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        
+        # Get all notifications the user currently has access to see
+        if user.is_staff or user.is_superuser:
+            notifications = Notification.objects.all()
+        else:
+            from .models import BusinessProfile
+            profile = BusinessProfile.objects.filter(user=user).first()
+            if profile and profile.business_name:
+                notifications = Notification.objects.filter(
+                    models.Q(user=user) | models.Q(business_name=profile.business_name)
+                )
+            else:
+                notifications = Notification.objects.filter(user=user)
+                
+        # Exclude those already read by the user
+        unread_notifications = notifications.exclude(read_by=user)
+        
+        for notif in unread_notifications:
+            notif.read_by.add(user)
+            
+        return Response({"status": "all_read", "marked_count": unread_notifications.count()}, status=status.HTTP_200_OK)

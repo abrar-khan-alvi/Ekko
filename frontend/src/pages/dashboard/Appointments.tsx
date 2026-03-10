@@ -153,7 +153,7 @@ export default function Appointments() {
       </div>
 
       {/* Filters & Search */}
-      <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
         <div className="relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
@@ -359,12 +359,6 @@ export default function Appointments() {
                       <p className="text-[10px] font-black text-gray-300 uppercase mb-1 group-hover:text-[#4355FF] transition-colors">Email Address</p>
                       <p className="text-lg font-bold text-gray-800 tracking-tight truncate">{selectedAppointment.customerEmail || '—'}</p>
                     </div>
-                    {selectedAppointment.Whatsapp_Number && (
-                      <div className="p-4 bg-green-50/50 rounded-2xl border border-green-100/50 inline-block w-full">
-                        <p className="text-[10px] font-black text-green-600 uppercase mb-1">WhatsApp Verified</p>
-                        <p className="text-lg font-bold text-green-900 tracking-tight">{selectedAppointment.Whatsapp_Number}</p>
-                      </div>
-                    )}
                   </div>
                 </div>
 

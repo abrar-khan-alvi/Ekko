@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '../components/ui/Input';
@@ -18,6 +18,13 @@ export default function ResetPassword() {
 
   const email = location.state?.email;
   const code = location.state?.code;
+
+  // Guard: if navigated here without OTP state, send back to forgot-password
+  useEffect(() => {
+    if (!email || !code) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [email, code, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +47,14 @@ export default function ResetPassword() {
       });
       navigate('/success?type=reset');
     } catch (err: any) {
-      setError(err.data?.error || err.data?.detail || 'Failed to reset password');
+      // Show the exact server error so we can diagnose it
+      const msg = err.data?.error || err.data?.detail
+        || err.data?.new_password?.[0]
+        || err.data?.code?.[0]
+        || err.data?.email?.[0]
+        || JSON.stringify(err.data)
+        || 'Failed to reset password';
+      setError(msg);
     } finally {
       setLoading(false);
     }

@@ -261,3 +261,22 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['new_password'] != attrs['confirm_password']:
             raise serializers.ValidationError({"confirm_password": "Passwords do not match."})
         return attrs
+
+from .models import Notification
+
+class NotificationSerializer(serializers.ModelSerializer):
+    is_read = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Notification
+        fields = [
+            'id', 'title', 'message', 'notification_type', 'is_read', 'created_at',
+            'business_name', 'customer_name', 'customer_phone', 'appointment_time'
+        ]
+        read_only_fields = fields
+
+    def get_is_read(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return obj.read_by.filter(id=user.id).exists()

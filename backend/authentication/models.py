@@ -65,3 +65,23 @@ class OTP(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.code} ({self.purpose})"
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', null=True, blank=True)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=50, default='reminder')
+    read_by = models.ManyToManyField(User, related_name='read_notifications', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Extra fields for reminder specific data
+    business_name = models.CharField(max_length=255, blank=True, null=True)
+    customer_name = models.CharField(max_length=255, blank=True, null=True)
+    customer_phone = models.CharField(max_length=50, blank=True, null=True)
+    appointment_time = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.title} - {self.created_at}"

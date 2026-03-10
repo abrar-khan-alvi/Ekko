@@ -43,6 +43,13 @@ export default function VerifyEmail() {
     setError('');
 
     try {
+      if (purpose === 'reset') {
+        // For password reset, don't consume the OTP here — /reset-password/ will
+        // validate and delete it. Just navigate with the code.
+        navigate('/reset-password', { state: { email, code: otpCode } });
+        return;
+      }
+
       await apiFetch('/verify-email/', {
         method: 'POST',
         body: JSON.stringify({
@@ -52,11 +59,7 @@ export default function VerifyEmail() {
         }),
       });
 
-      if (purpose === 'signup') {
-        navigate('/success?type=signup');
-      } else {
-        navigate('/reset-password', { state: { email, code: otpCode } });
-      }
+      navigate('/success?type=signup');
     } catch (err: any) {
       setError(err.data?.error || err.data?.detail || 'Invalid verification code');
     } finally {

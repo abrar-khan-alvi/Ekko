@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Loader2, Phone, RefreshCw, Check, CheckCheck } from 'lucide-react';
+import { Search, Loader2, Phone, RefreshCw, Check, CheckCheck, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface WebhookConversation {
@@ -160,10 +160,10 @@ export default function Conversations() {
   const avatarInitial = (name: string) => name.charAt(0).toUpperCase();
 
   return (
-    <div className="flex h-[calc(100vh-6rem)] rounded-2xl overflow-hidden shadow-xl border border-gray-200" style={{ fontFamily: "'Segoe UI', Helvetica Neue, Arial, sans-serif" }}>
+    <div className="flex h-[calc(100vh-6rem)] md:h-[calc(100vh-6rem)] rounded-2xl overflow-hidden shadow-xl border border-gray-200 bg-white" style={{ fontFamily: "'Segoe UI', Helvetica Neue, Arial, sans-serif" }}>
 
       {/* ── SIDEBAR ──────────────────────────────────────────── */}
-      <div className="w-[340px] shrink-0 flex flex-col border-r border-gray-200" style={{ background: '#fff' }}>
+      <div className={`w-full md:w-[340px] shrink-0 flex-col border-r border-gray-200 bg-white ${selectedContact ? 'hidden md:flex' : 'flex'}`}>
 
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 py-3" style={{ background: WA_TEAL }}>
@@ -255,12 +255,19 @@ export default function Conversations() {
       </div>
 
       {/* ── CHAT PANEL ───────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col" style={{ background: WA_PANEL }}>
+      <div className={`flex-1 flex-col ${!selectedContact ? 'hidden md:flex' : 'flex'}`} style={{ background: WA_PANEL }}>
         {selectedContact ? (
           <>
             {/* Chat Top Bar */}
             <div className="flex items-center gap-3 px-4 py-2.5 shadow-sm shrink-0" style={{ background: WA_TEAL }}>
-              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ background: WA_DARK_GREEN }}>
+              <button
+                onClick={() => setSelectedContact(null)}
+                className="md:hidden mr-1 p-1.5 -ml-2 text-white hover:bg-white/10 rounded-full transition-colors"
+                title="Back to contacts"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0" style={{ background: WA_DARK_GREEN }}>
                 {avatarInitial(selectedContact.contactName)}
               </div>
               <div className="flex-1">

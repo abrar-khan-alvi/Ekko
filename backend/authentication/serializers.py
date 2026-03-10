@@ -1,6 +1,9 @@
 from rest_framework import serializers, exceptions
 import re
 from .models import User, BusinessProfile
+import requests
+import threading
+from django.conf import settings
 
 # Matches: Mon-Fri 09:00-17:00 | Monday-Friday 09:00-17:00 etc.
 _HOURS_RE = re.compile(
@@ -117,6 +120,11 @@ class UserSerializer(serializers.ModelSerializer):
         has_business_change = False
 
         if profile_data is not None:
+            if not instance.is_paid:
+                raise exceptions.ValidationError({
+                    "business_profile": "You must have an active PRO subscription to update your business profile."
+                })
+                
             try:
                 profile = instance.business_profile
             except BusinessProfile.DoesNotExist:
@@ -137,21 +145,20 @@ class UserSerializer(serializers.ModelSerializer):
 
         # Trigger webhook if business profile changed
         if has_business_change:
-            self._trigger_update_webhook(user)
+            self._trigger_n8n_webhook(user, endpoint='update-business')
 
         return user
 
-    def _trigger_update_webhook(self, user):
-        import requests
-        import threading
-        from django.conf import settings
-
+    def _trigger_n8n_webhook(self, user, endpoint):
         def send_webhook():
             try:
                 business = user.business_profile
+                business_name = business.business_name if business else getattr(user, 'full_name', '')
+                
                 payload = {
                     "email": user.email,
-                    "businessName": business.business_name if business else getattr(user, 'full_name', ''),
+                    "businessId": str(business.id) if business else str(getattr(user, 'id', '')),
+                    "businessName": business_name,
                     "businessHours": business.business_hours if business else '',
                     "services": business.services_offered if business else '',
                     "bookingPolicies": business.booking_policies if business else ''
@@ -207,10 +214,6 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
         return user
 
     def _trigger_n8n_webhook(self, user, endpoint):
-        import requests
-        import threading
-        from django.conf import settings
-
         def send_webhook():
             try:
                 business = user.business_profile
@@ -218,17 +221,20 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
                 
                 if endpoint == 'deactivate-business':
                     payload = {
+                        "businessId": str(business.id) if business else str(getattr(user, 'id', '')),
                         "businessName": business_name
                     }
                 else:
                     payload = {
+                        "businessId": str(business.id) if business else str(getattr(user, 'id', '')),
                         "businessName": business_name,
                         "businessHours": business.business_hours if business else '',
                         "services": business.services_offered if business else '',
-                        "bookingPolicies": business.booking_policies if business else '',
-                        "isActive": user.is_active
+                        "bookingPolicies": business.booking_policies if business else ''
                     }
                 
+                # Exclude the "x-admin-secret" headers as your tested payload didn't strictly require auth OR we can safely leave it.
+                # Let's keep it as is, but ensure Content-Type is set.
                 headers = {
                     "Content-Type": "application/json",
                     "x-admin-secret": getattr(settings, 'N8N_WEBHOOK_SECRET', '')

@@ -10,6 +10,7 @@ interface UserProfile {
   phone_number: string;
   address: string;
   is_superuser: boolean;
+  is_paid: boolean;
   business_profile: {
     business_name: string;
     business_hours: string;
@@ -65,7 +66,25 @@ export default function Settings() {
       toast.success('Business details updated successfully!');
     } catch (err: any) {
       console.error('Profile update failed', err);
-      toast.error('Failed to update business details. Please check your inputs.');
+      const serverErrors = err.data;
+      let firstMessage = 'Failed to update business details. Please check your inputs.';
+
+      if (typeof serverErrors === 'object' && serverErrors !== null) {
+        // Business profile errors often come nested under "business_profile"
+        let errorSource = serverErrors;
+        if (serverErrors.business_profile) {
+          errorSource = serverErrors.business_profile;
+        }
+
+        const errorValues = Object.values(errorSource);
+        if (errorValues.length > 0) {
+          const firstErr = errorValues[0];
+          firstMessage = Array.isArray(firstErr) ? firstErr[0] : String(firstErr);
+        } else if (serverErrors.detail) {
+          firstMessage = serverErrors.detail;
+        }
+      }
+      toast.error(firstMessage);
     } finally {
       setProfileLoading(false);
     }
@@ -291,6 +310,16 @@ export default function Settings() {
                     </div>
                   </div>
 
+                  {!user?.is_paid && (
+                    <div className="mb-6 bg-orange-50 border border-orange-200 rounded-xl p-5 flex items-start gap-4">
+                      <Lock className="w-5 h-5 text-orange-500 mt-0.5 shrink-0" />
+                      <div>
+                        <h3 className="font-bold text-orange-800">PRO Subscription Required</h3>
+                        <p className="text-sm text-orange-700 mt-1">You must have an active PRO subscription to update your business profile output and manage your public data. Please contact support or your administrator to activate your subscription.</p>
+                      </div>
+                    </div>
+                  )}
+
                   <form onSubmit={handleProfileUpdate} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 
@@ -318,8 +347,9 @@ export default function Settings() {
                           name="business_hours"
                           value={businessData.business_hours}
                           onChange={handleBusinessInputChange}
+                          disabled={!user?.is_paid}
                           placeholder="e.g. Mon-Fri: 9am - 5pm"
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all disabled:opacity-50 disabled:bg-gray-50"
                         />
                       </div>
 
@@ -332,8 +362,9 @@ export default function Settings() {
                           name="services_offered"
                           value={businessData.services_offered}
                           onChange={handleBusinessInputChange}
+                          disabled={!user?.is_paid}
                           rows={4}
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] resize-y transition-all"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] resize-y transition-all disabled:opacity-50 disabled:bg-gray-50"
                         />
                       </div>
 
@@ -346,8 +377,9 @@ export default function Settings() {
                           name="booking_policies"
                           value={businessData.booking_policies}
                           onChange={handleBusinessInputChange}
+                          disabled={!user?.is_paid}
                           rows={4}
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] resize-y transition-all"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] resize-y transition-all disabled:opacity-50 disabled:bg-gray-50"
                         />
                       </div>
                     </div>
@@ -357,8 +389,8 @@ export default function Settings() {
                     <div className="pt-6 border-t border-gray-100 flex justify-end">
                       <button
                         type="submit"
-                        disabled={profileLoading}
-                        className="flex items-center gap-2 px-8 py-3.5 bg-[#4355FF] text-white rounded-xl font-bold hover:bg-[#3644CC] transition-all shadow-lg shadow-[#4355FF]/25 active:scale-95 disabled:opacity-50"
+                        disabled={profileLoading || !user?.is_paid}
+                        className="flex items-center gap-2 px-8 py-3.5 bg-[#4355FF] text-white rounded-xl font-bold hover:bg-[#3644CC] transition-all shadow-lg shadow-[#4355FF]/25 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-[#4355FF] disabled:cursor-not-allowed"
                       >
                         {profileLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                         Publish Business Changes

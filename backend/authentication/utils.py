@@ -47,38 +47,55 @@ def verify_cache_otp(email, code, purpose='signup'):
 
 def send_otp_email(email, code, purpose):
     subject = "Verify your email" if purpose == 'signup' else "Reset your password"
-    message = f"Your OTP for {purpose} is: {code}. It will expire in 10 minutes."
+    display_purpose = "verification" if purpose == 'signup' else "password reset"
     
-    try:
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
-        )
-    except Exception as e:
-        print(f"Error sending email: {str(e)}")
-        logger.error(f"Failed to send {purpose} OTP to {email}: {str(e)}")
+    html = render_to_string('authentication/email_otp.html', {
+        'code': code,
+        'purpose': display_purpose,
+        'subject': subject,
+    })
+    
+    # Create a clean plain-text fallback
+    text_content = f"Your Ekko Loop OTP for {display_purpose} is: {code}. This code expires in 10 minutes."
+    
+    _send_html_email_with_logo(email, subject, html, text_content)
 
 
 # ─── Subscription notification emails ─────────────────────────────────────────
 
-def _send_subscription_email(email, name, subject, html_body):
-    """Internal helper — sends an HTML email in a background thread."""
+def _send_html_email_with_logo(email, subject, html_body, text_body=None):
+    """Internal helper — sends an HTML email with an inline logo in a background thread."""
+    text_body = text_body or html_body # fallback to HTML if no text provided (legacy)
     def _send():
         try:
             msg = EmailMultiAlternatives(
                 subject=subject,
-                body=html_body,  # fallback plain-text (browsers strip tags)
+                body=text_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[email],
             )
             msg.attach_alternative(html_body, "text/html")
+            msg.mixed_subtype = 'related'
+            
+            # Attach inline logo
+            from email.mime.image import MIMEImage
+            import os
+            
+            logo_path = os.path.join(settings.BASE_DIR, 'static', 'ekkologo.png')
+            if os.path.exists(logo_path):
+                with open(logo_path, 'rb') as f:
+                    logo_img = MIMEImage(f.read())
+                    # The Content-ID must be exactly what is referenced in HTML, e.g., <ekkologo.png>
+                    logo_img.add_header('Content-ID', '<ekkologo.png>')
+                    logo_img.add_header('Content-Disposition', 'inline', filename='ekkologo.png')
+                    msg.attach(logo_img)
+            else:
+                logger.warning(f"Logo not found at {logo_path}")
+
             msg.send(fail_silently=False)
-            logger.info(f"[email] Subscription email '{subject}' sent to {email}")
+            logger.info(f"[email] Email '{subject}' sent to {email}")
         except Exception as e:
-            logger.error(f"[email] Failed to send subscription email to {email}: {e}")
+            logger.error(f"[email] Failed to send email to {email}: {e}")
 
     threading.Thread(target=_send).start()
 
@@ -91,7 +108,7 @@ def send_subscription_activated_email(user):
         'name': name,
         'subject': subject,
     })
-    _send_subscription_email(user.email, name, subject, html)
+    _send_html_email_with_logo(user.email, subject, html)
 
 
 def send_subscription_deactivated_email(user):
@@ -102,5 +119,5 @@ def send_subscription_deactivated_email(user):
         'name': name,
         'subject': subject,
     })
-    _send_subscription_email(user.email, name, subject, html)
+    _send_html_email_with_logo(user.email, subject, html)
 

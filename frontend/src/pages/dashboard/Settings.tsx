@@ -16,6 +16,9 @@ interface UserProfile {
     business_hours: string;
     services_offered: string;
     booking_policies: string;
+    facebook_link: string;
+    instagram_link: string;
+    linkedin_link: string;
   };
 }
 
@@ -30,7 +33,10 @@ export default function Settings() {
     business_name: '',
     business_hours: '',
     services_offered: '',
-    booking_policies: ''
+    booking_policies: '',
+    facebook_link: '',
+    instagram_link: '',
+    linkedin_link: ''
   });
 
   // Password Update State
@@ -137,7 +143,10 @@ export default function Settings() {
             business_name: data.business_profile.business_name || '',
             business_hours: data.business_profile.business_hours || '',
             services_offered: data.business_profile.services_offered || '',
-            booking_policies: data.business_profile.booking_policies || ''
+            booking_policies: data.business_profile.booking_policies || '',
+            facebook_link: data.business_profile.facebook_link || '',
+            instagram_link: data.business_profile.instagram_link || '',
+            linkedin_link: data.business_profile.linkedin_link || ''
           });
         }
       } catch (err) {
@@ -381,6 +390,49 @@ export default function Settings() {
                           rows={4}
                           className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] resize-y transition-all disabled:opacity-50 disabled:bg-gray-50"
                         />
+                      </div>
+
+                      <div className="md:col-span-2 space-y-4 pt-4 border-t border-gray-100">
+                        <h3 className="text-sm font-bold text-gray-900">Social Media Links (Optional)</h3>
+                        
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Facebook Link</label>
+                          <input
+                            type="url"
+                            name="facebook_link"
+                            value={businessData.facebook_link}
+                            onChange={handleBusinessInputChange}
+                            disabled={!user?.is_paid}
+                            placeholder="https://facebook.com/yourbusiness"
+                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all disabled:opacity-50 disabled:bg-gray-50"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Instagram Link</label>
+                          <input
+                            type="url"
+                            name="instagram_link"
+                            value={businessData.instagram_link}
+                            onChange={handleBusinessInputChange}
+                            disabled={!user?.is_paid}
+                            placeholder="https://instagram.com/yourbusiness"
+                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all disabled:opacity-50 disabled:bg-gray-50"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">LinkedIn Link</label>
+                          <input
+                            type="url"
+                            name="linkedin_link"
+                            value={businessData.linkedin_link}
+                            onChange={handleBusinessInputChange}
+                            disabled={!user?.is_paid}
+                            placeholder="https://linkedin.com/company/yourbusiness"
+                            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] transition-all disabled:opacity-50 disabled:bg-gray-50"
+                          />
+                        </div>
                       </div>
                     </div>
 

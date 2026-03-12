@@ -33,6 +33,9 @@ type FieldErrors = {
   businessHours?: string;
   servicesOffered?: string;
   bookingPolicies?: string;
+  facebookLink?: string;
+  instagramLink?: string;
+  linkedinLink?: string;
 };
 
 function validateStep1(formData: typeof initialFormData): FieldErrors {
@@ -107,6 +110,18 @@ function validateStep2(formData: typeof initialFormData): FieldErrors {
     errs.bookingPolicies = 'Please describe your booking policy (e.g. Monday to Saturday).';
   }
 
+  const URL_RE = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i;
+  
+  if (formData.facebookLink && !URL_RE.test(formData.facebookLink)) {
+    errs.facebookLink = 'Please enter a valid URL.';
+  }
+  if (formData.instagramLink && !URL_RE.test(formData.instagramLink)) {
+    errs.instagramLink = 'Please enter a valid URL.';
+  }
+  if (formData.linkedinLink && !URL_RE.test(formData.linkedinLink)) {
+    errs.linkedinLink = 'Please enter a valid URL.';
+  }
+
   return errs;
 }
 
@@ -122,7 +137,10 @@ const initialFormData = {
   businessName: '',
   businessHours: '',
   servicesOffered: '',
-  bookingPolicies: ''
+  bookingPolicies: '',
+  facebookLink: '',
+  instagramLink: '',
+  linkedinLink: ''
 };
 
 export default function Signup() {
@@ -180,6 +198,9 @@ export default function Signup() {
             business_hours: formData.businessHours,
             services_offered: formData.servicesOffered,
             booking_policies: formData.bookingPolicies,
+            facebook_link: formData.facebookLink,
+            instagram_link: formData.instagramLink,
+            linkedin_link: formData.linkedinLink,
           }
         }),
       });
@@ -355,6 +376,39 @@ export default function Signup() {
                 error={fieldErrors.bookingPolicies}
                 className="min-h-[100px]"
               />
+
+              <div className="pt-2">
+                <h3 className="text-sm font-medium text-gray-700 mb-4">Social Media Links (Optional)</h3>
+                <div className="space-y-4">
+                  <Input
+                    name="facebookLink"
+                    label="Facebook Link"
+                    type="url"
+                    placeholder="https://facebook.com/yourbusiness"
+                    value={formData.facebookLink}
+                    onChange={handleInputChange}
+                    error={fieldErrors.facebookLink}
+                  />
+                  <Input
+                    name="instagramLink"
+                    label="Instagram Link"
+                    type="url"
+                    placeholder="https://instagram.com/yourbusiness"
+                    value={formData.instagramLink}
+                    onChange={handleInputChange}
+                    error={fieldErrors.instagramLink}
+                  />
+                  <Input
+                    name="linkedinLink"
+                    label="LinkedIn Link"
+                    type="url"
+                    placeholder="https://linkedin.com/company/yourbusiness"
+                    value={formData.linkedinLink}
+                    onChange={handleInputChange}
+                    error={fieldErrors.linkedinLink}
+                  />
+                </div>
+              </div>
 
               <div className="flex gap-4">
                 <button

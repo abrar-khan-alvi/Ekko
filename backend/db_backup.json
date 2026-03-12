@@ -1,331 +1,2378 @@
 [
 {
-    "model": "sessions.session",
-    "pk": "ydl7arwuets6xwblkoo41x8jzyv0vwsg",
-    "fields": {
-        "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERGsXpdwwUH1x3ku5Ub03GVtdlDnJX5EG7nFri5_Vw_w4K9fKtEQgZ0BKas2Vnh2ysw5ytSQkU4Gh1iJojhKQggzasgIPGAUelwZF4fwDxRjdS:1vyndi:St6BBM88AGT-bsYHapgv9nS2BtCfBFAJdR-OVC8FeBQ",
-        "expire_date": "2026-03-21T09:08:02.058Z"
-    }
+  "model": "sessions.session",
+  "pk": "2orloqf71hyp7olpgmfe9qtmgcxp2toj",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERIE6_W6D44LqDdKd6azK2ui5zkLsiD9rl1BI_r4f7d1Col2-NQMiAltCcLTs7ZGMd5mxNSqAAR6tD1BwhJAUZtGEFHDQOOCoNjsT7A8pWNxw:1vzMJi:TeOPG6Bu5iPYGX5A7TlrQJaOgq2chPm_kCGLqpAoUyg",
+    "expire_date": "2026-03-22T22:09:42.889Z"
+  }
 },
 {
-    "model": "authentication.user",
-    "fields": {
-        "password": "pbkdf2_sha256$600000$PKF4261vBsfpFX6uwoOEFI$ERZXAapCZlVjST6ntWb2q3DXLqZe/MNxYj2HASSWhMI=",
-        "last_login": null,
-        "is_superuser": false,
-        "email": "test@example.com",
-        "full_name": "",
-        "address": "",
-        "phone_number": "",
-        "is_active": true,
-        "is_verified": false,
-        "is_paid": false,
-        "is_staff": false,
-        "date_joined": "2026-03-07T03:14:28.541Z",
-        "groups": [],
-        "user_permissions": []
-    }
+  "model": "sessions.session",
+  "pk": "gzkrb93fo8drhoyji6ssdc8twaoortmp",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERIE6_W6D44LqDdKd6azK2ui5zkLsiD9rl1BI_r4f7d1Col2-NQMiAltCcLTs7ZGMd5mxNSqAAR6tD1BwhJAUZtGEFHDQOOCoNjsT7A8pWNxw:1vyxjN:o0W_5rVKUceoDk5J0hKU8hf-H6zDWQgIXRFwQlxpSrw",
+    "expire_date": "2026-03-21T19:54:33.765Z"
+  }
 },
 {
-    "model": "authentication.user",
-    "fields": {
-        "password": "pbkdf2_sha256$600000$4iXv4BpSmud6yEtMmOF4Rk$HOtjCpjDieSlSBdfZ6CCLMsvVDK673jb6mNrkUTT7Dg=",
-        "last_login": "2026-03-07T09:08:02.048Z",
-        "is_superuser": true,
-        "email": "admin@example.com",
-        "full_name": "Admin",
-        "address": "Admin",
-        "phone_number": "01816249770",
-        "is_active": true,
-        "is_verified": true,
-        "is_paid": false,
-        "is_staff": true,
-        "date_joined": "2026-03-07T06:26:20.985Z",
-        "groups": [],
-        "user_permissions": []
-    }
+  "model": "sessions.session",
+  "pk": "qg3pkam2e5czhnbgkk4mu3tk9qc3mjog",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERIE6_W6D44LqDdKd6azK2ui5zkLsiD9rl1BI_r4f7d1Col2-NQMiAltCcLTs7ZGMd5mxNSqAAR6tD1BwhJAUZtGEFHDQOOCoNjsT7A8pWNxw:1w0OGK:RjaI2Pdlzii8JTQrh_iXxM2PEJ4YT4WUrnLrHRsRcq0",
+    "expire_date": "2026-03-25T18:26:28.908Z"
+  }
 },
 {
-    "model": "authentication.user",
-    "fields": {
-        "password": "pbkdf2_sha256$600000$fRyeUmX23B791TKEyuXVuV$86WRN77h3CoLLrD//HjvvBcCWS6hj/GU58r1pVKYCbM=",
-        "last_login": null,
-        "is_superuser": false,
-        "email": "abrar1khan2@gmail.com",
-        "full_name": "Abrar Khan Alvi",
-        "address": "rupali r/a,chandgaon",
-        "phone_number": "+8801816249770",
-        "is_active": true,
-        "is_verified": true,
-        "is_paid": false,
-        "is_staff": false,
-        "date_joined": "2026-03-07T07:45:01.203Z",
-        "groups": [],
-        "user_permissions": []
-    }
+  "model": "sessions.session",
+  "pk": "ydl7arwuets6xwblkoo41x8jzyv0vwsg",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hAZOlBcuu8ZyACDVA0kpV0Z765NutDtf-_9l_C0rcVvnRc_J3ERGsXpdwwUH1x3ku5Ub03GVtdlDnJX5EG7nFri5_Vw_w4K9fKtEQgZ0BKas2Vnh2ysw5ytSQkU4Gh1iJojhKQggzasgIPGAUelwZF4fwDxRjdS:1vyndi:St6BBM88AGT-bsYHapgv9nS2BtCfBFAJdR-OVC8FeBQ",
+    "expire_date": "2026-03-21T09:08:02.058Z"
+  }
 },
 {
-    "model": "authentication.businessprofile",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "test@example.com"
-        ],
-        "name": "",
-        "email": "",
-        "business_name": "Test Business",
-        "business_hours": "9-5",
-        "services_offered": "Test Services",
-        "booking_policies": "Test Policies"
-    }
+  "model": "authentication.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$4iXv4BpSmud6yEtMmOF4Rk$HOtjCpjDieSlSBdfZ6CCLMsvVDK673jb6mNrkUTT7Dg=",
+    "last_login": "2026-03-11T18:47:47.370Z",
+    "is_superuser": true,
+    "email": "admin@example.com",
+    "full_name": "Admin",
+    "address": "Admin",
+    "phone_number": "01816249770",
+    "is_active": true,
+    "is_verified": true,
+    "is_paid": false,
+    "is_staff": true,
+    "date_joined": "2026-03-07T06:26:20.985Z",
+    "groups": [],
+    "user_permissions": []
+  }
 },
 {
-    "model": "authentication.businessprofile",
-    "pk": 44,
-    "fields": {
-        "user": [
-            "abrar1khan2@gmail.com"
-        ],
-        "name": "Abrar Khan Alvi",
-        "email": "abrar1khan2@gmail.com",
-        "business_name": "ekko",
-        "business_hours": "ekkoekko",
-        "services_offered": "ekkoekko",
-        "booking_policies": "ekkoekkoekko"
-    }
+  "model": "authentication.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$cUJLvGmETYrWYsqk3Ug2kI$gClPJrXTdfZcZc7XxCjBUw1clCsTQ3nAbSHeyQ61w8A=",
+    "last_login": "2026-03-12T01:08:27.976Z",
+    "is_superuser": false,
+    "email": "abrar1khan2@gmail.com",
+    "full_name": "Abrar Khan Alvi",
+    "address": "rupali r/a,chandgaon",
+    "phone_number": "+8801816249770",
+    "is_active": true,
+    "is_verified": true,
+    "is_paid": true,
+    "is_staff": false,
+    "date_joined": "2026-03-07T07:45:01.203Z",
+    "groups": [],
+    "user_permissions": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 1,
-    "fields": {
-        "action_time": "2026-03-07T06:28:28.761Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "2",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.businessprofile",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "abrar1khan2@gmail.com"
+    ],
+    "name": "Abrar Khan Alvi",
+    "email": "abrar1khan2@gmail.com",
+    "business_name": "GuitarLand",
+    "business_hours": "Mon-Fri 06:00-18:00",
+    "services_offered": "Guitar Lessons, Piano Lessons, Vocal Exercise",
+    "booking_policies": "No Refunds. Per hour ->10$",
+    "facebook_link": "https://www.linkedin.com/in/abrarkhanalvi/",
+    "instagram_link": "https://www.linkedin.com/in/abrarkha/",
+    "linkedin_link": "https://www.linkedin.com/in/abrarkhanalvi/"
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 2,
-    "fields": {
-        "action_time": "2026-03-07T06:35:22.131Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "36",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 37,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Arif Mahmud Sisir",
+    "message": "Reminder sent to Arif Mahmud Sisir for their appointment at Ekko Flow on Feb 23, 2026 at 10:00 AM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.525Z",
+    "business_name": "Ekko Flow",
+    "customer_name": "Arif Mahmud Sisir",
+    "customer_phone": "1779052465",
+    "appointment_time": "Feb 23, 2026 at 10:00 AM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 3,
-    "fields": {
-        "action_time": "2026-03-07T06:38:26.665Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "37",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 38,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Sisir",
+    "message": "Reminder sent to Sisir for their appointment at Ekko Flow on Feb 28, 2026 at 09:00 AM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.533Z",
+    "business_name": "Ekko Flow",
+    "customer_name": "Sisir",
+    "customer_phone": "1234567889",
+    "appointment_time": "Feb 28, 2026 at 09:00 AM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 4,
-    "fields": {
-        "action_time": "2026-03-07T06:41:27.413Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "businessprofile"
-        ],
-        "object_id": "37",
-        "object_repr": "ekko",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 39,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Alex",
+    "message": "Reminder sent to Alex for their appointment at Cuts & Co on Oct 03, 2023 at 05:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.537Z",
+    "business_name": "Cuts & Co",
+    "customer_name": "Alex",
+    "customer_phone": "1234567890",
+    "appointment_time": "Oct 03, 2023 at 05:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 5,
-    "fields": {
-        "action_time": "2026-03-07T06:43:04.687Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "38",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 40,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Arif Mahmud Sisir",
+    "message": "Reminder sent to Arif Mahmud Sisir for their appointment at Cuts & Co on Oct 04, 2023 at 05:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.540Z",
+    "business_name": "Cuts & Co",
+    "customer_name": "Arif Mahmud Sisir",
+    "customer_phone": "177952465",
+    "appointment_time": "Oct 04, 2023 at 05:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 6,
-    "fields": {
-        "action_time": "2026-03-07T07:23:08.171Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "39",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 41,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Sisir",
+    "message": "Reminder sent to Sisir for their appointment at Ekko Loop on Mar 10, 2026 at 04:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.543Z",
+    "business_name": "Ekko Loop",
+    "customer_name": "Sisir",
+    "customer_phone": "546557",
+    "appointment_time": "Mar 10, 2026 at 04:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 7,
-    "fields": {
-        "action_time": "2026-03-07T07:25:47.019Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "40",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 42,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Abrar Khan Alvi",
+    "message": "Reminder sent to Abrar Khan Alvi for their appointment at Ekko Loop on Oct 12, 2023 at 07:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.545Z",
+    "business_name": "Ekko Loop",
+    "customer_name": "Abrar Khan Alvi",
+    "customer_phone": "1816249771",
+    "appointment_time": "Oct 12, 2023 at 07:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 8,
-    "fields": {
-        "action_time": "2026-03-07T07:27:33.388Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "41",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 43,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Abrar Khan Alvi",
+    "message": "Reminder sent to Abrar Khan Alvi for their appointment at Cuts & Co on Mar 10, 2026 at 07:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.548Z",
+    "business_name": "Cuts & Co",
+    "customer_name": "Abrar Khan Alvi",
+    "customer_phone": "1816249771",
+    "appointment_time": "Mar 10, 2026 at 07:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 9,
-    "fields": {
-        "action_time": "2026-03-07T07:31:37.329Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "42",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 44,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Atiqur Rahman",
+    "message": "Reminder sent to Atiqur Rahman for their appointment at Cuts & Co on Mar 12, 2026 at 06:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.550Z",
+    "business_name": "Cuts & Co",
+    "customer_name": "Atiqur Rahman",
+    "customer_phone": "1917654897",
+    "appointment_time": "Mar 12, 2026 at 06:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 10,
-    "fields": {
-        "action_time": "2026-03-07T07:32:32.831Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "43",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 45,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Atiqur Rahman",
+    "message": "Reminder sent to Atiqur Rahman for their appointment at Ekko Flow on Mar 12, 2026 at 03:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.554Z",
+    "business_name": "Ekko Flow",
+    "customer_name": "Atiqur Rahman",
+    "customer_phone": "1917654897",
+    "appointment_time": "Mar 12, 2026 at 03:00 PM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 11,
-    "fields": {
-        "action_time": "2026-03-07T07:44:19.085Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "44",
-        "object_repr": "abrar1khan2@gmail.com",
-        "action_flag": 3,
-        "change_message": ""
-    }
+  "model": "authentication.notification",
+  "pk": 46,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Girish",
+    "message": "Reminder sent to Girish for their appointment at Ekko Flow on Mar 27, 2026 at 09:00 AM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.557Z",
+    "business_name": "Ekko Flow",
+    "customer_name": "Girish",
+    "customer_phone": "177777777777",
+    "appointment_time": "Mar 27, 2026 at 09:00 AM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 12,
-    "fields": {
-        "action_time": "2026-03-07T07:58:17.783Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "35",
-        "object_repr": "admin@example.com",
-        "action_flag": 2,
-        "change_message": "[{\"changed\": {\"fields\": [\"Is verified\"]}}]"
-    }
+  "model": "authentication.notification",
+  "pk": 47,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Alvi",
+    "message": "Reminder sent to Alvi for their appointment at Cuts & Co on Mar 11, 2026 at 10:00 AM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.560Z",
+    "business_name": "Cuts & Co",
+    "customer_name": "Alvi",
+    "customer_phone": "1816249770",
+    "appointment_time": "Mar 11, 2026 at 10:00 AM",
+    "read_by": []
+  }
 },
 {
-    "model": "admin.logentry",
-    "pk": 13,
-    "fields": {
-        "action_time": "2026-03-07T07:58:47.919Z",
-        "user": [
-            "admin@example.com"
-        ],
-        "content_type": [
-            "authentication",
-            "user"
-        ],
-        "object_id": "35",
-        "object_repr": "admin@example.com",
-        "action_flag": 2,
-        "change_message": "[{\"changed\": {\"fields\": [\"Full name\", \"Address\", \"Phone number\"]}}]"
-    }
+  "model": "authentication.notification",
+  "pk": 48,
+  "fields": {
+    "user": null,
+    "title": "Reminder for HM Ziyad",
+    "message": "Reminder sent to HM Ziyad for their appointment at GuitarLand on Mar 11, 2026 at 12:00 PM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-10T19:23:29.563Z",
+    "business_name": "GuitarLand",
+    "customer_name": "HM Ziyad",
+    "customer_phone": "1816249654",
+    "appointment_time": "Mar 11, 2026 at 12:00 PM",
+    "read_by": [
+      [
+        "abrar1khan2@gmail.com"
+      ]
+    ]
+  }
+},
+{
+  "model": "authentication.notification",
+  "pk": 49,
+  "fields": {
+    "user": null,
+    "title": "Reminder for Abrar khan alvi",
+    "message": "Reminder sent to Abrar khan alvi for their appointment at GuitarLand on Mar 11, 2026 at 07:00 AM.",
+    "notification_type": "reminder",
+    "created_at": "2026-03-11T20:09:04.311Z",
+    "business_name": "GuitarLand",
+    "customer_name": "Abrar khan alvi",
+    "customer_phone": "1816249975",
+    "appointment_time": "Mar 11, 2026 at 07:00 AM",
+    "read_by": [
+      [
+        "abrar1khan2@gmail.com"
+      ]
+    ]
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 1,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773076351,
+    "received_message": "Hello I want to book an appointment",
+    "sent_message": "Hi there! I'd be happy to help you book an appointment. Could you please provide the following information?  \n\n- Your full name  \n- Your phone number  \n- The service you'd like (Dental or Consultation)  \n- Your preferred date and time  \n- Your email address  \n\nThis will help me find the best slot for you! 😊",
+    "created_at": "2026-03-10T16:47:42.117Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 2,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773076406,
+    "received_message": "What kind of services did you providing?",
+    "sent_message": "Certainly! We offer the following services:\n\n- Dental\n- Consultation\n\nIf you have any questions or need to book an appointment, feel free to let me know! 😊",
+    "created_at": "2026-03-10T16:47:42.124Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 3,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773077442,
+    "received_message": "Hello..",
+    "sent_message": "Hi there! How can I assist you today? 😊",
+    "created_at": "2026-03-10T16:47:42.126Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 4,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773077475,
+    "received_message": "What kind of services did you providing?",
+    "sent_message": "Of course! We offer the following services:\n\n- Haircut\n- Beard Trim\n\nFeel free to ask if you need more details or want to schedule an appointment! 😊",
+    "created_at": "2026-03-10T16:47:42.129Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 5,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773078712,
+    "received_message": "Hello",
+    "sent_message": "Hello! How can I assist you today? 😊",
+    "created_at": "2026-03-10T16:47:42.131Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 6,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773078730,
+    "received_message": "What kind of services did you providing?",
+    "sent_message": "Certainly! We offer the following services:\n\n- Haircut\n- Beard Trim\n\nFeel free to ask for more details or to book an appointment! 😊",
+    "created_at": "2026-03-10T16:47:42.134Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 7,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079479,
+    "received_message": "hello",
+    "sent_message": "Hello! How can I assist you today? 😊",
+    "created_at": "2026-03-10T16:47:42.137Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 8,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079513,
+    "received_message": "what kind of services do you providing?",
+    "sent_message": "Certainly! Could you please let me know which business you're interested in? Here's a list of our available businesses:\n\n1. Ekko Flow — Dental\n\nLet me know your choice, and I can provide more details about their services! 😊",
+    "created_at": "2026-03-10T16:47:42.140Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 9,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079619,
+    "received_message": "hello",
+    "sent_message": "Hello! How can I assist you today? 😊",
+    "created_at": "2026-03-10T16:47:42.143Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 10,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079635,
+    "received_message": "what kind of services do you providing?",
+    "sent_message": "Of course! Could you please specify which business you're interested in? Here's a list of our available businesses:\n\n1. Ekko Flow — Dental\n\nLet me know, and I'll provide more details on their services! 😊",
+    "created_at": "2026-03-10T16:47:42.146Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 11,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079782,
+    "received_message": "is there any other services that you are providing?",
+    "sent_message": "Could you please specify which business you’re interested in? Here’s what we have:\n\n1. Ekko Flow — Dental\n\nLet me know if you're interested in this business, and I'll provide more information about their services! 😊",
+    "created_at": "2026-03-10T16:47:42.148Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 12,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773079876,
+    "received_message": "is there any other services that you are providing?",
+    "sent_message": "Could you let me know which business you are interested in? Here's what we currently have available:\n\n1. Ekko Flow — Dental\n\nIf you're interested, I can provide more details about their services! 😊",
+    "created_at": "2026-03-10T16:47:42.151Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 13,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773080005,
+    "received_message": "hello",
+    "sent_message": "Hello! How can I assist you today? 😊",
+    "created_at": "2026-03-10T16:47:42.154Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 14,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773080022,
+    "received_message": "which  business you have",
+    "sent_message": "We currently have the following business available:\n\n1. Ekko Flow — Dental\n\nLet me know if you're interested, and I can provide more details! 😊",
+    "created_at": "2026-03-10T16:47:42.156Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 15,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773080213,
+    "received_message": "which  business you have",
+    "sent_message": "We currently have the following business available:\n\n1. Ekko Flow — Dental\n\nLet me know if you're interested, and I can provide more details! 😊",
+    "created_at": "2026-03-10T16:47:42.158Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 16,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773080332,
+    "received_message": "hello",
+    "sent_message": "Hello! How can I help you today? 😊",
+    "created_at": "2026-03-10T16:47:42.160Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 17,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773080358,
+    "received_message": "how  many7 businmess you have",
+    "sent_message": "We currently have one business available:\n\n1. Ekko Flow — Dental\n\nIf you'd like more information, just let me know! 😊",
+    "created_at": "2026-03-10T16:47:42.162Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 18,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085645,
+    "received_message": "Hey",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. Alvi — Haircut, Beard Trim\n4. Ekko Loop — ekkoekkoal\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T16:47:42.164Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 19,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085670,
+    "received_message": "4",
+    "sent_message": "✅ Great! You've selected *Ekko Loop*.\n📋 Services: ekkoekkoal\n⏰ Hours: ekkoekko\n\nHow can I help you today? I can help with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T16:47:42.167Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 20,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085684,
+    "received_message": "New booking",
+    "sent_message": "To book an appointment, I'll need a few details:\n\n- Your full name\n- Phone number\n- Email address\n- Preferred date and time\n- Service you’d like to book\n\nPlease provide these details so I can assist you further!",
+    "created_at": "2026-03-10T16:47:42.171Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 21,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085753,
+    "received_message": "Abrar Khan Alvi\n01816249771\nabrar1khan2@gmail.com\nTomorrow 7.00 PM",
+    "sent_message": "It seems like the service name is missing. Could you please let me know which service you'd like to book at Ekko Loop? 😊",
+    "created_at": "2026-03-10T16:47:42.174Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 22,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085764,
+    "received_message": "ekkoekkoal",
+    "sent_message": "✅ Your booking is confirmed with *Ekko Loop*!\n\n- **Service:** ekkoekkoal\n- **Date & Time:** Thursday, October 12th at 7:00 PM\n- **Contact:** 01816249771\n\nRemember our booking policies: ekkoekkoekko.\n\nIs there anything else I can help you with? 😊",
+    "created_at": "2026-03-10T16:47:42.176Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 23,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085808,
+    "received_message": "Can you list all the bookings in my name",
+    "sent_message": "I'm here to help! Could you please let me know what you need assistance with? 😊",
+    "created_at": "2026-03-10T16:47:42.179Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 24,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085826,
+    "received_message": "Can you list all the bookings in my name",
+    "sent_message": "I found a booking for you:\n\n- **Business:** Ekko Loop\n- **Service:** ekkoekkoal\n- **Date & Time:** Thursday, October 12th at 7:00 PM\n\nIf you need any changes or further assistance, feel free to let me know! 📅",
+    "created_at": "2026-03-10T16:47:42.182Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 25,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085890,
+    "received_message": "can you list all the bookings in the name of Arif Mahmud Sisir",
+    "sent_message": "Here are the bookings for Arif Mahmud Sisir:\n\n1. **Ekko Flow**\n   - **Service:** Consultation\n   - **Date & Time:** Monday, February 23rd, 2026 at 10:00 AM\n\n2. **Cuts & Co**\n   - **Service:** Haircut\n   - **Date & Time:** Wednesday, October 4th, 2023 at 5:00 PM\n\nIf you need to make any changes or have questions, let me know! 😊",
+    "created_at": "2026-03-10T16:47:42.185Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 26,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773085978,
+    "received_message": "can you tell me what services he is using",
+    "sent_message": "Arif Mahmud Sisir has used the following services:\n\n1. **Ekko Flow**: Consultation\n2. **Cuts & Co**: Haircut\n\nIf there's anything else you need, feel free to ask! 😊",
+    "created_at": "2026-03-10T16:47:42.188Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 27,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773086377,
+    "received_message": "how many context can store one at a time",
+    "sent_message": "I'm here to manage and assist with one conversation context at a time, ensuring each request is attended to efficiently. If there's something specific you need, feel free to let me know! 😊",
+    "created_at": "2026-03-10T16:47:42.190Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 28,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773086405,
+    "received_message": "can i book appointment in my friends name",
+    "sent_message": "Absolutely! Just provide your friend's details, including their full name, phone number, email, preferred date and time, and the service they need. I'll take care of the rest! 😊",
+    "created_at": "2026-03-10T16:47:42.193Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 29,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773086432,
+    "received_message": "can you tell me is their any booking in the name of ziyad",
+    "sent_message": "I'm here to assist you with any specific requests! If you'd like to book an appointment, just provide the details, and I'll get it set up for you or your friend. 😊",
+    "created_at": "2026-03-10T16:47:42.196Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 30,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773086450,
+    "received_message": "can you tell me is their any booking in the name of ziyad",
+    "sent_message": "I couldn't find any bookings under the name Ziyad. If you'd like to make a new booking for Ziyad, just let me know the details, and I'll be happy to assist! 😊",
+    "created_at": "2026-03-10T16:47:42.199Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 31,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097417,
+    "received_message": "Hi",
+    "sent_message": "I'm here to assist you! However, I need to operate as an AI receptionist following specific processes. How can I help you today?",
+    "created_at": "2026-03-10T16:47:42.201Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 32,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097432,
+    "received_message": "Need to book an appointment",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. alvi — Haircut, Beard Trim\n4. Ekko Loop — ekkoekkoal\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T16:47:42.204Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 33,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097449,
+    "received_message": "1",
+    "sent_message": "✅ Great! You've selected *Ekko Flow*.\n📋 Services: Dental, Consultation\n⏰ Hours: Sun-Fri 09:00-17:00\n\nHow can I help you today? I can assist with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T16:47:42.206Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 34,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097459,
+    "received_message": "New booking",
+    "sent_message": "Sure! Please provide the following details for your new booking:\n\n- Your Name\n- Phone Number\n- Email\n- Service Requested (Dental or Consultation)\n- Preferred Date & Time",
+    "created_at": "2026-03-10T16:47:42.208Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 35,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097485,
+    "received_message": "Atiqur Rahman\n01917654897\nAtiq@gmail.com\nDental\n12th march 7pm",
+    "sent_message": "The preferred date and time for your booking are outside Ekko Flow's business hours (Sun-Fri 09:00-17:00).\n\nCould you please choose a different time within business hours? How about March 12th at 10:00 AM or 3:00 PM?",
+    "created_at": "2026-03-10T16:47:42.210Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 36,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097607,
+    "received_message": "Hey",
+    "sent_message": "Hi there! How can I help you today? 😊",
+    "created_at": "2026-03-10T16:47:42.212Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 37,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097619,
+    "received_message": "Need to book an appointment",
+    "sent_message": "Sure, I can help with that! Could you please provide the following details?\n\n- Your Name\n- Phone Number\n- Email\n- Service Requested (Dental or Consultation)\n- Preferred Date & Time within Ekko Flow's business hours (Sun-Fri 09:00-17:00)",
+    "created_at": "2026-03-10T16:47:42.214Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 38,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097639,
+    "received_message": "Atiqur Rahman\n01917654897\nAtiq@gmail.com\nDental\n12th march 7pm",
+    "sent_message": "The time you've requested is outside Ekko Flow's operating hours (Sun-Fri 09:00-17:00). Could we look at a different time? \n\nIs March 12th at 10:00 AM or 3:00 PM a good option for you? 📅",
+    "created_at": "2026-03-10T16:47:42.216Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 39,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773097659,
+    "received_message": "3.00 Pm is good",
+    "sent_message": "✅ Your appointment has been successfully booked!\n\n**Details:**\n- **Business:** Ekko Flow\n- **Service:** Dental\n- **Date & Time:** Thursday, March 12th at 3:00 PM\n- **Policies:** Sunday to Friday\n\nIf you have any questions, feel free to ask. 😊",
+    "created_at": "2026-03-10T16:47:42.218Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 40,
+  "fields": {
+    "contact_name": "Rahaman AtiQ",
+    "contact_number": "8801782151217",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773100927,
+    "received_message": null,
+    "sent_message": "Could you please clarify how I can assist you further? 😊",
+    "created_at": "2026-03-10T16:47:42.220Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 41,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101228,
+    "received_message": "Hey",
+    "sent_message": "I'm here to assist with booking and scheduling appointments for businesses. Could you please let me know how I can help you today? 😊",
+    "created_at": "2026-03-10T16:47:42.222Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 42,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101254,
+    "received_message": "I want to book an appointment",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. alvi — Haircut, Beard Trim\n4. Ekko Loop — ekkoekkoal\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T16:47:42.224Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 43,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101274,
+    "received_message": "1",
+    "sent_message": "✅ Great! You've selected *Ekko Flow*.\n📋 Services: Dental, Consultation\n⏰ Hours: Sun-Fri 09:00-17:00\n\nHow can I help you today? I can assist with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T16:47:42.227Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 44,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101298,
+    "received_message": "New booking",
+    "sent_message": "Sure thing! I'll need a few details from you to get started:\n\n- Your full name\n- Phone number\n- Email address\n- The service you'd like to book\n- Your preferred date and time\n\nOnce I have this information, I can check the availability for you. 📅✨",
+    "created_at": "2026-03-10T16:47:42.230Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 45,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101349,
+    "received_message": "Girish 0177777777777 girish@gmail.com dental 27-03-2026",
+    "sent_message": "Great news! The slot on Friday, March 27th at 9:00 AM is available for your booking at Ekko Flow. Please confirm if you'd like to proceed with this time, and I'll handle the booking for you! 👍",
+    "created_at": "2026-03-10T16:47:42.232Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 46,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101563,
+    "received_message": "I want to book an appointment",
+    "sent_message": "Sure! Just let me know:\n\n- Your full name\n- Phone number\n- Email address\n- The service you need\n- Your preferred date and time\n\nOnce I have these details, I'll check availability and set up your appointment. 😊",
+    "created_at": "2026-03-10T16:47:42.236Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 47,
+  "fields": {
+    "contact_name": "Girish",
+    "contact_number": "8801957574565",
+    "business_name": "Ekko Flow",
+    "business_id": null,
+    "timestamp": 1773101573,
+    "received_message": "Girish 0177777777777 girish@gmail.com dental 27-03-2026",
+    "sent_message": "Your appointment is confirmed, Girish! 😊\n\n- **Business:** Ekko Flow\n- **Date & Time:** Friday, March 27th at 9:00 AM\n- **Service:** Dental\n\nThank you for booking with us. If you need any further assistance, feel free to let me know! 📅✨",
+    "created_at": "2026-03-10T16:47:42.239Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 48,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137119,
+    "received_message": "Hey",
+    "sent_message": "I'm here to help! While I use technology to assist you efficiently, I’m designed to provide a warm and professional experience much like a human receptionist. Let me know how I can assist you today! 😊",
+    "created_at": "2026-03-10T16:47:42.241Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 49,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137136,
+    "received_message": "I want to book for an appointment",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. alvi — Haircut, Beard Trim\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T16:47:42.245Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 50,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137151,
+    "received_message": "2",
+    "sent_message": "✅ Great! You've selected *Cuts & Co*.\n📋 Services: Haircut, Beard Trim\n⏰ Hours: Mon-Sat 10:00-18:00\n\nHow can I help you today? I can help with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T16:47:42.247Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 51,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137168,
+    "received_message": "New booking",
+    "sent_message": "Great! I'll need a few details to get started:\n\n- Your full name\n- Phone number\n- Email address\n- Service you'd like (Haircut or Beard Trim)\n- Preferred date and time for the appointment\n\nOnce I have these, we can proceed with your booking. 😊",
+    "created_at": "2026-03-10T16:47:42.249Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 52,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137207,
+    "received_message": "Alvi\n01816249770\nabrar1khan2@gmail.com\nHaircut\nTomorrow 10.00",
+    "sent_message": "Your appointment is booked at *Cuts & Co* for a Haircut on **Wednesday, March 11th at 10:00 AM**.\n\n📋 Here are the details:\n- **Name:** Alvi\n- **Phone:** 01816249770\n- **Email:** abrar1khan2@gmail.com\n- **Booking Policies:** Monday to Saturday\n\nIs there anything else I can help you with? 😊",
+    "created_at": "2026-03-10T16:47:42.251Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 53,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773137233,
+    "received_message": "No thanks",
+    "sent_message": "You're welcome! If you need anything else, feel free to reach out. Have a great day! 😊",
+    "created_at": "2026-03-10T16:47:42.254Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 54,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773144333,
+    "received_message": "Hello i want to book an appointment",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. alvi — Haircut, Beard Trim\n4. GuitarLand — Guitar Lessons, Piano Lessons, Vocal Exercise\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T16:47:42.256Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 55,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773144350,
+    "received_message": "GuitarLand",
+    "sent_message": "✅ Great! You've selected *GuitarLand*.\n📋 Services: Guitar Lessons, Piano Lessons, Vocal Exercise\n⏰ Hours: Mon-Fri 06:00-18:00\n\nHow can I help you today? I can assist with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T16:47:42.258Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 56,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773144365,
+    "received_message": "New Booking",
+    "sent_message": "Great! I can help with that. Please provide the following details:\n\n- Your full name\n- Phone number\n- Email address\n- Service you would like to book (Guitar Lessons, Piano Lessons, Vocal Exercise)\n- Preferred date and time\n\nLet me know, and I’ll get started on scheduling your appointment!",
+    "created_at": "2026-03-10T16:47:42.260Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 57,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773144416,
+    "received_message": "HM Ziyad\n01816249654\nabrarkhanalvi27@gmail.com\nVocal Exercise\nTue 12.00",
+    "sent_message": "Your booking is confirmed at *GuitarLand*.\n\n📅 Date: Wednesday, March 11, 2026\n⏰ Time: 12:00 PM\n🎵 Service: Vocal Exercise\n\nPlease remember: No refunds, and it's $10 per hour.\n\nIs there anything else I can assist you with? 😊",
+    "created_at": "2026-03-10T16:47:42.262Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 58,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773172171,
+    "received_message": "hey i want to book an appointment",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. **Ekko Flow** — Dental, Consultation\n2. **Cuts & Co** — Haircut, Beard Trim\n3. **alvi** — Haircut, Beard Trim\n4. **GuitarLand** — Guitar Lessons, Piano Lessons, Vocal Exercise\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-10T19:53:41.599Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 59,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773172194,
+    "received_message": "Guitarland",
+    "sent_message": "✅ Great! You've selected **GuitarLand**.\n📋 Services: Guitar Lessons, Piano Lessons, Vocal Exercise\n⏰ Hours: Mon-Fri 06:00-18:00\n\nHow can I help you today? I can assist with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-10T19:53:41.606Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 60,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773172209,
+    "received_message": "New booking",
+    "sent_message": "To book a new appointment at GuitarLand, I'll need the following details:\n\n- Your name\n- Phone number\n- Email address\n- Service you'd like (Guitar Lessons, Piano Lessons, or Vocal Exercise)\n- Preferred date and time\n\nOnce I have this information, I'll check availability and confirm your booking.",
+    "created_at": "2026-03-10T19:53:41.608Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 61,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773172370,
+    "received_message": "Abrar khan alvi\n01816249975\nabrar1khan2@gmail.com\nGuitar Lessons\nTue 07.00",
+    "sent_message": "📅 Your booking is confirmed at **GuitarLand** for **Guitar Lessons** on **Wednesday, March 11th at 7:00 AM**.\n\n📋 **Policies:** No Refunds. Per hour → $10\n\nIs there anything else I can help you with?",
+    "created_at": "2026-03-10T19:53:41.610Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 62,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773186261,
+    "received_message": "i want to book appointment for the business name guitarland for guitar lessons on march 13th at 7.00 AM",
+    "sent_message": "👋 Welcome! Please choose the business you'd like to book with:\n\n1. Ekko Flow — Dental, Consultation\n2. Cuts & Co — Haircut, Beard Trim\n3. alvi — Haircut, Beard Trim\n4. GuitarLand — Guitar Lessons, Piano Lessons, Vocal Exercise\n\nReply with the number or name of the business.",
+    "created_at": "2026-03-11T16:56:19.332Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 63,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773186277,
+    "received_message": "4",
+    "sent_message": "✅ Great! You've selected *GuitarLand*.\n📋 Services: Guitar Lessons, Piano Lessons, Vocal Exercise\n⏰ Hours: Mon-Fri 06:00-18:00\n\nHow can I help you today? I can help with:\n- New booking\n- Reschedule\n- Cancellation\n- General questions",
+    "created_at": "2026-03-11T16:56:19.341Z"
+  }
+},
+{
+  "model": "chatbot.conversationlog",
+  "pk": 64,
+  "fields": {
+    "contact_name": "Alvi",
+    "contact_number": "8801816249770",
+    "business_name": "GuitarLand",
+    "business_id": null,
+    "timestamp": 1773186287,
+    "received_message": "- New booking",
+    "sent_message": "Sure! I'll need a few details to get started. Could you please provide:\n\n- Your Name\n- Phone Number\n- Email\n- Service you want to book (Guitar Lesson, Piano Lesson, Vocal Exercise)\n- Preferred Date & Time\n\nOnce I have this information, I'll check availability and book your appointment. 📅",
+    "created_at": "2026-03-11T16:56:19.343Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 1,
+  "fields": {
+    "row_number": 2,
+    "tool_call_id": "call_MhXfOJnbxQwtyZysKPepRlPE",
+    "business_name": "Ekko Flow",
+    "business_id": "ekko_flow_001",
+    "business_hours": "Sunday–Friday 09:00–17:00",
+    "services_offered": "Dental",
+    "booking_policies": "Sunday to Friday",
+    "customer_name": "Arif Mahmud Sisir",
+    "customer_phone": "1779052465",
+    "whatsapp_number": "",
+    "customer_email": "sisir711954@gmail.com",
+    "appointment_datetime": "2026-02-23T10:00:00Z",
+    "service": "Consultation",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.445Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 2,
+  "fields": {
+    "row_number": 3,
+    "tool_call_id": "call_63HYOZw5IMF0fsDyLYclao8l",
+    "business_name": "Ekko Flow",
+    "business_id": "ekko_flow_001",
+    "business_hours": "09:00-17:00",
+    "services_offered": "Dental",
+    "booking_policies": "Sunday-Friday",
+    "customer_name": "Sisir",
+    "customer_phone": "1234567889",
+    "whatsapp_number": "",
+    "customer_email": "sisir@sisir.com",
+    "appointment_datetime": "2026-02-28T09:00:00Z",
+    "service": "General checkup",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.452Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 3,
+  "fields": {
+    "row_number": 4,
+    "tool_call_id": "call_1",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Alex",
+    "customer_phone": "1234567890",
+    "whatsapp_number": "",
+    "customer_email": "alex@example.com",
+    "appointment_datetime": "2023-10-03T17:00:00Z",
+    "service": "Haircut",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.457Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 4,
+  "fields": {
+    "row_number": 5,
+    "tool_call_id": "call_2",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Arif Mahmud Sisir",
+    "customer_phone": "177952465",
+    "whatsapp_number": "",
+    "customer_email": "sisir711954@gmail.com",
+    "appointment_datetime": "2023-10-04T17:00:00Z",
+    "service": "Haircut",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.461Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 5,
+  "fields": {
+    "row_number": 6,
+    "tool_call_id": "parallel_call",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Arif Mahmud Sisir",
+    "customer_phone": "177952465",
+    "whatsapp_number": "",
+    "customer_email": "sisir711954@gmail.com",
+    "appointment_datetime": "2023-10-04T17:00:00Z",
+    "service": "Haircut",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.465Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 6,
+  "fields": {
+    "row_number": 7,
+    "tool_call_id": "parallel_booking",
+    "business_name": "Ekko Loop",
+    "business_id": "4",
+    "business_hours": "Ekko-Ekko",
+    "services_offered": "ekkoekkoal",
+    "booking_policies": "Not specified",
+    "customer_name": "Sisir",
+    "customer_phone": "546557",
+    "whatsapp_number": "",
+    "customer_email": "sisi@gmail.com",
+    "appointment_datetime": "2026-03-10T16:00:00Z",
+    "service": "ekkoekkoal",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.469Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 7,
+  "fields": {
+    "row_number": 8,
+    "tool_call_id": "call_rhpCGVdbrOxqex70CmO5qiQO",
+    "business_name": "Ekko Loop",
+    "business_id": "5",
+    "business_hours": "ekkoekko",
+    "services_offered": "ekkoekkoal",
+    "booking_policies": "ekkoekkoekko",
+    "customer_name": "Abrar Khan Alvi",
+    "customer_phone": "1816249771",
+    "whatsapp_number": "",
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2023-10-12T19:00:00Z",
+    "service": "ekkoekkoal",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.473Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 8,
+  "fields": {
+    "row_number": 9,
+    "tool_call_id": "call_vF7PM36GjH6cAWbGXOx7pb1u",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Abrar Khan Alvi",
+    "customer_phone": "1816249771",
+    "whatsapp_number": "",
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-10T19:00:00Z",
+    "service": "haircut",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.477Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 9,
+  "fields": {
+    "row_number": 10,
+    "tool_call_id": "booking_create_1",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Atiqur Rahman",
+    "customer_phone": "1917654897",
+    "whatsapp_number": "",
+    "customer_email": "Atiq@gmail.com",
+    "appointment_datetime": "2026-03-12T18:00:00Z",
+    "service": "Beard Trim",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.481Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 10,
+  "fields": {
+    "row_number": 11,
+    "tool_call_id": "call_CMfmdlswn92DLewvcf9YZ4Nf",
+    "business_name": "Ekko Flow",
+    "business_id": "1",
+    "business_hours": "Sun-Fri 09:00-17:00",
+    "services_offered": "Dental, Consultation",
+    "booking_policies": "Sunday to Friday",
+    "customer_name": "Atiqur Rahman",
+    "customer_phone": "1917654897",
+    "whatsapp_number": "8801782151217",
+    "customer_email": "Atiq@gmail.com",
+    "appointment_datetime": "2026-03-12T15:00:00Z",
+    "service": "Dental",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.483Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 11,
+  "fields": {
+    "row_number": 12,
+    "tool_call_id": "tool_2",
+    "business_name": "Ekko Flow",
+    "business_id": "1",
+    "business_hours": "Sun-Fri 09:00-17:00",
+    "services_offered": "Dental, Consultation",
+    "booking_policies": "Sunday to Friday",
+    "customer_name": "Girish",
+    "customer_phone": "177777777777",
+    "whatsapp_number": "8801957574565",
+    "customer_email": "girish@gmail.com",
+    "appointment_datetime": "2026-03-27T09:00:00Z",
+    "service": "Dental",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.487Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 12,
+  "fields": {
+    "row_number": 13,
+    "tool_call_id": "tool_1",
+    "business_name": "Ekko Flow",
+    "business_id": "1",
+    "business_hours": "Sun-Fri 09:00-17:00",
+    "services_offered": "Dental, Consultation",
+    "booking_policies": "Sunday to Friday",
+    "customer_name": "Girish",
+    "customer_phone": "177777777777",
+    "whatsapp_number": "8801957574565",
+    "customer_email": "girish@gmail.com",
+    "appointment_datetime": "2026-03-27T09:00:00Z",
+    "service": "Dental",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.491Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 13,
+  "fields": {
+    "row_number": 14,
+    "tool_call_id": "tool_fLsJajlY9QdUG9S8NWZhNYz",
+    "business_name": "Cuts & Co",
+    "business_id": "2",
+    "business_hours": "Mon-Sat 10:00-18:00",
+    "services_offered": "Haircut, Beard Trim",
+    "booking_policies": "Monday to Saturday",
+    "customer_name": "Alvi",
+    "customer_phone": "1816249770",
+    "whatsapp_number": "8801816249770",
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-11T10:00:00Z",
+    "service": "Haircut",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.495Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 14,
+  "fields": {
+    "row_number": 15,
+    "tool_call_id": "booking_001",
+    "business_name": "GuitarLand",
+    "business_id": "45",
+    "business_hours": "Mon-Fri 06:00-18:00",
+    "services_offered": "Guitar Lessons, Piano Lessons, Vocal Exercise",
+    "booking_policies": "No Refunds. Per hour ->10$",
+    "customer_name": "HM Ziyad",
+    "customer_phone": "1816249654",
+    "whatsapp_number": "8801816249770",
+    "customer_email": "abrarkhanalvi27@gmail.com",
+    "appointment_datetime": "2026-03-11T12:00:00Z",
+    "service": "Vocal Exercise",
+    "status": "Pending",
+    "action": "To Sync",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T16:48:18.499Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 15,
+  "fields": {
+    "row_number": 16,
+    "tool_call_id": "create_booking_1",
+    "business_name": "GuitarLand",
+    "business_id": "44",
+    "business_hours": "Mon-Fri 06:00-18:00",
+    "services_offered": "Guitar Lessons, Piano Lessons, Vocal Exercise",
+    "booking_policies": "No Refunds. Per hour ->10$",
+    "customer_name": "Abrar khan alvi",
+    "customer_phone": "1816249975",
+    "whatsapp_number": "8801816249770",
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-11T07:00:00Z",
+    "service": "Guitar Lessons",
+    "status": "Pending",
+    "action": "Yes",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-10T19:53:29.108Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 18,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "manual_0b4f17224b9b",
+    "business_name": "GuitarLand",
+    "business_id": "44",
+    "business_hours": null,
+    "services_offered": null,
+    "booking_policies": null,
+    "customer_name": "Khan ",
+    "customer_phone": "+11816249770",
+    "whatsapp_number": null,
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-14T04:25:00Z",
+    "service": "amne",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": true,
+    "is_synced_to_sheets": true,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-11T19:26:02.031Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 32,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "manual_upload_88b52509cd55",
+    "business_name": "GuitarLand",
+    "business_id": "44",
+    "business_hours": "Mon-Fri 06:00-18:00",
+    "services_offered": "Guitar Lessons, Piano Lessons, Vocal Exercise",
+    "booking_policies": "No Refunds. Per hour ->10$",
+    "customer_name": "abrar khan alvi",
+    "customer_phone": "+8801816249770",
+    "whatsapp_number": null,
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-14T04:25:00Z",
+    "service": "amne12",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": true,
+    "is_synced_to_sheets": true,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-11T20:06:30.714Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 33,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "manual_upload_d10087abc5aa",
+    "business_name": "GuitarLand",
+    "business_id": "44",
+    "business_hours": "Mon-Fri 06:00-18:00",
+    "services_offered": "Guitar Lessons, Piano Lessons, Vocal Exercise",
+    "booking_policies": "No Refunds. Per hour ->10$",
+    "customer_name": "ziyad",
+    "customer_phone": "1181624974",
+    "whatsapp_number": null,
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-14T07:05:20Z",
+    "service": "gaan14",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": true,
+    "is_synced_to_sheets": true,
+    "reminder_sent": false,
+    "overdue_sent": false,
+    "created_at": "2026-03-11T20:06:30.718Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 34,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "test_reminder_001",
+    "business_name": "Test Business",
+    "business_id": "999",
+    "business_hours": null,
+    "services_offered": null,
+    "booking_policies": null,
+    "customer_name": "Test Reminder User",
+    "customer_phone": "+44123456789",
+    "whatsapp_number": "+44123456789",
+    "customer_email": "your@email.com",
+    "appointment_datetime": "2026-03-14T00:24:22.773Z",
+    "service": "Test Service",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": true,
+    "overdue_sent": false,
+    "created_at": "2026-03-12T00:24:22.792Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 35,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "test_overdue_001",
+    "business_name": "Test Business",
+    "business_id": "999",
+    "business_hours": null,
+    "services_offered": null,
+    "booking_policies": null,
+    "customer_name": "Test Overdue User",
+    "customer_phone": "+44123456789",
+    "whatsapp_number": "+44123456789",
+    "customer_email": "your@email.com",
+    "appointment_datetime": "2026-03-10T23:24:22.957Z",
+    "service": "Test Service",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": false,
+    "overdue_sent": true,
+    "created_at": "2026-03-12T00:24:22.957Z"
+  }
+},
+{
+  "model": "chatbot.appointment",
+  "pk": 36,
+  "fields": {
+    "row_number": null,
+    "tool_call_id": "test_48hr_now",
+    "business_name": "Test Biz",
+    "business_id": "999",
+    "business_hours": null,
+    "services_offered": null,
+    "booking_policies": null,
+    "customer_name": "Test",
+    "customer_phone": "8801816249770",
+    "whatsapp_number": "0880181624970",
+    "customer_email": "abrar1khan2@gmail.com",
+    "appointment_datetime": "2026-03-14T01:13:02.353Z",
+    "service": "Test",
+    "status": "Pending",
+    "action": "No",
+    "is_manual": false,
+    "is_synced_to_sheets": false,
+    "reminder_sent": true,
+    "overdue_sent": false,
+    "created_at": "2026-03-12T01:13:02.370Z"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-03-07T06:28:28.761Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "2",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-03-07T06:35:22.131Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "36",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-03-07T06:38:26.665Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "37",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-03-07T06:41:27.413Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "businessprofile"
+    ],
+    "object_id": "37",
+    "object_repr": "ekko",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-03-07T06:43:04.687Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "38",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-03-07T07:23:08.171Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "39",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-03-07T07:25:47.019Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "40",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-03-07T07:27:33.388Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "41",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-03-07T07:31:37.329Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "42",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-03-07T07:32:32.831Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "43",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-03-07T07:44:19.085Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "44",
+    "object_repr": "abrar1khan2@gmail.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-03-07T07:58:17.783Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "35",
+    "object_repr": "admin@example.com",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is verified\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-03-07T07:58:47.919Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "35",
+    "object_repr": "admin@example.com",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Full name\", \"Address\", \"Phone number\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-03-09T19:56:48.302Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "user"
+    ],
+    "object_id": "1",
+    "object_repr": "test@example.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-03-10T16:59:56.309Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "businessprofile"
+    ],
+    "object_id": "44",
+    "object_repr": "GuitarLand",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Business name\", \"Business hours\", \"Services offered\", \"Booking policies\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-03-10T19:03:00.293Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "authentication",
+      "notification"
+    ],
+    "object_id": "10",
+    "object_repr": "Reminder Sent - 2026-03-10 18:52:40.839480+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is read\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-03-11T19:02:14.327Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "16",
+    "object_repr": "Khan @ GuitarLand — 2026-03-14 03:02:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-03-11T19:24:37.665Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "17",
+    "object_repr": "Abrar Khan @ GuitarLand — 2026-03-14 04:06:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2026-03-11T19:40:00.198Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "21",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-03-11T19:40:00.208Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "19",
+    "object_repr": "atiq @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-03-11T19:40:00.211Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "20",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-03-11T19:53:01.643Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "23",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-03-11T19:53:01.651Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "22",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-03-11T19:57:40.657Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "25",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2026-03-11T19:57:40.668Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "24",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2026-03-11T20:00:56.697Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "27",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2026-03-11T20:00:56.703Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "26",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2026-03-11T20:03:27.550Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "29",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2026-03-11T20:03:27.556Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "28",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2026-03-11T20:06:23.365Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "31",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-19 05:05:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2026-03-11T20:06:23.372Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "30",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2026-03-12T00:17:59.527Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "32",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Customer phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2026-03-12T00:23:06.324Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "32",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Customer phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2026-03-12T00:34:39.735Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "32",
+    "object_repr": "abrar khan alvi @ GuitarLand — 2026-03-14 04:25:00+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Customer phone\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2026-03-12T01:03:45.324Z",
+    "user": [
+      "admin@example.com"
+    ],
+    "content_type": [
+      "chatbot",
+      "appointment"
+    ],
+    "object_id": "33",
+    "object_repr": "ziyad @ GuitarLand — 2026-03-14 07:05:20+00:00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Appointment datetime\"]}}]"
+  }
 }
 ]

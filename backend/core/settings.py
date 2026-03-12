@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -185,3 +186,25 @@ N8N_WEBHOOK_SECRET = os.environ.get('N8N_WEBHOOK_SECRET', '')
 N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/activate-business')
 N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/deactivate-business')
 N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/update-business')
+
+# ─── Celery / Redis Settings ───────────────────────────────────────────────────
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# Beat schedule — both tasks run every hour
+# The 48hr reminder has a 2-hour window (47–49hr) so hourly is precise enough.
+CELERY_BEAT_SCHEDULE = {
+    'send-48hr-reminders-every-hour': {
+        'task': 'chatbot.tasks.send_48hr_reminder_emails',
+        'schedule': crontab(minute=0),  # top of every hour
+    },
+    'send-overdue-emails-every-hour': {
+        'task': 'chatbot.tasks.send_overdue_emails',
+        'schedule': crontab(minute=0),  # top of every hour
+    },
+}
+

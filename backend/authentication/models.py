@@ -43,6 +43,9 @@ class BusinessProfile(models.Model):
     business_hours = models.CharField(max_length=255, blank=True)
     services_offered = models.TextField(blank=True)
     booking_policies = models.TextField(blank=True)
+    facebook_link = models.URLField(max_length=500, blank=True)
+    instagram_link = models.URLField(max_length=500, blank=True)
+    linkedin_link = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return self.business_name

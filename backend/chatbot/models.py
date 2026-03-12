@@ -39,10 +39,20 @@ class Appointment(models.Model):
     appointment_datetime = models.DateTimeField(null=True, blank=True)
     service = models.CharField(max_length=255, null=True, blank=True)
     
+    # --- New Fields for Manual Sync & Tracking ---
+    status = models.CharField(max_length=50, default='Pending', null=True, blank=True)
+    action = models.CharField(max_length=50, default='No', null=True, blank=True)
+    is_manual = models.BooleanField(default=False)
+    is_synced_to_sheets = models.BooleanField(default=False)
+
+    # --- Email Tracking (prevents duplicate sends) ---
+    reminder_sent = models.BooleanField(default=False)  # 48hr reminder email sent
+    overdue_sent = models.BooleanField(default=False)   # Overdue email sent
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['appointment_datetime']
+        ordering = ['-appointment_datetime']
 
     def __str__(self):
         return f"{self.customer_name} @ {self.business_name} — {self.appointment_datetime}"

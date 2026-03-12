@@ -19,10 +19,13 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
     business_hours = serializers.CharField(required=False, allow_blank=True)
     services_offered = serializers.CharField(required=False, allow_blank=True)
     booking_policies = serializers.CharField(required=False, allow_blank=True)
+    facebook_link = serializers.URLField(required=False, allow_blank=True)
+    instagram_link = serializers.URLField(required=False, allow_blank=True)
+    linkedin_link = serializers.URLField(required=False, allow_blank=True)
 
     class Meta:
         model = BusinessProfile
-        fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies']
+        fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies', 'facebook_link', 'instagram_link', 'linkedin_link']
 
     def validate_business_name(self, value):
         if value and len(value.strip()) > 100:
@@ -131,8 +134,10 @@ class UserSerializer(serializers.ModelSerializer):
                 profile = BusinessProfile.objects.create(user=instance, business_name='', business_hours='', services_offered='', booking_policies='')
 
             changed_fields = []
+            print(f"[DEBUG] Profile Update Receieved Fields: {profile_data}")
             for attr, value in profile_data.items():
                 if getattr(profile, attr) != value:
+                    print(f"[DEBUG] Profile Field Updating -> {attr} : {value}")
                     setattr(profile, attr, value)
                     changed_fields.append(attr)
                     has_business_change = True
@@ -140,12 +145,13 @@ class UserSerializer(serializers.ModelSerializer):
             if changed_fields:
                 profile.save(update_fields=changed_fields)
 
+        # Trigger webhook whenever business profile data was sent in the request
+        # (always keep n8n / Google Sheets in sync)
+        if profile_data is not None and instance.is_paid:
+            self._trigger_n8n_webhook(instance, endpoint='update-business')
+
         # Other fields are read_only, so they won't be in validated_data unless forced
         user = super().update(instance, validated_data)
-
-        # Trigger webhook if business profile changed
-        if has_business_change:
-            self._trigger_n8n_webhook(user, endpoint='update-business')
 
         return user
 
@@ -161,7 +167,10 @@ class UserSerializer(serializers.ModelSerializer):
                     "businessName": business_name,
                     "businessHours": business.business_hours if business else '',
                     "services": business.services_offered if business else '',
-                    "bookingPolicies": business.booking_policies if business else ''
+                    "bookingPolicies": business.booking_policies if business else '',
+                    "bookingFacebook": business.facebook_link if business else '',
+                    "bookingInstagram": business.instagram_link if business else '',
+                    "bookingLinkedin": business.linkedin_link if business else ''
                 }
                 
                 headers = {
@@ -230,7 +239,10 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
                         "businessName": business_name,
                         "businessHours": business.business_hours if business else '',
                         "services": business.services_offered if business else '',
-                        "bookingPolicies": business.booking_policies if business else ''
+                        "bookingPolicies": business.booking_policies if business else '',
+                        "bookingFacebook": business.facebook_link if business else '',
+                        "bookingInstagram": business.instagram_link if business else '',
+                        "bookingLinkedin": business.linkedin_link if business else ''
                     }
                 
                 # Exclude the "x-admin-secret" headers as your tested payload didn't strictly require auth OR we can safely leave it.

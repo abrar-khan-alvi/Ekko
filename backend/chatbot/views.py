@@ -9,6 +9,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.utils.dateparse import parse_datetime
 from .models import ConversationLog, Appointment
+from .email_utils import send_thank_you_email
+from .whatsapp_utils import send_whatsapp_thank_you
 
 class ConversationListView(APIView):
     """
@@ -150,6 +152,10 @@ class AppointmentListView(APIView):
                 'customerEmail': a.customer_email,
                 'appointmentDateTime': a.appointment_datetime.isoformat() if a.appointment_datetime else None,
                 'service': a.service,
+                'status': a.status,
+                'action': a.action,
+                'is_manual': a.is_manual,
+                'is_synced_to_sheets': a.is_synced_to_sheets,
             })
         return Response(data)
 
@@ -214,6 +220,212 @@ class SyncAppointmentsView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ManualAppointmentCreateView(APIView):
+    """
+    Creates a new manual appointment in the database and forwards it to n8n to sync to Google Sheets.
+    Expects data matching: customerName, customerPhone, customerEmail, appointmentDateTime, service, businessId
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        import uuid
+        data = request.data
+
+        # If user isn't assigned to a business profile, reject (unless superuser testing)
+        biz_id = data.get('businessId') or data.get('business_id')
+        biz_name = data.get('BusinessName') or data.get('businessName') or data.get('business_name')
+        
+        if not request.user.is_superuser:
+            if hasattr(request.user, 'business_profile'):
+                profile = request.user.business_profile
+                biz_id = str(profile.id) if profile.id else ''
+                biz_name = profile.business_name
+                biz_hours = profile.business_hours
+                biz_services = profile.services_offered
+                biz_policies = profile.booking_policies
+            else:
+                return Response({"error": "No business profile attached."}, status=status.HTTP_403_FORBIDDEN)
+
+        tool_call_id = f"manual_{uuid.uuid4().hex[:12]}"
+        status_val = data.get('status', 'Pending')
+        action_val = data.get('action', 'No')
+
+        # Parse datetime
+        dt_str = data.get('appointmentDateTime')
+        parsed_dt = None
+        if dt_str:
+            try:
+                parsed_dt = parse_datetime(dt_str.replace(' ', 'T')) if isinstance(dt_str, str) else dt_str
+            except Exception:
+                parsed_dt = None
+
+        # Create localized appointment
+        try:
+            appt = Appointment.objects.create(
+                tool_call_id=tool_call_id,
+                is_manual=True,
+                status=status_val,
+                action=action_val,
+                business_name=biz_name,
+                business_id=biz_id,
+                business_hours=biz_hours if not request.user.is_superuser else None,
+                services_offered=biz_services if not request.user.is_superuser else None,
+                booking_policies=biz_policies if not request.user.is_superuser else None,
+                customer_name=data.get('customerName'),
+                customer_phone=data.get('customerPhone'),
+                customer_email=data.get('customerEmail'),
+                appointment_datetime=parsed_dt,
+                service=data.get('service')
+            )
+            # We no longer auto-forward here. User must explicitly sync manually via the UI.
+
+            return Response({
+                'message': 'Manual appointment queued for sync successfully',
+                'appointment': {
+                    'id': appt.id,
+                    'toolCallId': appt.tool_call_id,
+                    'customerName': appt.customer_name,
+                    'status': appt.status
+                }
+            }, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CSVUploadAppointmentsView(APIView):
+    """
+    Accepts a bulk CSV upload of existing appointments, saving them to DB and passing to n8n.
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        import uuid
+        import pandas as pd
+        file_obj = request.FILES.get('file')
+        
+        if not file_obj:
+            return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        # Determine business context
+        if request.user.is_superuser:
+            biz_id = request.data.get('businessId', '')
+            biz_name = request.data.get('BusinessName', 'Admin Upload')
+        else:
+            if not hasattr(request.user, 'business_profile'):
+                return Response({"error": "No business profile attached."}, status=status.HTTP_403_FORBIDDEN)
+            profile = request.user.business_profile
+            biz_id = str(profile.id) if profile.id else ''
+            biz_name = profile.business_name
+            biz_hours = profile.business_hours
+            biz_services = profile.services_offered
+            biz_policies = profile.booking_policies
+
+        try:
+            # Detect CSV or Excel
+            if file_obj.name.endswith('.csv'):
+                df = pd.read_csv(file_obj)
+            elif file_obj.name.endswith('.xls') or file_obj.name.endswith('.xlsx'):
+                df = pd.read_excel(file_obj)
+            else:
+                return Response({'error': 'Unsupported file format. Use .csv or .xlsx'}, status=400)
+                
+            # Replace NaNs with None
+            df = df.where(pd.notnull(df), None)
+            
+            created_count = 0
+            skipped_count = 0
+            
+            for index, row in df.iterrows():
+                # Extract using loose matching on column names
+                def get_val(possible_names, default=None):
+                    for name in possible_names:
+                        if name in row and row[name] is not None:
+                            val = str(row[name]).strip()
+                            if val.lower() != 'nan' and val.lower() != 'none':
+                                return val
+                    return default
+
+                c_name = get_val(['customerName', 'Name', 'Customer Name', 'customer_name'])
+                c_phone = get_val(['customerPhone', 'Phone', 'customer_phone', 'Phone Number', 'phone'])
+                
+                # Skip completely blank lines
+                if not c_name and not c_phone:
+                    continue  
+
+                c_email = get_val(['customerEmail', 'Email', 'customer_email', 'email'])
+                c_service = get_val(['service', 'Service', 'Appointment Type'])
+                a_time = get_val(['appointmentDateTime', 'appointment_datetime', 'Date', 'DateTime', 'Time'])
+                
+                parsed_dt = None
+                if a_time:
+                    try:
+                        # Attempt to parse as strict datetime first
+                        parsed_dt = pd.to_datetime(a_time).to_pydatetime()
+                        # Make timezone aware if settings demand it
+                        if timezone.is_naive(parsed_dt):
+                            parsed_dt = timezone.make_aware(parsed_dt)
+                    except Exception:
+                        # If parsing fails (e.g. they typed '12ta'), we just leave parsed_dt as None but the raw string is lost from db unless we use a CharField. 
+                        # However, Ekko seems to pass the original string directly to n8n if we just don't crash.
+                        pass
+                
+                # Duplicate Check: Prevent double-booking same number around same time for same business
+                # If parsed_dt failed, we only check by phone
+                if parsed_dt:
+                    is_duplicate = Appointment.objects.filter(
+                        business_id=biz_id,
+                        customer_phone=c_phone,
+                        appointment_datetime=parsed_dt
+                    ).exists()
+                else:
+                    # If date is invalid/'12ta', just check if they recently manually uploaded this person
+                    is_duplicate = Appointment.objects.filter(
+                        business_id=biz_id,
+                        customer_phone=c_phone,
+                        is_manual=True
+                    ).exists()
+
+                if is_duplicate:
+                    skipped_count += 1
+                    continue
+
+                tool_call_id = f"manual_upload_{uuid.uuid4().hex[:12]}"
+                status_val = get_val(['status', 'Status'], 'Pending')
+                action_val = get_val(['action', 'Action'], 'No')
+                
+                appt = Appointment(
+                    tool_call_id=tool_call_id,
+                    is_manual=True,
+                    status=status_val,
+                    action=action_val,
+                    business_name=biz_name,
+                    business_id=biz_id,
+                    business_hours=biz_hours if not request.user.is_superuser else None,
+                    services_offered=biz_services if not request.user.is_superuser else None,
+                    booking_policies=biz_policies if not request.user.is_superuser else None,
+                    customer_name=c_name,
+                    customer_phone=c_phone,
+                    customer_email=c_email,
+                    appointment_datetime=parsed_dt,
+                    service=c_service
+                )
+                appt.save()
+                created_count += 1
+
+            # We no longer auto-forward here. User must explicitly sync via the UI.
+
+            return Response({
+                "message": f"Successfully imported {created_count} appointments.",
+                "imported_count": created_count,
+                "skipped_count": skipped_count
+            }, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            return Response({'error': f"Error parsing file: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class DashboardStatsView(APIView):
@@ -367,3 +579,159 @@ class AnalyticsStatsView(APIView):
             'total_appointments': total_appts,
             'selected_year': year
         })
+
+class SyncManualToSheetsView(APIView):
+    """
+    Finds all unsynced manual appointments for the logged-in business and pushes them one by one
+    to the specific n8n webhook. Marks them as synced if successful.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        from django.db.models import Q
+        
+        if not request.user.is_superuser:
+            if not hasattr(request.user, 'business_profile'):
+                return Response({'error': 'No business profile attached.'}, status=status.HTTP_403_FORBIDDEN)
+            profile = request.user.business_profile
+            biz_id = str(profile.id) if profile.id else ''
+            biz_name = profile.business_name
+            biz_hours = profile.business_hours
+            biz_services = profile.services_offered
+            biz_policies = profile.booking_policies
+        else:
+            # Superuser could specify which business to sync, or we default to testing.
+            biz_id = request.data.get('businessId') or request.data.get('business_id', '')
+            biz_name = request.data.get('BusinessName') or request.data.get('business_name', 'Admin Test')
+            biz_hours = biz_services = biz_policies = None
+
+        # Webhook URL provided by user
+        n8n_webhook = getattr(
+            settings, 
+            'N8N_EXPLICIT_SYNC_WEBHOOK_URL', 
+            'https://ekkoflow.app.n8n.cloud/webhook/insertesisitngdata'
+        )
+        
+        # Only query unsynced manual appointments for this business
+        query = Q(is_manual=True, is_synced_to_sheets=False)
+        if biz_id:
+            query &= Q(business_id=biz_id)
+        
+        unsynced_appts = Appointment.objects.filter(query)
+        
+        if unsynced_appts.exists():
+            import time
+            create_sheet_webhook = getattr(
+                settings,
+                'N8N_CREATE_SHEET_WEBHOOK_URL',
+                'https://ekkoflow.app.n8n.cloud/webhook/9aa020f9-e8a3-4d15-af18-3f52a305a5c6'
+            )
+            try:
+                # Trigger the webhook to ensure the sheet exists
+                requests.post(create_sheet_webhook, json={
+                    "businessName": biz_name,
+                    "businessId": biz_id
+                }, timeout=10)
+            except Exception as e:
+                print(f"Failed to trigger sheet creation webhook: {e}")
+        
+        success_count = 0
+        failure_count = 0
+
+        for appt in unsynced_appts:
+            # Backfill static business info if it's missing (for older manual uploads)
+            save_needed = False
+            if not appt.business_hours and biz_hours:
+                appt.business_hours = biz_hours
+                appt.services_offered = biz_services
+                appt.booking_policies = biz_policies
+                save_needed = True
+            
+            if save_needed:
+                try:
+                    appt.save(update_fields=['business_hours', 'services_offered', 'booking_policies'])
+                except Exception:
+                    pass
+
+            payload = {
+                "businessName": appt.business_name or biz_name,
+                "customerName": appt.customer_name or "",
+                "customerPhone": appt.customer_phone or "",
+                "customerEmail": appt.customer_email or "",
+                "appointmentDateTime": appt.appointment_datetime.isoformat() if appt.appointment_datetime else "",
+                "service": appt.service or "",
+                "businessId": appt.business_id or biz_id,
+                "toolCallId": appt.tool_call_id,
+                "status": appt.status or "Pending",
+                "action": appt.action or "No"
+            }
+            try:
+                # Send the exact format expected by the PowerShell script
+                response = requests.post(n8n_webhook, json=payload, timeout=10)
+                if response.status_code == 200:
+                    appt.is_synced_to_sheets = True
+                    appt.save()
+                    success_count += 1
+                else:
+                    failure_count += 1
+            except Exception as e:
+                print(f"Failed to sync appointment {appt.id} to n8n: {e}")
+                failure_count += 1
+
+        return Response({
+            'message': 'Sync process complete.',
+            'success_count': success_count,
+            'failure_count': failure_count,
+            'total_attempted': len(unsynced_appts)
+        }, status=status.HTTP_200_OK)
+
+
+class UpdateAppointmentActionView(APIView):
+    """
+    PATCH /api/appointments/<pk>/action/
+    Payload: { "action": "Yes" | "No" }
+
+    Updates the appointment action field.
+    If action is changed to "Yes" (customer visited) and a customer email exists,
+    immediately fires the Thank You email from the business.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            appt = Appointment.objects.get(pk=pk)
+        except Appointment.DoesNotExist:
+            return Response({'error': 'Appointment not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Only the owner business (or superuser) may update this appointment
+        if not request.user.is_superuser:
+            if hasattr(request.user, 'business_profile'):
+                profile = request.user.business_profile
+                biz_id = str(profile.id)
+                if appt.business_id != biz_id and appt.business_name != profile.business_name:
+                    return Response({'error': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({'error': 'No business profile attached.'}, status=status.HTTP_403_FORBIDDEN)
+
+        new_action = request.data.get('action')
+        if new_action not in ('Yes', 'No'):
+            return Response(
+                {'error': 'Invalid action value. Must be "Yes" or "No".'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        old_action = appt.action
+        appt.action = new_action
+        appt.save(update_fields=['action'])
+
+        # Fire Thank You email + WhatsApp when transitioning to "Yes"
+        if new_action == 'Yes' and old_action != 'Yes':
+            if appt.customer_email:
+                send_thank_you_email(appt)
+            send_whatsapp_thank_you(appt)  # uses whatsapp_number or customer_phone
+
+        return Response({
+            'id': appt.id,
+            'action': appt.action,
+            'message': 'Action updated successfully.'
+        }, status=status.HTTP_200_OK)

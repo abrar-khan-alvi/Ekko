@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import {
   Calendar, Search, Loader2, RefreshCw, Mail, Phone, Clock,
   ExternalLink, X, MapPin, Briefcase, Info, ChevronRight,
-  User, ClipboardList, ShieldCheck, Hash, ChevronLeft, Send
+  User, ClipboardList, ShieldCheck, Hash, ChevronLeft, Send, CheckCheck
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -43,6 +43,7 @@ export default function Appointments() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSyncingToSheets, setIsSyncingToSheets] = useState(false);
+  const [visitingId, setVisitingId] = useState<number | null>(null); // tracks which row is loading
   
   const [manualForm, setManualForm] = useState({
     customerName: '',
@@ -123,6 +124,43 @@ export default function Appointments() {
       toast.error('An error occurred while pushing to Sheets.');
     } finally {
       setIsSyncingToSheets(false);
+    }
+  };
+
+  const handleMarkVisited = async (appt: Appointment, markAs: 'Yes' | 'No') => {
+    setVisitingId(appt.id);
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`http://localhost:8000/api/chatbot/appointments/${appt.id}/action/`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: markAs }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update');
+
+      // Update local state immediately — no need to re-fetch everything
+      setAppointments(prev =>
+        prev.map(a => a.id === appt.id ? { ...a, action: markAs } : a)
+      );
+      // Also update the open modal if it's showing this appointment
+      if (selectedAppointment?.id === appt.id) {
+        setSelectedAppointment(prev => prev ? { ...prev, action: markAs } : prev);
+      }
+
+      if (markAs === 'Yes') {
+        toast.success('Marked as Visited! Thank you email sent 📧');
+      } else {
+        toast.success('Marked as Not Visited.');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to update visit status.');
+    } finally {
+      setVisitingId(null);
     }
   };
 
@@ -393,12 +431,37 @@ export default function Appointments() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => setSelectedAppointment(app)}
-                        className="h-8 w-8 inline-flex items-center justify-center text-gray-400 hover:text-[#4355FF] hover:bg-white rounded-lg transition-all border border-transparent hover:border-gray-100 hover:shadow-sm"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
+                      <div className="flex items-center justify-center gap-1.5">
+                        {/* Visited Toggle Button — locked once marked Yes */}
+                        {app.action === 'Yes' ? (
+                          <button
+                            disabled
+                            title="Already marked as Visited"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-green-100 text-green-700 text-[10px] font-black rounded-lg border border-green-200 cursor-not-allowed opacity-80"
+                          >
+                            <CheckCheck className="w-3 h-3" />
+                            Visited ✓
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleMarkVisited(app, 'Yes')}
+                            disabled={visitingId === app.id}
+                            title="Mark as Visited"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 text-gray-500 text-[10px] font-black rounded-lg hover:bg-green-50 hover:text-green-600 transition-all border border-gray-200 hover:border-green-200 disabled:opacity-50"
+                          >
+                            {visitingId === app.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCheck className="w-3 h-3" />}
+                            Mark Visited
+                          </button>
+                        )}
+
+                        {/* Detail button */}
+                        <button
+                          onClick={() => setSelectedAppointment(app)}
+                          className="h-8 w-8 inline-flex items-center justify-center text-gray-400 hover:text-[#4355FF] hover:bg-white rounded-lg transition-all border border-transparent hover:border-gray-100 hover:shadow-sm"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -573,12 +636,35 @@ export default function Appointments() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setSelectedAppointment(null)}
-                  className="w-full md:w-auto px-10 py-4 bg-gray-900 text-white rounded-[1.5rem] font-bold text-sm hover:bg-gray-800 hover:shadow-2xl hover:shadow-black/20 transition-all transform active:scale-95"
-                >
-                  Keep exploring
-                </button>
+                <div className="flex gap-3 w-full md:w-auto">
+                  {/* Visited toggle inside modal — locked once Yes */}
+                  {selectedAppointment.action === 'Yes' ? (
+                    <button
+                      disabled
+                      title="Already marked as Visited"
+                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-[1.5rem] font-bold text-sm border border-green-200 cursor-not-allowed opacity-80"
+                    >
+                      <CheckCheck className="w-4 h-4" />
+                      Visited ✓
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleMarkVisited(selectedAppointment, 'Yes')}
+                      disabled={visitingId === selectedAppointment.id}
+                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-[#4355FF] text-white rounded-[1.5rem] font-bold text-sm hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200 disabled:opacity-70"
+                    >
+                      {visitingId === selectedAppointment.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCheck className="w-4 h-4" />}
+                      Mark as Visited
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => setSelectedAppointment(null)}
+                    className="flex-1 md:flex-none px-6 py-3 bg-gray-900 text-white rounded-[1.5rem] font-bold text-sm hover:bg-gray-800 hover:shadow-2xl hover:shadow-black/20 transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -37,14 +37,14 @@ export default function Appointments() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // New States for Manual Entry / Upload
   const [showManualModal, setShowManualModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSyncingToSheets, setIsSyncingToSheets] = useState(false);
   const [visitingId, setVisitingId] = useState<number | null>(null); // tracks which row is loading
-  
+
   const [manualForm, setManualForm] = useState({
     customerName: '',
     customerPhone: '',
@@ -108,7 +108,7 @@ export default function Appointments() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         if (data.total_attempted === 0) {
           toast.success('All appointments are already synced to Sheets!');
@@ -170,7 +170,7 @@ export default function Appointments() {
     try {
       const token = localStorage.getItem('access_token');
       const payload = { ...manualForm, status: 'Pending', action: 'No' };
-      
+
       const response = await fetch('http://localhost:8000/api/chatbot/appointments/manual/', {
         method: 'POST',
         headers: {
@@ -179,9 +179,9 @@ export default function Appointments() {
         },
         body: JSON.stringify(payload)
       });
-      
+
       if (!response.ok) throw new Error('Failed to create appointment');
-      
+
       toast.success('Appointment added and queued for sync!');
       setShowManualModal(false);
       setManualForm({ customerName: '', customerPhone: '', customerEmail: '', appointmentDateTime: '', service: '' });
@@ -218,13 +218,13 @@ export default function Appointments() {
       }
 
       const result = await response.json();
-      
+
       if (result.skipped_count && result.skipped_count > 0) {
         toast.success(`Imported ${result.imported_count} appointments! (Skipped ${result.skipped_count} duplicates)`);
       } else {
         toast.success(result.message || 'File uploaded successfully!');
       }
-      
+
       setShowUploadModal(false);
       await fetchAppointments();
     } catch (error: any) {
@@ -311,7 +311,7 @@ export default function Appointments() {
                 <ClipboardList className="w-4 h-4" />
                 Upload CSV
               </button>
-              
+
               <button
                 onClick={() => setShowManualModal(true)}
                 className="flex items-center justify-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-md font-semibold text-sm"
@@ -319,15 +319,15 @@ export default function Appointments() {
                 <User className="w-4 h-4" />
                 Add Appointment
               </button>
-              
-              <button
+
+              {/* <button
                 onClick={handleSyncToSheets}
                 disabled={isSyncingToSheets}
                 className="flex items-center justify-center gap-2 px-6 py-2.5 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all shadow-md font-semibold text-sm disabled:opacity-70"
               >
                 {isSyncingToSheets ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 Push to Sheets
-              </button>
+              </button>*/}
             </>
           )}
 
@@ -401,13 +401,12 @@ export default function Appointments() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <div className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${
-                        app.status === 'Confirmed' ? 'bg-green-50 text-green-600' :
+                      <div className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${app.status === 'Confirmed' ? 'bg-green-50 text-green-600' :
                         app.status === 'Reminder Sent' ? 'bg-indigo-50 text-indigo-600' :
-                        app.status === 'Visited' ? 'bg-purple-50 text-purple-600' : 
-                        app.status === 'Cancelled' ? 'bg-red-50 text-red-600' :
-                        'bg-orange-50 text-orange-600'
-                      }`}>
+                          app.status === 'Visited' ? 'bg-purple-50 text-purple-600' :
+                            app.status === 'Cancelled' ? 'bg-red-50 text-red-600' :
+                              'bg-orange-50 text-orange-600'
+                        }`}>
                         {app.status || 'Pending'}
                       </div>
                       <div className="flex flex-col items-center gap-1 mt-1.5">
@@ -421,7 +420,6 @@ export default function Appointments() {
                             )}
                           </div>
                         )}
-                        {app.action === 'Yes' && <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-bold uppercase tracking-widest mt-1">Visited</span>}
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -509,8 +507,8 @@ export default function Appointments() {
                     key={i}
                     onClick={() => setCurrentPage(i + 1)}
                     className={`w-8 h-8 rounded-xl font-black text-[11px] transition-all ${currentPage === i + 1
-                        ? "bg-[#4355FF] text-white shadow-md shadow-blue-200"
-                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                      ? "bg-[#4355FF] text-white shadow-md shadow-blue-200"
+                      : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
                       }`}
                   >
                     {i + 1}
@@ -680,35 +678,35 @@ export default function Appointments() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <form onSubmit={handleManualSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Customer Name</label>
-                  <input required value={manualForm.customerName} onChange={e => setManualForm({...manualForm, customerName: e.target.value})} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="John Doe" />
+                  <input required value={manualForm.customerName} onChange={e => setManualForm({ ...manualForm, customerName: e.target.value })} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="John Doe" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
-                  <input required value={manualForm.customerPhone} onChange={e => setManualForm({...manualForm, customerPhone: e.target.value})} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="+1234567890" />
+                  <input required value={manualForm.customerPhone} onChange={e => setManualForm({ ...manualForm, customerPhone: e.target.value })} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="+1234567890" />
                 </div>
               </div>
-              
+
               <div className="space-y-1">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Email Address</label>
-                <input required value={manualForm.customerEmail} onChange={e => setManualForm({...manualForm, customerEmail: e.target.value})} type="email" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="john@example.com" />
+                <input required value={manualForm.customerEmail} onChange={e => setManualForm({ ...manualForm, customerEmail: e.target.value })} type="email" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="john@example.com" />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Date & Time</label>
-                  <input required value={manualForm.appointmentDateTime} onChange={e => setManualForm({...manualForm, appointmentDateTime: e.target.value})} type="datetime-local" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" />
+                  <input required value={manualForm.appointmentDateTime} onChange={e => setManualForm({ ...manualForm, appointmentDateTime: e.target.value })} type="datetime-local" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Service</label>
-                  <input required value={manualForm.service} onChange={e => setManualForm({...manualForm, service: e.target.value})} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="Consultation" />
+                  <input required value={manualForm.service} onChange={e => setManualForm({ ...manualForm, service: e.target.value })} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="Consultation" />
                 </div>
               </div>
-              
+
               <div className="pt-4 border-t border-gray-100 flex justify-end gap-3">
                 <button type="button" onClick={() => setShowManualModal(false)} className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
                 <button type="submit" disabled={isSubmitting} className="px-5 py-2.5 bg-[#4355FF] text-white text-sm font-bold rounded-xl hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200 disabled:opacity-70 flex items-center gap-2">
@@ -731,31 +729,31 @@ export default function Appointments() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-8 text-center space-y-6">
               <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-[#4355FF]">
                 <ClipboardList className="w-8 h-8" />
               </div>
-              
+
               <div>
                 <p className="text-sm font-bold text-gray-800">Import from CSV or Excel</p>
                 <div className="mt-3 bg-gray-50 border border-gray-200 p-3 rounded-xl inline-block mx-auto">
-                    <p className="text-xs text-gray-500 font-medium">Use our template to ensure perfect syncing.</p>
-                    <button 
-                        onClick={() => {
-                            const csvContent = "data:text/csv;charset=utf-8,customerName,customerPhone,customerEmail,appointmentDateTime,service\nJohn Doe,1234567890,john@example.com,2026-03-12T10:00,Consultation";
-                            const encodedUri = encodeURI(csvContent);
-                            const link = document.createElement("a");
-                            link.setAttribute("href", encodedUri);
-                            link.setAttribute("download", "appointment_template.csv");
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        }}
-                        className="mt-2 w-full px-4 py-2 bg-white text-[#4355FF] border border-[#4355FF]/20 rounded-lg shadow-sm text-xs font-bold hover:bg-blue-50 transition-all"
-                    >
-                        Download Template CSV
-                    </button>
+                  <p className="text-xs text-gray-500 font-medium">Use our template to ensure perfect syncing.</p>
+                  <button
+                    onClick={() => {
+                      const csvContent = "data:text/csv;charset=utf-8,customerName,customerPhone,customerEmail,appointmentDateTime,service\nJohn Doe,1234567890,john@example.com,2026-03-12T10:00,Consultation";
+                      const encodedUri = encodeURI(csvContent);
+                      const link = document.createElement("a");
+                      link.setAttribute("href", encodedUri);
+                      link.setAttribute("download", "appointment_template.csv");
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                    className="mt-2 w-full px-4 py-2 bg-white text-[#4355FF] border border-[#4355FF]/20 rounded-lg shadow-sm text-xs font-bold hover:bg-blue-50 transition-all"
+                  >
+                    Download Template CSV
+                  </button>
                 </div>
               </div>
 
@@ -768,8 +766,8 @@ export default function Appointments() {
                   onChange={handleFileUpload}
                   disabled={isSubmitting}
                 />
-                <label 
-                  htmlFor="csv-upload" 
+                <label
+                  htmlFor="csv-upload"
                   className={`inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#4355FF] text-white rounded-xl shadow-lg shadow-blue-200 font-bold cursor-pointer transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed hover:bg-[#4355FF]' : 'hover:bg-[#3245FF] active:scale-95'}`}
                 >
                   {isSubmitting ? (

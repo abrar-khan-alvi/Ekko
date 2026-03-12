@@ -198,9 +198,9 @@ export default function Signup() {
             business_hours: formData.businessHours,
             services_offered: formData.servicesOffered,
             booking_policies: formData.bookingPolicies,
-            facebook_link: formData.facebookLink,
-            instagram_link: formData.instagramLink,
-            linkedin_link: formData.linkedinLink,
+            facebook_link: formData.facebookLink.trim() || 'N/A',
+            instagram_link: formData.instagramLink.trim() || 'N/A',
+            linkedin_link: formData.linkedinLink.trim() || 'N/A',
           }
         }),
       });
@@ -383,7 +383,7 @@ export default function Signup() {
                   <Input
                     name="facebookLink"
                     label="Facebook Link"
-                    type="url"
+                    type="text"
                     placeholder="https://facebook.com/yourbusiness"
                     value={formData.facebookLink}
                     onChange={handleInputChange}
@@ -392,7 +392,7 @@ export default function Signup() {
                   <Input
                     name="instagramLink"
                     label="Instagram Link"
-                    type="url"
+                    type="text"
                     placeholder="https://instagram.com/yourbusiness"
                     value={formData.instagramLink}
                     onChange={handleInputChange}
@@ -401,7 +401,7 @@ export default function Signup() {
                   <Input
                     name="linkedinLink"
                     label="LinkedIn Link"
-                    type="url"
+                    type="text"
                     placeholder="https://linkedin.com/company/yourbusiness"
                     value={formData.linkedinLink}
                     onChange={handleInputChange}

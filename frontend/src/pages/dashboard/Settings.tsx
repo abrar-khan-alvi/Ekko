@@ -65,7 +65,12 @@ export default function Settings() {
       const data = await apiFetch('/user/', {
         method: 'PATCH',
         body: JSON.stringify({
-          business_profile: updatableFields
+          business_profile: {
+            ...updatableFields,
+            facebook_link: updatableFields.facebook_link?.trim() || 'N/A',
+            instagram_link: updatableFields.instagram_link?.trim() || 'N/A',
+            linkedin_link: updatableFields.linkedin_link?.trim() || 'N/A'
+          }
         })
       });
       setUser(data);
@@ -398,7 +403,7 @@ export default function Settings() {
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Facebook Link</label>
                           <input
-                            type="url"
+                            type="text"
                             name="facebook_link"
                             value={businessData.facebook_link}
                             onChange={handleBusinessInputChange}
@@ -411,7 +416,7 @@ export default function Settings() {
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Instagram Link</label>
                           <input
-                            type="url"
+                            type="text"
                             name="instagram_link"
                             value={businessData.instagram_link}
                             onChange={handleBusinessInputChange}
@@ -424,7 +429,7 @@ export default function Settings() {
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">LinkedIn Link</label>
                           <input
-                            type="url"
+                            type="text"
                             name="linkedin_link"
                             value={businessData.linkedin_link}
                             onChange={handleBusinessInputChange}

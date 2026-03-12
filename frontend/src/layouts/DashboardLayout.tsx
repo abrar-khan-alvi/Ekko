@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Star
 } from 'lucide-react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -73,6 +74,7 @@ export default function DashboardLayout() {
       category: "SYSTEM",
       items: [
         { icon: UserCog, label: "User & Roles", path: "/dashboard/users", adminOnly: true },
+        { icon: Star, label: "Reviews", path: "/dashboard/reviews", adminOnly: false },
         { icon: Bell, label: "Notifications", path: "/dashboard/notifications", adminOnly: false },
         { icon: Settings, label: "Settings", path: "/dashboard/settings", adminOnly: false },
       ]

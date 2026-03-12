@@ -20,6 +20,7 @@ import UserRoles from './pages/dashboard/UserRoles';
 import Notifications from './pages/dashboard/Notifications';
 import Settings from './pages/dashboard/Settings';
 import CustomerDetails from './pages/dashboard/CustomerDetails';
+import Reviews from './pages/dashboard/Reviews';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="users" element={<UserRoles />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="reviews" element={<Reviews />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

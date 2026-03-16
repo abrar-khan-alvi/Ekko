@@ -5,6 +5,7 @@ import {
   ExternalLink, X, MapPin, Briefcase, Info, ChevronRight,
   User, ClipboardList, ShieldCheck, Hash, ChevronLeft, Send, CheckCheck
 } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 import toast from 'react-hot-toast';
 
 interface Appointment {
@@ -24,7 +25,6 @@ interface Appointment {
   status: string;
   action: string;
   is_manual: boolean;
-  is_synced_to_sheets: boolean;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -42,7 +42,6 @@ export default function Appointments() {
   const [showManualModal, setShowManualModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSyncingToSheets, setIsSyncingToSheets] = useState(false);
   const [visitingId, setVisitingId] = useState<number | null>(null); // tracks which row is loading
 
   const [manualForm, setManualForm] = useState({
@@ -56,14 +55,7 @@ export default function Appointments() {
   const fetchAppointments = async (isBgRefresh = false) => {
     if (!isBgRefresh) setLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/appointments/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error('Failed to fetch');
-      const data = await response.json();
+      const data = await apiFetch('/api/chatbot/appointments/');
       setAppointments(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
@@ -76,15 +68,7 @@ export default function Appointments() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/appointments/sync/', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error('Sync failed');
-      const result = await response.json();
+      const result = await apiFetch('/api/chatbot/appointments/sync/', { method: 'POST' });
       if (result.new_appointments_synced > 0) {
         toast.success(`${result.new_appointments_synced} new appointments synced!`);
       } else {
@@ -99,48 +83,13 @@ export default function Appointments() {
     }
   };
 
-  const handleSyncToSheets = async () => {
-    setIsSyncingToSheets(true);
-    try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/appointments/sync-to-sheets/', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.total_attempted === 0) {
-          toast.success('All appointments are already synced to Sheets!');
-        } else {
-          toast.success(`Synced ${data.success_count} appointment(s) to Sheets! ${data.failure_count > 0 ? `Failed: ${data.failure_count}` : ''}`);
-        }
-        await fetchAppointments(true);
-      } else {
-        toast.error(data.error || 'Failed to sync to Sheets');
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error('An error occurred while pushing to Sheets.');
-    } finally {
-      setIsSyncingToSheets(false);
-    }
-  };
-
   const handleMarkVisited = async (appt: Appointment, markAs: 'Yes' | 'No') => {
     setVisitingId(appt.id);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://localhost:8000/api/chatbot/appointments/${appt.id}/action/`, {
+      const data = await apiFetch(`/api/chatbot/appointments/${appt.id}/action/`, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ action: markAs }),
       });
-
-      if (!response.ok) throw new Error('Failed to update');
 
       // Update local state immediately — no need to re-fetch everything
       setAppointments(prev =>
@@ -164,6 +113,28 @@ export default function Appointments() {
     }
   };
 
+  const handleStatusUpdate = async (appt: Appointment, newStatus: string) => {
+    try {
+      const data = await apiFetch(`/api/chatbot/appointments/${appt.id}/status/`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      setAppointments(prev =>
+        prev.map(a => a.id === appt.id ? { ...a, status: data.status, action: data.action } : a)
+      );
+
+      if (selectedAppointment?.id === appt.id) {
+        setSelectedAppointment(prev => prev ? { ...prev, status: data.status, action: data.action } : prev);
+      }
+
+      toast.success(`Status updated to ${data.status}`);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to update status.');
+    }
+  };
+
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -171,18 +142,14 @@ export default function Appointments() {
       const token = localStorage.getItem('access_token');
       const payload = { ...manualForm, status: 'Pending', action: 'No' };
 
-      const response = await fetch('http://localhost:8000/api/chatbot/appointments/manual/', {
+      const response = await apiFetch('/api/chatbot/appointments/manual/', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error('Failed to create appointment');
+      const data = response;
 
-      toast.success('Appointment added and queued for sync!');
+      toast.success('Appointment added successfully!');
       setShowManualModal(false);
       setManualForm({ customerName: '', customerPhone: '', customerEmail: '', appointmentDateTime: '', service: '' });
       await fetchAppointments();
@@ -203,21 +170,13 @@ export default function Appointments() {
     formData.append('file', file);
 
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/appointments/upload/', {
+      const response = await apiFetch('/api/chatbot/appointments/upload/', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to upload file');
-      }
 
-      const result = await response.json();
+      const result = response;
 
       if (result.skipped_count && result.skipped_count > 0) {
         toast.success(`Imported ${result.imported_count} appointments! (Skipped ${result.skipped_count} duplicates)`);
@@ -320,14 +279,6 @@ export default function Appointments() {
                 Add Appointment
               </button>
 
-              {/* <button
-                onClick={handleSyncToSheets}
-                disabled={isSyncingToSheets}
-                className="flex items-center justify-center gap-2 px-6 py-2.5 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all shadow-md font-semibold text-sm disabled:opacity-70"
-              >
-                {isSyncingToSheets ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                Push to Sheets
-              </button>*/}
             </>
           )}
 
@@ -413,11 +364,6 @@ export default function Appointments() {
                         {app.is_manual && (
                           <div className="flex flex-col items-center gap-0.5 mt-1">
                             <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Imported</p>
-                            {app.is_synced_to_sheets ? (
-                              <span className="text-[8px] bg-green-50 text-green-600 border border-green-100 px-1.5 py-0.5 rounded font-bold uppercase">Sheets ✅</span>
-                            ) : (
-                              <span className="text-[8px] bg-gray-50 text-gray-400 border border-gray-100 px-1.5 py-0.5 rounded font-bold uppercase">Not Synced</span>
-                            )}
                           </div>
                         )}
                       </div>
@@ -431,25 +377,27 @@ export default function Appointments() {
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-1.5">
                         {/* Visited Toggle Button — locked once marked Yes */}
-                        {app.action === 'Yes' ? (
-                          <button
-                            disabled
-                            title="Already marked as Visited"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-green-100 text-green-700 text-[10px] font-black rounded-lg border border-green-200 cursor-not-allowed opacity-80"
-                          >
-                            <CheckCheck className="w-3 h-3" />
-                            Visited ✓
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleMarkVisited(app, 'Yes')}
-                            disabled={visitingId === app.id}
-                            title="Mark as Visited"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 text-gray-500 text-[10px] font-black rounded-lg hover:bg-green-50 hover:text-green-600 transition-all border border-gray-200 hover:border-green-200 disabled:opacity-50"
-                          >
-                            {visitingId === app.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCheck className="w-3 h-3" />}
-                            Mark Visited
-                          </button>
+                        {!user?.is_superuser && (
+                          app.action === 'Yes' ? (
+                            <button
+                              disabled
+                              title="Already marked as Visited"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-green-100 text-green-700 text-[10px] font-black rounded-lg border border-green-200 cursor-not-allowed opacity-80"
+                            >
+                              <CheckCheck className="w-3 h-3" />
+                              Visited ✓
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleMarkVisited(app, 'Yes')}
+                              disabled={visitingId === app.id}
+                              title="Mark as Visited"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gray-100 text-gray-500 text-[10px] font-black rounded-lg hover:bg-green-50 hover:text-green-600 transition-all border border-gray-200 hover:border-green-200 disabled:opacity-50"
+                            >
+                              {visitingId === app.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCheck className="w-3 h-3" />}
+                              Mark Visited
+                            </button>
+                          )
                         )}
 
                         {/* Detail button */}
@@ -578,6 +526,24 @@ export default function Appointments() {
                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                     {formatDate(selectedAppointment.appointmentDateTime)}
                   </p>
+
+                  {!user?.is_superuser && (
+                    <div className="mt-4 w-full text-left">
+                      <label className="text-[10px] font-black text-gray-300 uppercase block mb-1">Update Status</label>
+                      <select
+                        value={selectedAppointment.status || 'Pending'}
+                        onChange={(e) => handleStatusUpdate(selectedAppointment, e.target.value)}
+                        className="w-full bg-white border border-blue-100 rounded-xl px-3 py-2 text-xs font-bold text-gray-700 outline-none focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer"
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Reminder Sent">Reminder Sent</option>
+                        <option value="Visited">Visited</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Overdue">Overdue</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -636,24 +602,26 @@ export default function Appointments() {
 
                 <div className="flex gap-3 w-full md:w-auto">
                   {/* Visited toggle inside modal — locked once Yes */}
-                  {selectedAppointment.action === 'Yes' ? (
-                    <button
-                      disabled
-                      title="Already marked as Visited"
-                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-[1.5rem] font-bold text-sm border border-green-200 cursor-not-allowed opacity-80"
-                    >
-                      <CheckCheck className="w-4 h-4" />
-                      Visited ✓
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleMarkVisited(selectedAppointment, 'Yes')}
-                      disabled={visitingId === selectedAppointment.id}
-                      className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-[#4355FF] text-white rounded-[1.5rem] font-bold text-sm hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200 disabled:opacity-70"
-                    >
-                      {visitingId === selectedAppointment.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCheck className="w-4 h-4" />}
-                      Mark as Visited
-                    </button>
+                  {!user?.is_superuser && (
+                    selectedAppointment.action === 'Yes' ? (
+                      <button
+                        disabled
+                        title="Already marked as Visited"
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-green-100 text-green-700 rounded-[1.5rem] font-bold text-sm border border-green-200 cursor-not-allowed opacity-80"
+                      >
+                        <CheckCheck className="w-4 h-4" />
+                        Visited ✓
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleMarkVisited(selectedAppointment, 'Yes')}
+                        disabled={visitingId === selectedAppointment.id}
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-[#4355FF] text-white rounded-[1.5rem] font-bold text-sm hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200 disabled:opacity-70"
+                      >
+                        {visitingId === selectedAppointment.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCheck className="w-4 h-4" />}
+                        Mark as Visited
+                      </button>
+                    )
                   )}
 
                   <button
@@ -710,8 +678,7 @@ export default function Appointments() {
               <div className="pt-4 border-t border-gray-100 flex justify-end gap-3">
                 <button type="button" onClick={() => setShowManualModal(false)} className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
                 <button type="submit" disabled={isSubmitting} className="px-5 py-2.5 bg-[#4355FF] text-white text-sm font-bold rounded-xl hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200 disabled:opacity-70 flex items-center gap-2">
-                  {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                  Save & Sync
+                  Save Appointment
                 </button>
               </div>
             </form>

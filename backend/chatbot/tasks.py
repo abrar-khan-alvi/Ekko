@@ -9,6 +9,7 @@ from datetime import timedelta
 from .models import Appointment
 from .email_utils import send_48hr_reminder_email, send_overdue_email
 from .whatsapp_utils import send_whatsapp_48hr_reminder, send_whatsapp_overdue
+from .sms_utils import send_sms_48hr_reminder, send_sms_overdue
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,10 @@ def send_48hr_reminder_emails():
         try:
             send_48hr_reminder_email(appt)
             send_whatsapp_48hr_reminder(appt)
+            send_sms_48hr_reminder(appt)
             appt.reminder_sent = True
-            appt.save(update_fields=['reminder_sent'])
+            appt.status = 'Reminder Sent'
+            appt.save(update_fields=['reminder_sent', 'status'])
             count += 1
             logger.info(f"[tasks] 48hr reminder sent for appointment {appt.id} ({appt.customer_name})")
         except Exception as e:
@@ -70,8 +73,10 @@ def send_overdue_emails():
         try:
             send_overdue_email(appt)
             send_whatsapp_overdue(appt)
+            send_sms_overdue(appt)
             appt.overdue_sent = True
-            appt.save(update_fields=['overdue_sent'])
+            appt.status = 'Overdue'
+            appt.save(update_fields=['overdue_sent', 'status'])
             count += 1
             logger.info(f"[tasks] Overdue email sent for appointment {appt.id} ({appt.customer_name})")
         except Exception as e:

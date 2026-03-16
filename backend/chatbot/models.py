@@ -43,7 +43,6 @@ class Appointment(models.Model):
     status = models.CharField(max_length=50, default='Pending', null=True, blank=True)
     action = models.CharField(max_length=50, default='No', null=True, blank=True)
     is_manual = models.BooleanField(default=False)
-    is_synced_to_sheets = models.BooleanField(default=False)
 
     # --- Email Tracking (prevents duplicate sends) ---
     reminder_sent = models.BooleanField(default=False)  # 48hr reminder email sent
@@ -56,3 +55,23 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.customer_name} @ {self.business_name} — {self.appointment_datetime}"
+
+class Review(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    rating = models.CharField(max_length=50, null=True, blank=True) # stores emoji stars
+    feedback = models.TextField(null=True, blank=True)
+    business_name = models.CharField(max_length=255, null=True, blank=True)
+    
+    # Tracking
+    external_id = models.IntegerField(unique=True, null=True, blank=True) # from n8n id field
+    created_at_external = models.DateTimeField(null=True, blank=True) # from n8n createdAt
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at_external']
+
+    def __str__(self):
+        return f"Review by {self.name} for {self.business_name} — {self.rating}"

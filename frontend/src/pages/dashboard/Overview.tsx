@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import {
   Calendar, MessageSquare, AlertTriangle, TrendingUp,
-  CheckCircle2, Zap, Users, Loader2
+  CheckCircle2, Zap, Users, Loader2, History, LayoutList, Clock, ChevronRight
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Cell
 } from 'recharts';
 import { useOutletContext } from 'react-router-dom';
+import { apiFetch } from '../../utils/api';
 import toast from 'react-hot-toast';
 
 interface StatsData {
@@ -15,6 +16,7 @@ interface StatsData {
   total_conversations: number;
   total_customers: number;
   booking_trend: { name: string; bookings: number }[];
+  latest_appointments?: any[];
 }
 
 const StatCard = ({ title, value, subtext, icon: Icon, iconColor, bgColor }: any) => (
@@ -36,26 +38,32 @@ export default function Overview() {
   const { user } = useOutletContext<{ user: any }>();
   const [stats, setStats] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Default range: Last 30 days
+  const [startDate, setStartDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 29);
+    return d.toISOString().split('T')[0];
+  });
+  const [endDate, setEndDate] = useState(() => new Date().toISOString().split('T')[0]);
+
+  const fetchStats = async () => {
+    setLoading(true);
+    try {
+      const url = `/api/chatbot/stats/?start_date=${startDate}&end_date=${endDate}`;
+      const data = await apiFetch(url);
+      setStats(data);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load dashboard metrics.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem('access_token');
-        const response = await fetch('http://localhost:8000/api/chatbot/stats/', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
-        setStats(data);
-      } catch (err) {
-        console.error(err);
-        toast.error('Failed to load dashboard metrics.');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchStats();
-  }, []);
+  }, []); // Initial load only - user triggers refresh with filter button
 
   if (loading) {
     return (
@@ -127,14 +135,41 @@ export default function Overview() {
       {/* Chart Section */}
       <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
         {/* Decorative background logo or pattern could go here */}
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
           <div>
             <h3 className="text-xl font-black text-gray-900 leading-none">Booking Trends</h3>
-            <p className="text-sm text-gray-400 font-medium mt-2 uppercase tracking-widest">Next 7 Days Performance</p>
+            <p className="text-sm text-gray-400 font-medium mt-2 uppercase tracking-widest">Performance by Date Range</p>
           </div>
-          <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-            <TrendingUp className="w-4 h-4 text-[#4355FF]" />
-            <span className="text-xs font-bold text-gray-700">Live Data</span>
+          
+          <div className="flex flex-wrap items-center gap-3">
+             <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100">
+               <span className="text-[10px] font-black text-gray-400 uppercase">From</span>
+               <input 
+                 type="date" 
+                 value={startDate}
+                 onChange={(e) => setStartDate(e.target.value)}
+                 className="bg-transparent text-xs font-bold text-gray-700 outline-none cursor-pointer"
+               />
+             </div>
+             <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100">
+               <span className="text-[10px] font-black text-gray-400 uppercase">To</span>
+               <input 
+                 type="date" 
+                 value={endDate}
+                 onChange={(e) => setEndDate(e.target.value)}
+                 className="bg-transparent text-xs font-bold text-gray-700 outline-none cursor-pointer"
+               />
+             </div>
+             <button 
+               onClick={fetchStats}
+               className="px-4 py-2 bg-[#4355FF] text-white text-xs font-black rounded-xl hover:bg-[#3245FF] transition-all shadow-lg shadow-blue-200"
+             >
+               Filter
+             </button>
+             <div className="hidden lg:flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+               <span className="text-xs font-bold text-gray-700 text-nowrap">Live Data</span>
+             </div>
           </div>
         </div>
 
@@ -169,7 +204,7 @@ export default function Overview() {
                 {(stats?.booking_trend || []).map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={index === (stats?.booking_trend?.length ?? 0) - 1 ? "#4355FF" : "#cbd5e1"}
+                    fill={entry.bookings > 0 ? "#4355FF" : "#cbd5e1"}
                     className="hover:fill-[#4355FF] transition-all cursor-pointer"
                   />
                 ))}
@@ -182,11 +217,11 @@ export default function Overview() {
         <div className="flex justify-center mt-10 items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#4355FF]"></div>
-            <span className="text-[11px] text-gray-400 font-black uppercase tracking-widest">Today's Peak</span>
+            <span className="text-[11px] text-gray-400 font-black uppercase tracking-widest">Bookings Recorded</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-[#cbd5e1]"></div>
-            <span className="text-[11px] text-gray-400 font-black uppercase tracking-widest">Historical Data</span>
+            <span className="text-[11px] text-gray-400 font-black uppercase tracking-widest">No Bookings</span>
           </div>
         </div>
       </div>

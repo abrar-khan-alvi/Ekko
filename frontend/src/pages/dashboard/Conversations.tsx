@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, Loader2, Phone, RefreshCw, Check, CheckCheck, ArrowLeft } from 'lucide-react';
+import { apiFetch } from '../../utils/api';
 import toast from 'react-hot-toast';
 
 interface WebhookConversation {
@@ -37,12 +38,7 @@ export default function Conversations() {
   const fetchConversations = async (isBgRefresh = false) => {
     if (!isBgRefresh) setLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/conversations/', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Failed');
-      const data = await response.json();
+      const data = await apiFetch('/api/chatbot/conversations/');
       setConversations(Array.isArray(data) ? data : []);
     } catch {
       toast.error('Failed to load conversations.');
@@ -54,13 +50,7 @@ export default function Conversations() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/chatbot/conversations/sync/', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Sync failed');
-      const result = await response.json();
+      const result = await apiFetch('/api/chatbot/conversations/sync/', { method: 'POST' });
       if (result.new_messages_synced > 0) {
         toast.success(`${result.new_messages_synced} new messages synced!`);
       } else {

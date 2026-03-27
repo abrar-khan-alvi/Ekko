@@ -28,10 +28,19 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-j+w4&xaih#ky=uf0gc(zf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = ['*'] # For development
+ALLOWED_HOSTS = ['api.ekkoloop.co.uk', 'ekkoloop.co.uk', 'localhost', '127.0.0.1']
 
 
-# Application definition
+# Security settings for production (HTTPS)
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', '0') == '1'
+SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', '0') == '1'
+CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', '0') == '1'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# HSTS settings (only if using HTTPS)
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -166,11 +175,19 @@ SIMPLE_JWT = {
 # CORS Settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://localhost:5173", # Vite default
-    "http://localhost:5174", # Vite port fallback
-    "http://localhost:5175", # Vite port fallback
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    "https://ekkoloop.co.uk",
+    "https://api.ekkoloop.co.uk",
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    "https://ekkoloop.co.uk",
+    "https://api.ekkoloop.co.uk",
+]
 
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

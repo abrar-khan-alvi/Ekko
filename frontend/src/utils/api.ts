@@ -7,8 +7,8 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     const url = endpoint.startsWith('http')
         ? endpoint
         : endpoint.startsWith('/api/')
-            ? `http://localhost:8000${endpoint}`
-            : `${API_BASE_URL}${endpoint}`;
+            ? `${API_BASE_URL}${endpoint}`
+            : `${API_BASE_URL}/api/auth${endpoint}`;
 
     const token = localStorage.getItem('access_token');
 

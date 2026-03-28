@@ -3,10 +3,10 @@ import {
   BarChart2, TrendingUp, Calendar, ArrowUpRight, ArrowDownRight,
   Loader2, Filter, ChevronDown, CheckCircle2, Zap
 } from 'lucide-react';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { apiFetch } from '../../utils/api';
 import toast from 'react-hot-toast';
 
 interface AnalyticsData {
@@ -28,12 +28,7 @@ export default function Analytics() {
   const fetchAnalytics = async (year: number) => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://localhost:8000/api/chatbot/analytics/?year=${year}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Failed to fetch analytics');
-      const result = await response.json();
+      const result = await apiFetch(`/api/chatbot/analytics/?year=${year}`);
       setData(result);
     } catch (err) {
       console.error(err);

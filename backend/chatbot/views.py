@@ -57,11 +57,9 @@ class SyncConversationsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        webhook_url = getattr(
-            settings, 
-            'N8N_CONVERSATION_WEBHOOK_URL', 
-            'https://ekkoflow.app.n8n.cloud/webhook/12a447b8-54c0-472c-9ec8-0b7455695e85'
-        )
+        webhook_url = getattr(settings, 'N8N_CONVERSATION_WEBHOOK_URL', None)
+        if not webhook_url:
+            return Response({"error": "N8N_CONVERSATION_WEBHOOK_URL not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         try:
             response = requests.get(webhook_url, timeout=15)
@@ -115,8 +113,6 @@ class SyncConversationsView(APIView):
 
 # ─── APPOINTMENTS ──────────────────────────────────────────────────────────
 
-APPOINTMENT_WEBHOOK_URL = 'https://ekkoflow.app.n8n.cloud/webhook/193cc923-2bd8-40b9-89b0-5c4090e94d35'
-
 
 class AppointmentListView(APIView):
     """
@@ -167,11 +163,9 @@ class SyncAppointmentsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        webhook_url = getattr(
-            settings,
-            'N8N_APPOINTMENTS_WEBHOOK_URL',
-            APPOINTMENT_WEBHOOK_URL
-        )
+        webhook_url = getattr(settings, 'N8N_APPOINTMENTS_WEBHOOK_URL', None)
+        if not webhook_url:
+            return Response({"error": "N8N_APPOINTMENTS_WEBHOOK_URL not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         try:
             response = requests.get(webhook_url, timeout=15)
             if response.status_code != 200:
@@ -755,7 +749,9 @@ class SyncReviewsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        webhook_url = 'https://ekkoflow.app.n8n.cloud/webhook/getreview'
+        webhook_url = getattr(settings, 'N8N_REVIEWS_WEBHOOK_URL', None)
+        if not webhook_url:
+            return Response({"error": "N8N_REVIEWS_WEBHOOK_URL not configured."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         try:
             response = requests.get(webhook_url, timeout=15)
             if response.status_code != 200:

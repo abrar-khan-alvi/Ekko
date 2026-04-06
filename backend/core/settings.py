@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-j+w4&xaih#ky=uf0gc(zf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = ['api.ekkoloop.co.uk', 'ekkoloop.co.uk', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Security settings for production (HTTPS)
@@ -173,33 +173,36 @@ SIMPLE_JWT = {
 }
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175",
-    "https://ekkoloop.co.uk",
-    "https://api.ekkoloop.co.uk",
-]
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    'CORS_ALLOWED_ORIGINS', 
+    'http://localhost:3000,http://localhost:5173'
+).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF Settings
-CSRF_TRUSTED_ORIGINS = [
-    "https://ekkoloop.co.uk",
-    "https://api.ekkoloop.co.uk",
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    'CSRF_TRUSTED_ORIGINS', 
+    'http://localhost:3000,http://localhost:5173'
+).split(',')
 
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'abrar1khan2@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'nitvtcrypcxirrpo')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 # n8n Webhook Settings
 N8N_WEBHOOK_SECRET = os.environ.get('N8N_WEBHOOK_SECRET', '')
+N8N_CONVERSATION_WEBHOOK_URL = os.environ.get('N8N_CONVERSATION_WEBHOOK_URL')
+N8N_APPOINTMENTS_WEBHOOK_URL = os.environ.get('N8N_APPOINTMENTS_WEBHOOK_URL')
+N8N_REVIEWS_WEBHOOK_URL = os.environ.get('N8N_REVIEWS_WEBHOOK_URL')
+N8N_NOTIFICATION_SYNC_URL = os.environ.get('N8N_NOTIFICATION_SYNC_URL')
+N8N_WHATSAPP_WEBHOOK_URL = os.environ.get('N8N_WHATSAPP_WEBHOOK_URL')
+N8N_SMS_WEBHOOK_URL = os.environ.get('N8N_SMS_WEBHOOK_URL')
+
 N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/activate-business')
 N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/deactivate-business')
 N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/update-business')

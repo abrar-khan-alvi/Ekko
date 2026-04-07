@@ -57,9 +57,9 @@ def send_sms_thank_you(appointment):
     service = appointment.service or "your appointment"
 
     message = (
-        f"Hi {customer_name}! 👋\n\n"
+        f"Hi {customer_name}! \n\n"
         f"Thank you for visiting {biz_name} today for {service}. "
-        f"We really appreciate it! 🙏\n\n"
+        f"We really appreciate it! Please leave us a review here: https://ekkoflow.app.n8n.cloud/form/431b8d3f-3821-4c63-bc25-8c7fd3dcef95\n\n"
         f"See you again soon!\n— {biz_name}"
     )
 
@@ -103,8 +103,8 @@ def send_sms_overdue(appointment):
     service = appointment.service or "your appointment"
 
     message = (
-        f"Hi {customer_name}! 😢 We missed you at {biz_name} for your {service}. "
-        f"We'd love to reschedule! Feel free to reach out to book your next visit. 📅"
+        f"Hi {customer_name}! We missed you at {biz_name} for your {service}. "
+        f"We'd love to reschedule! Feel free to reach out to book your next visit."
     )
 
     _send_sms(phone, message, biz_name)

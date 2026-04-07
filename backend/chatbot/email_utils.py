@@ -67,12 +67,18 @@ def send_thank_you_email(appointment):
     <body>
       <div class="container">
         <div class="header">
-          <h1>Thank You for Visiting! 🙏</h1>
+          <h1>Thank You for Visiting! </h1>
         </div>
         <div class="body">
           <p>Hi <span class="highlight">{customer_name}</span>,</p>
           <p>Thank you so much for visiting <strong>{biz_name}</strong> today for <strong>{service}</strong>.</p>
           <p>We hope you had a great experience and we look forward to seeing you again soon!</p>
+          <div style="text-align: center; margin: 32px 0;">
+            <a href="https://ekkoflow.app.n8n.cloud/form/431b8d3f-3821-4c63-bc25-8c7fd3dcef95" 
+               style="background-color: #7c3aed; color: #ffffff; padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);">
+               Leave a Review ⭐
+            </a>
+          </div>
           <p>If you have any feedback or questions, feel free to reach out to us anytime.</p>
           <p>Warm regards,<br><strong>{biz_name}</strong></p>
         </div>
@@ -88,6 +94,7 @@ def send_thank_you_email(appointment):
         f"Hi {customer_name},\n\n"
         f"Thank you for visiting {biz_name} for {service}. "
         f"We hope you had a great experience!\n\n"
+        f"Please leave us a review here: https://ekkoflow.app.n8n.cloud/form/431b8d3f-3821-4c63-bc25-8c7fd3dcef95\n\n"
         f"Warm regards,\n{biz_name}"
     )
 
@@ -139,15 +146,15 @@ def send_48hr_reminder_email(appointment):
     <body>
       <div class="container">
         <div class="header">
-          <h1>⏰ Appointment Reminder</h1>
+          <h1>Appointment Reminder</h1>
         </div>
         <div class="body">
           <p>Hi <span class="highlight">{customer_name}</span>,</p>
           <p>This is a friendly reminder that you have an upcoming appointment with <strong>{biz_name}</strong>.</p>
           <div class="appt-box">
-            <p>📅 <strong>Date & Time:</strong> {dt_str}</p>
-            <p>✂️ <strong>Service:</strong> {service}</p>
-            <p>🏢 <strong>Business:</strong> {biz_name}</p>
+            <p> <strong>Date & Time:</strong> {dt_str}</p>
+            <p><strong>Service:</strong> {service}</p>
+            <p><strong>Business:</strong> {biz_name}</p>
           </div>
           <p>If you need to reschedule or have any questions, please contact us as soon as possible.</p>
           <p>We look forward to seeing you!</p>
@@ -213,7 +220,7 @@ def send_overdue_email(appointment):
     <body>
       <div class="container">
         <div class="header">
-          <h1>We Missed You! 😢</h1>
+          <h1>We Missed You!</h1>
         </div>
         <div class="body">
           <p>Hi <span class="highlight">{customer_name}</span>,</p>

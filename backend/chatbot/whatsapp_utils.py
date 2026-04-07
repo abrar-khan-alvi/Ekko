@@ -52,10 +52,11 @@ def send_whatsapp_thank_you(appointment):
     service = appointment.service or "your appointment"
 
     message = (
-        f"Hi {customer_name}! 👋\n\n"
+        f"Hi {customer_name}!\n\n"
         f"Thank you so much for visiting *{biz_name}* today for *{service}*. "
-        f"We really appreciate your visit and hope you had a great experience! 🙏\n\n"
+        f"We really appreciate your visit and hope you had a great experience!\n\n"
         f"We look forward to seeing you again soon. Feel free to reach out anytime!\n\n"
+        f"Please leave us a review: https://ekkoflow.app.n8n.cloud/form/431b8d3f-3821-4c63-bc25-8c7fd3dcef95\n\n"
         f"— {biz_name}"
     )
 
@@ -78,13 +79,13 @@ def send_whatsapp_48hr_reminder(appointment):
     dt_str = dt.strftime("%A, %B %d at %I:%M %p") if dt else "your scheduled time"
 
     message = (
-        f"Hi {customer_name}! ⏰\n\n"
+        f"Hi {customer_name}!\n\n"
         f"This is a friendly reminder from *{biz_name}* that you have an upcoming appointment:\n\n"
-        f"📅 *Date & Time:* {dt_str}\n"
-        f"✂️ *Service:* {service}\n"
-        f"🏢 *Business:* {biz_name}\n\n"
+        f"*Date & Time:* {dt_str}\n"
+        f"*Service:* {service}\n"
+        f"*Business:* {biz_name}\n\n"
         f"If you need to reschedule or have any questions, please contact us as soon as possible.\n\n"
-        f"See you soon! 😊\n— {biz_name}"
+        f"See you soon!\n— {biz_name}"
     )
 
     _send_whatsapp(phone, message, biz_name)
@@ -106,13 +107,13 @@ def send_whatsapp_overdue(appointment):
     dt_str = dt.strftime("%A, %B %d") if dt else "your scheduled date"
 
     message = (
-        f"Hi {customer_name}! 😢\n\n"
+        f"Hi {customer_name}! \n\n"
         f"We noticed you weren't able to make it to your appointment at *{biz_name}* "
         f"on *{dt_str}* for *{service}*.\n\n"
         f"We completely understand that things come up! We'd love to have you reschedule "
-        f"at a time that works for you. 📅\n\n"
+        f"at a time that works for you. \n\n"
         f"Feel free to reply to this message or contact us directly to book your next visit.\n\n"
-        f"Hope to see you soon! 💙\n— {biz_name}"
+        f"Hope to see you soon! \n— {biz_name}"
     )
 
     _send_whatsapp(phone, message, biz_name)

@@ -203,9 +203,9 @@ N8N_NOTIFICATION_SYNC_URL = os.environ.get('N8N_NOTIFICATION_SYNC_URL')
 N8N_WHATSAPP_WEBHOOK_URL = os.environ.get('N8N_WHATSAPP_WEBHOOK_URL')
 N8N_SMS_WEBHOOK_URL = os.environ.get('N8N_SMS_WEBHOOK_URL')
 
-N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/activate-business')
-N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/deactivate-business')
-N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL', 'https://ekkoflow.app.n8n.cloud/webhook/update-business')
+N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL')
+N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL')
+N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL')
 
 # ─── Celery / Redis Settings ───────────────────────────────────────────────────
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0')

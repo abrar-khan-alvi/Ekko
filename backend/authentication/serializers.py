@@ -10,7 +10,7 @@ _HOURS_RE = re.compile(
     r'^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)'
     r'[\s\-]+'
     r'(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)'
-    r'\s+\d{2}:\d{2}-\d{2}:\d{2}$',
+    r'\s+\d{1,2}:\d{2}-\d{1,2}:\d{2}$',
     re.IGNORECASE
 )
 

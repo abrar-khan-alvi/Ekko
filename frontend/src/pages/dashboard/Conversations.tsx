@@ -51,14 +51,11 @@ export default function Conversations() {
     setSyncing(true);
     try {
       const result = await apiFetch('/api/chatbot/conversations/sync/', { method: 'POST' });
-      if (result.new_messages_synced > 0) {
-        toast.success(`${result.new_messages_synced} new messages synced!`);
-      } else {
-        toast.success('Already up to date!');
-      }
+      toast.success(result.message || 'Sync complete.');
       await fetchConversations(true);
-    } catch {
-      toast.error('Sync failed. Try again.');
+    } catch (err: any) {
+      const msg = err.data?.error || err.message || 'Sync failed. Try again.';
+      toast.error(msg);
     } finally {
       setSyncing(false);
     }

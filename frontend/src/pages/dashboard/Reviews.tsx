@@ -29,6 +29,7 @@ export default function Reviews() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [selectedBusiness, setSelectedBusiness] = useState('All Businesses');
 
   const fetchReviews = async () => {
     try {
@@ -46,9 +47,9 @@ export default function Reviews() {
       const response = await apiFetch('/api/chatbot/reviews/sync/', { method: 'POST' });
       toast.success(response.message || 'Sync successful!');
       await fetchReviews();
-    } catch (error) {
-      console.error('Sync error:', error);
-      toast.error('Failed to sync reviews.');
+    } catch (err: any) {
+      const msg = err.data?.error || err.message || 'Failed to sync reviews.';
+      toast.error(msg);
     } finally {
       setSyncing(false);
     }
@@ -70,12 +71,21 @@ export default function Reviews() {
     initData();
   }, []);
 
-  const filteredReviews = reviews.filter(review =>
-    (review.Name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
-    (review.Email?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
-    (review.Feedback?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
-    (user?.is_superuser && (review.BusinessName?.toLowerCase() || '').includes(searchQuery.toLowerCase()))
-  );
+  const filteredReviews = reviews.filter(review => {
+    const matchesSearch = 
+      (review.Name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (review.Email?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (review.Feedback?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (user?.is_superuser && (review.BusinessName?.toLowerCase() || '').includes(searchQuery.toLowerCase()));
+    
+    const matchesBusiness = 
+      selectedBusiness === 'All Businesses' || 
+      review.BusinessName === selectedBusiness;
+
+    return matchesSearch && matchesBusiness;
+  });
+
+  const uniqueBusinesses = Array.from(new Set(reviews.map(r => r.BusinessName).filter(Boolean)));
 
   return (
     <div className="max-w-7xl mx-auto pb-16 px-4">
@@ -107,6 +117,27 @@ export default function Reviews() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          {user?.is_superuser && (
+            <div className="relative group w-full sm:w-auto">
+              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <Store className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+              </div>
+              <select
+                value={selectedBusiness}
+                onChange={(e) => setSelectedBusiness(e.target.value)}
+                className="block w-full pl-12 pr-10 py-4 border-2 border-transparent rounded-[2rem] leading-5 bg-white text-gray-900 font-bold shadow-xl shadow-gray-100/50 focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 sm:text-sm appearance-none transition-all cursor-pointer"
+              >
+                <option value="All Businesses">All Businesses</option>
+                {uniqueBusinesses.map(biz => (
+                  <option key={biz} value={biz}>{biz}</option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
+                <MousePointer2 className="h-4 w-4 text-gray-400" />
+              </div>
+            </div>
+          )}
 
           <button
             onClick={handleSync}
@@ -149,41 +180,12 @@ export default function Reviews() {
         </motion.div>
       ) : (
         <div className="space-y-16">
-          {user?.is_superuser ? (
-            Object.entries(
-              filteredReviews.reduce((acc, review) => {
-                const biz = review.BusinessName || 'Unassigned';
-                if (!acc[biz]) acc[biz] = [];
-                acc[biz].push(review);
-                return acc;
-              }, {} as Record<string, Review[]>)
-            ).map(([bizName, bizReviews]) => {
-              const reviewsList = bizReviews as Review[];
-              return (
-                <div key={bizName} className="space-y-6">
-                  <div className="flex items-center gap-6 px-4">
-                    <div className="flex items-center gap-3 bg-gray-900 text-white px-5 py-2.5 rounded-2xl shadow-xl shadow-gray-900/10">
-                      <Store className="w-5 h-5 text-blue-400" />
-                      <h2 className="text-xs font-black uppercase tracking-[0.2em]">{bizName}</h2>
-                    </div>
-                    <div className="h-[2px] bg-gray-100 flex-1"></div>
-                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{reviewsList.length} Reviews</span>
-                  </div>
-                  <ReviewTable 
-                    reviews={reviewsList} 
-                    onRowClick={setSelectedReview} 
-                  />
-                </div>
-              );
-            })
-          ) : (
-            <div className="bg-white rounded-[3rem] border border-gray-100 overflow-hidden shadow-2xl shadow-gray-100/50">
-               <ReviewTable 
-                  reviews={filteredReviews} 
-                  onRowClick={setSelectedReview} 
-                />
-            </div>
-          )}
+          <div className="bg-white rounded-[3rem] border border-gray-100 overflow-hidden shadow-2xl shadow-gray-100/50">
+             <ReviewTable 
+                reviews={filteredReviews} 
+                onRowClick={setSelectedReview} 
+              />
+          </div>
         </div>
       )}
 

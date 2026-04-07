@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Search, Loader2, Eye, CheckCircle, Ban } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../../utils/api';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import toast from 'react-hot-toast';
 
 const getStatus = (customer: any) => {
   if (!customer.is_verified) return 'Pending';
@@ -27,6 +29,11 @@ export default function Customers() {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const navigate = useNavigate();
 
+  // Confirm Modal State
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [customerToToggle, setCustomerToToggle] = useState<any | null>(null);
+  const [nextStatus, setNextStatus] = useState<boolean>(false);
+
   const fetchCustomers = async () => {
     try {
       const data = await apiFetch('/users/');
@@ -45,25 +52,28 @@ export default function Customers() {
     fetchCustomers();
   }, []);
 
-  const toggleCustomerStatus = async (customerId: number, currentStatus: string) => {
-    // If pending, they need to verify email first ideally, but admin can force activate
+  const toggleCustomerStatus = (customer: any, currentStatus: string) => {
     const willBeActive = currentStatus !== 'Active';
-    const confirmMessage = willBeActive
-      ? `Are you sure you want to ACTIVATE this business account?`
-      : `Are you sure you want to SUSPEND this business account? They will no longer be able to log in.`;
+    setCustomerToToggle(customer);
+    setNextStatus(willBeActive);
+    setConfirmModalOpen(true);
+  };
 
-    if (!window.confirm(confirmMessage)) return;
+  const handleConfirmToggle = async () => {
+    if (!customerToToggle) return;
 
-    setUpdatingId(customerId);
+    setUpdatingId(customerToToggle.id);
     try {
-      await apiFetch(`/users/${customerId}/`, {
+      await apiFetch(`/users/${customerToToggle.id}/`, {
         method: 'PATCH',
-        body: JSON.stringify({ is_active: willBeActive })
+        body: JSON.stringify({ is_active: nextStatus })
       });
       await fetchCustomers();
+      setConfirmModalOpen(false);
+      setCustomerToToggle(null);
     } catch (err) {
       console.error("Failed to update status", err);
-      alert("Failed to update status.");
+      toast.error("Failed to update status.");
     } finally {
       setUpdatingId(null);
     }
@@ -149,7 +159,13 @@ export default function Customers() {
                           })}
                         </td>
                         <td className="px-6 py-4">
-                          <StatusBadge status={status} />
+                          <button 
+                            onClick={() => toggleCustomerStatus(customer, status)}
+                            disabled={updatingId === customer.id}
+                            className="hover:opacity-80 transition-opacity focus:outline-none"
+                          >
+                            <StatusBadge status={status} />
+                          </button>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
@@ -183,6 +199,23 @@ export default function Customers() {
           </>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+          setCustomerToToggle(null);
+        }}
+        onConfirm={handleConfirmToggle}
+        title={nextStatus ? "Activate Business Account?" : "Suspend Business Account?"}
+        message={nextStatus 
+          ? `Are you sure you want to ACTIVATE the account for ${customerToToggle?.business_profile?.business_name || customerToToggle?.email}? They will regain full access to their dashboard.` 
+          : `Are you sure you want to SUSPEND the account for ${customerToToggle?.business_profile?.business_name || customerToToggle?.email}? They will be immediately blocked from logging in.`
+        }
+        confirmText={nextStatus ? "Activate Account" : "Suspend Account"}
+        variant={nextStatus ? "primary" : "danger"}
+        loading={updatingId !== null}
+      />
     </div>
   );
 }

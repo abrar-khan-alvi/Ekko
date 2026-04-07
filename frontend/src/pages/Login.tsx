@@ -5,7 +5,9 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { AuthLeftPanel } from '../components/AuthLeftPanel';
 import signinBg from '../assets/signin.png';
+import { Logo } from '../components/Logo';
 import { apiFetch } from '../utils/api';
+
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,6 +56,9 @@ export default function Login() {
 
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md border border-gray-100 rounded-2xl p-8 shadow-sm bg-white">
+          <div className="lg:hidden mb-8 flex justify-center">
+            <Logo />
+          </div>
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-semibold text-gray-900 mb-2">Login to Account</h2>
             <p className="text-gray-500">Please enter your email and password to continue</p>
@@ -70,7 +75,7 @@ export default function Login() {
               name="email"
               label="Email address"
               type="email"
-              placeholder="esteban_schiller@gmail.com"
+              placeholder="example@gmail.com"
               value={formData.email}
               onChange={handleInputChange}
               required

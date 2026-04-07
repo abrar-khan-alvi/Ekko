@@ -7,7 +7,9 @@ import { Button } from '../components/ui/Button';
 import { AuthLeftPanel } from '../components/AuthLeftPanel';
 import signupBg from '../assets/signup.png';
 
+import { Logo } from '../components/Logo';
 import { apiFetch } from '../utils/api';
+
 
 // ─── Validation helpers ────────────────────────────────────────────────────────
 
@@ -17,7 +19,7 @@ const PHONE_RE = /^[\d\s\+\(\)\-]{7,20}$/;
 
 // Accepts: Mon-Fri 09:00-17:00 | Monday-Friday 09:00-17:00 | Sun-Fri 09:00-17:00 etc.
 const HOURS_RE =
-  /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[\s\-]+(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+\d{2}:\d{2}-\d{2}:\d{2}$/i;
+  /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[\s\-]+(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+\d{1,2}:\d{2}-\d{1,2}:\d{2}$/i;
 
 // Business name: letters, digits, spaces, & . , ' -
 const BIZ_NAME_RE = /^[\w\s&.,'\-]{2,100}$/;
@@ -198,15 +200,41 @@ export default function Signup() {
             business_hours: formData.businessHours,
             services_offered: formData.servicesOffered,
             booking_policies: formData.bookingPolicies,
-            facebook_link: formData.facebookLink.trim() || 'N/A',
-            instagram_link: formData.instagramLink.trim() || 'N/A',
-            linkedin_link: formData.linkedinLink.trim() || 'N/A',
+            facebook_link: formData.facebookLink.trim() || '',
+            instagram_link: formData.instagramLink.trim() || '',
+            linkedin_link: formData.linkedinLink.trim() || '',
           }
         }),
       });
       navigate('/verify-email', { state: { email: formData.email, purpose: 'signup' } });
     } catch (err: any) {
-      setError(err.data?.email?.[0] || err.data?.detail || 'An error occurred during signup');
+      if (err.data) {
+        // If the backend returned field-specific validation errors, show them
+        const backendErrs: FieldErrors = {};
+        
+        // Handle root-level errors (like email already exists)
+        if (err.data.email) backendErrs.email = err.data.email[0];
+        
+        // Handle nested business_profile errors
+        if (err.data.business_profile) {
+          const bp = err.data.business_profile;
+          if (bp.business_name) backendErrs.businessName = bp.business_name[0];
+          if (bp.business_hours) backendErrs.businessHours = bp.business_hours[0];
+          if (bp.services_offered) backendErrs.servicesOffered = bp.services_offered[0];
+          if (bp.booking_policies) backendErrs.bookingPolicies = bp.booking_policies[0];
+        }
+        
+        if (Object.keys(backendErrs).length > 0) {
+          setFieldErrors(prev => ({ ...prev, ...backendErrs }));
+          // If we have errors on step 2, we stay here. If we have errors ONLY on step 1, we might need to go back.
+          // But usually, humans only trigger step 1 errors on step 1.
+          setError('Please correct the highlighted errors.');
+        } else {
+          setError(err.data.detail || 'An error occurred during signup');
+        }
+      } else {
+        setError('An error occurred during signup. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -222,6 +250,9 @@ export default function Signup() {
 
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-xl border border-gray-100 rounded-2xl p-8 lg:p-10 shadow-sm bg-white">
+          <div className="lg:hidden mb-8 flex justify-center">
+            <Logo />
+          </div>
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-semibold text-[#4355FF] uppercase tracking-wider">Step {currentStep} of 2</span>
@@ -250,7 +281,7 @@ export default function Signup() {
                 name="email"
                 label="Email address"
                 type="email"
-                placeholder="esteban_schiller@gmail.com"
+                placeholder="example@gmail.com"
                 value={formData.email}
                 onChange={handleInputChange}
                 error={fieldErrors.email}
@@ -271,7 +302,7 @@ export default function Signup() {
                   name="phoneNumber"
                   label="Phone Number"
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+44 7911 123456"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                   error={fieldErrors.phoneNumber}

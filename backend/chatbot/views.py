@@ -11,7 +11,10 @@ from django.utils.dateparse import parse_datetime
 from .models import ConversationLog, Appointment, Review
 from .email_utils import send_thank_you_email
 from .whatsapp_utils import send_whatsapp_thank_you
+import logging
 from .sms_utils import send_sms_thank_you
+
+logger = logging.getLogger(__name__)
 
 class ConversationListView(APIView):
     """
@@ -67,48 +70,78 @@ class SyncConversationsView(APIView):
             response = requests.get(webhook_url, timeout=15)
             
             if response.status_code != 200:
+                logger.error(f"[sync-conversations] Webhook returned {response.status_code}: {response.text}")
                 return Response(
-                    {"error": "Failed to fetch conversations from external service."}, 
+                    {"error": f"External service error (Status {response.status_code})."}, 
                     status=status.HTTP_502_BAD_GATEWAY
                 )
+
+            # Check for empty body
+            if not response.text.strip():
+                return Response({
+                    "status": "success", 
+                    "new_messages_synced": 0, 
+                    "message": "The source service returned no data."
+                })
 
             data = response.json()
             messages = data.get('messages', []) if isinstance(data, dict) else data
 
             if not isinstance(messages, list):
-                messages = []
+                logger.error(f"[sync-conversations] Unexpected data format: {type(data)}")
+                return Response({"error": "Invalid data format from external service."}, status=status.HTTP_502_BAD_GATEWAY)
+
+            if not messages:
+                return Response({
+                    "status": "success",
+                    "new_messages_synced": 0,
+                    "message": "No new messages were found at the source."
+                })
 
             created_count = 0
             for m in messages:
-                ts = int(m.get('timestamp') or 0)
-                contact_number = m.get('Contact_number') or ''
-                
-                # Only use contact_number + timestamp as the lookup key
-                # Everything else goes in defaults so it can be updated
-                _, created = ConversationLog.objects.get_or_create(
-                    contact_number=contact_number,
-                    timestamp=ts,
-                    defaults={
-                        'contact_name': m.get('Contact_name'),
-                        'business_name': m.get('Business_Name'),
-                        'business_id': m.get('Business_ID'),
-                        'received_message': m.get('Recieved_Message'),  # capital M
-                        'sent_message': m.get('Sent_message'),           # lowercase m
-                    }
-                )
-                if created:
-                    created_count += 1
+                try:
+                    raw_ts = m.get('timestamp') or 0
+                    ts = int(float(raw_ts))
+                    
+                    contact_number = m.get('Contact_number') or ''
+                    if not contact_number:
+                        continue
 
-            return Response({"status": "success", "new_messages_synced": created_count})
+                    _, created = ConversationLog.objects.get_or_create(
+                        contact_number=contact_number,
+                        timestamp=ts,
+                        defaults={
+                            'contact_name': m.get('Contact_name'),
+                            'business_name': m.get('Business_Name'),
+                            'business_id': m.get('Business_ID'),
+                            'received_message': m.get('Recieved_Message'),
+                            'sent_message': m.get('Sent_message'),
+                        }
+                    )
+                    if created:
+                        created_count += 1
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"[sync-conversations] Skipping invalid message entry: {e}")
+                    continue
+
+            msg = f"{created_count} new messages synced!" if created_count > 0 else "Already up to date."
+            return Response({
+                "status": "success", 
+                "new_messages_synced": created_count,
+                "message": msg
+            })
 
         except requests.RequestException as e:
+            logger.error(f"[sync-conversations] Request failed: {e}")
             return Response(
-                {"error": f"Error connecting to webhook service: {e}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "Could not connect to the conversation sync service. Please try again later."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
         except Exception as e:
+            logger.exception("[sync-conversations] Unexpected error during sync")
             return Response(
-                {"error": f"An unexpected error occurred: {e}"},
+                {"error": f"Internal sync error: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -175,10 +208,28 @@ class SyncAppointmentsView(APIView):
         try:
             response = requests.get(webhook_url, timeout=15)
             if response.status_code != 200:
-                return Response({'error': 'Failed to fetch appointments.'}, status=status.HTTP_502_BAD_GATEWAY)
+                logger.error(f"[sync-appointments] Webhook returned {response.status_code}")
+                return Response({'error': f'External service error (Status {response.status_code}).'}, status=status.HTTP_502_BAD_GATEWAY)
+
+            if not response.text.strip():
+                return Response({
+                    'status': 'success',
+                    'new_appointments_synced': 0,
+                    'message': 'No appointment data returned from the source.'
+                })
 
             raw = response.json()
             rows = raw if isinstance(raw, list) else raw.get('appointments', [])
+
+            if not isinstance(rows, list):
+                return Response({"error": "Invalid data format from external service."}, status=status.HTTP_502_BAD_GATEWAY)
+
+            if not rows:
+                return Response({
+                    'status': 'success',
+                    'new_appointments_synced': 0,
+                    'message': 'No new appointments were found.'
+                })
 
             created_count = 0
             for row in rows:
@@ -214,12 +265,19 @@ class SyncAppointmentsView(APIView):
                 if created:
                     created_count += 1
 
-            return Response({'status': 'success', 'new_appointments_synced': created_count})
+            msg = f"{created_count} new appointments synced!" if created_count > 0 else "Appointments are already up to date."
+            return Response({
+                'status': 'success', 
+                'new_appointments_synced': created_count,
+                'message': msg
+            })
 
         except requests.RequestException as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(f"[sync-appointments] Request failed: {e}")
+            return Response({'error': 'Could not connect to the appointment sync service.'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.exception("[sync-appointments] Unexpected error during sync")
+            return Response({'error': f"Internal sync error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ManualAppointmentCreateView(APIView):
@@ -759,11 +817,27 @@ class SyncReviewsView(APIView):
         try:
             response = requests.get(webhook_url, timeout=15)
             if response.status_code != 200:
-                return Response({"error": "Failed to fetch reviews."}, status=status.HTTP_502_BAD_GATEWAY)
+                logger.error(f"[sync-reviews] Webhook returned {response.status_code}")
+                return Response({"error": f"External service error (Status {response.status_code})."}, status=status.HTTP_502_BAD_GATEWAY)
+
+            if not response.text.strip():
+                return Response({
+                    "status": "success",
+                    "synced_count": 0,
+                    "message": "No reviews data returned from the source."
+                })
 
             reviews_data = response.json()
             if not isinstance(reviews_data, list):
-                return Response({"error": "Invalid data format from webhook."}, status=status.HTTP_502_BAD_GATEWAY)
+                logger.error(f"[sync-reviews] Unexpected data format: {type(reviews_data)}")
+                return Response({"error": "Invalid data format from external service."}, status=status.HTTP_502_BAD_GATEWAY)
+
+            if not reviews_data:
+                return Response({
+                    "status": "success",
+                    "synced_count": 0,
+                    "message": "No new reviews were found at the source."
+                })
 
             created_count = 0
             for r in reviews_data:
@@ -793,10 +867,16 @@ class SyncReviewsView(APIView):
                 if created:
                     created_count += 1
 
+            msg = f"Successfully synced {created_count} new reviews!" if created_count > 0 else "Reviews are already up to date."
             return Response({
-                "message": f"Successfully synced reviews. {created_count} new reviews added.",
+                "status": "success",
+                "message": msg,
                 "synced_count": created_count
             }, status=status.HTTP_200_OK)
 
+        except requests.RequestException as e:
+            logger.error(f"[sync-reviews] Request failed: {e}")
+            return Response({"error": "Could not connect to the review sync service."}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            logger.exception("[sync-reviews] Unexpected error during sync")
+            return Response({"error": f"Internal sync error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

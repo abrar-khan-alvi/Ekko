@@ -69,15 +69,11 @@ export default function Appointments() {
     setSyncing(true);
     try {
       const result = await apiFetch('/api/chatbot/appointments/sync/', { method: 'POST' });
-      if (result.new_appointments_synced > 0) {
-        toast.success(`${result.new_appointments_synced} new appointments synced!`);
-      } else {
-        toast.success('Appointments are already up to date.');
-      }
+      toast.success(result.message || 'Sync complete.');
       await fetchAppointments(true);
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to sync appointments.');
+    } catch (err: any) {
+      const msg = err.data?.error || err.message || 'Failed to sync appointments.';
+      toast.error(msg);
     } finally {
       setSyncing(false);
     }
@@ -254,10 +250,10 @@ export default function Appointments() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-20">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
-          <p className="text-gray-500 mt-1">Manage and monitor all incoming customer bookings.</p>
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div className="flex-1">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Appointments</h1>
+          <p className="text-gray-500 font-medium mt-1">Manage and monitor all incoming customer bookings.</p>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
@@ -413,7 +409,7 @@ export default function Appointments() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="py-24 text-center">
+                  <td colSpan={6} className="py-24 text-center">
                     <div className="flex flex-col items-center justify-center gap-4 text-gray-300">
                       <Calendar className="w-12 h-12 opacity-20" />
                       <div>
@@ -655,13 +651,13 @@ export default function Appointments() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Phone</label>
-                  <input required value={manualForm.customerPhone} onChange={e => setManualForm({ ...manualForm, customerPhone: e.target.value })} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="+1234567890" />
+                  <input required value={manualForm.customerPhone} onChange={e => setManualForm({ ...manualForm, customerPhone: e.target.value })} type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="+44 7911 123456" />
                 </div>
               </div>
 
               <div className="space-y-1">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Email Address</label>
-                <input required value={manualForm.customerEmail} onChange={e => setManualForm({ ...manualForm, customerEmail: e.target.value })} type="email" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="john@example.com" />
+                <input required value={manualForm.customerEmail} onChange={e => setManualForm({ ...manualForm, customerEmail: e.target.value })} type="email" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#4355FF]/20 focus:border-[#4355FF] outline-none transition-all" placeholder="example@gmail.com" />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

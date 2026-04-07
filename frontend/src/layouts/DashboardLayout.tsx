@@ -182,7 +182,7 @@ export default function DashboardLayout() {
                   <span className="bg-[#4355FF] text-[9px] text-white px-1.5 py-0.5 rounded-md font-black tracking-tighter uppercase">PRO</span>
                 )}
                 <p className="text-[13px] font-bold text-gray-900">
-                  {user?.full_name || 'Loading...'}
+                  {user ? (user.full_name || (user.is_superuser ? 'Administrator' : user.email)) : 'Loading...'}
                 </p>
               </div>
               <p className="text-[11px] text-[#6B7280] font-medium uppercase text-right">

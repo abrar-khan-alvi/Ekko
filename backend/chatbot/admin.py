@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ConversationLog, Appointment
+from .models import ConversationLog, Appointment, Review
 
 @admin.register(ConversationLog)
 class ConversationLogAdmin(admin.ModelAdmin):
@@ -16,3 +16,11 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = ('customer_name', 'customer_phone', 'customer_email', 'business_name')
     readonly_fields = ('created_at',)
     ordering = ('-appointment_datetime',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('name', 'business_name', 'rating', 'email', 'phone', 'created_at_external')
+    list_filter = ('business_name', 'rating', 'created_at_external')
+    search_fields = ('name', 'email', 'phone', 'business_name', 'feedback')
+    readonly_fields = ('created_at',)
+    ordering = ('-created_at_external',)

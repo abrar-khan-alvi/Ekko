@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Search, Edit, Trash2, X } from 'lucide-react';
 import { apiFetch } from '../../utils/api';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import toast from 'react-hot-toast';
 
 interface User {
   id: number;
@@ -43,6 +45,11 @@ export default function UserRoles() {
   const [editRole, setEditRole] = useState("Viewer");
   const [editStatus, setEditStatus] = useState("Active");
   const [saving, setSaving] = useState(false);
+  
+  // Deactivate confirmation state
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [userToDeactivate, setUserToDeactivate] = useState<User | null>(null);
+  const [deactivating, setDeactivating] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -94,23 +101,34 @@ export default function UserRoles() {
       closeEditModal();
     } catch (err) {
       console.error("Failed to update user", err);
-      alert("Failed to update user. Note: only Super Admins can update roles.");
+      toast.error("Failed to update user. Note: only Super Admins can update roles.");
     } finally {
       setSaving(false);
     }
   };
 
-  const deactivateUser = async (user: User) => {
-    if (window.confirm(`Are you sure you want to deactivate ${user.full_name}?`)) {
-      try {
-        await apiFetch(`/users/${user.id}/`, {
-          method: 'PATCH',
-          body: JSON.stringify({ is_active: false })
-        });
-        fetchUsers();
-      } catch (err) {
-        console.error("Failed to deactivate user", err);
-      }
+  const deactivateUser = (user: User) => {
+    setUserToDeactivate(user);
+    setConfirmModalOpen(true);
+  };
+
+  const handleConfirmDeactivate = async () => {
+    if (!userToDeactivate) return;
+    
+    setDeactivating(true);
+    try {
+      await apiFetch(`/users/${userToDeactivate.id}/`, {
+        method: 'PATCH',
+        body: JSON.stringify({ is_active: false })
+      });
+      await fetchUsers();
+      setConfirmModalOpen(false);
+      setUserToDeactivate(null);
+    } catch (err) {
+      console.error("Failed to deactivate user", err);
+      toast.error("Failed to deactivate user.");
+    } finally {
+      setDeactivating(false);
     }
   };
 
@@ -298,6 +316,21 @@ export default function UserRoles() {
           </div>
         </div>
       )}
+
+      {/* Deactivate Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+          setUserToDeactivate(null);
+        }}
+        onConfirm={handleConfirmDeactivate}
+        title="Deactivate Admin Access?"
+        message={`Are you sure you want to deactivate ${userToDeactivate?.full_name || userToDeactivate?.email}? This user will lose all administrative privileges immediately.`}
+        confirmText="Deactivate Admin"
+        variant="danger"
+        loading={deactivating}
+      />
     </div>
   );
 }

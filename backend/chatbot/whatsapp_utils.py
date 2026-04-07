@@ -10,11 +10,7 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-WHATSAPP_WEBHOOK_URL = getattr(
-    settings,
-    'N8N_WHATSAPP_WEBHOOK_URL',
-    'https://ekkoflow.app.n8n.cloud/webhook/whatsapp_message'
-)
+WHATSAPP_WEBHOOK_URL = getattr(settings, 'N8N_WHATSAPP_WEBHOOK_URL', None)
 
 
 def _send_whatsapp(phone: str, message: str, business_name: str):

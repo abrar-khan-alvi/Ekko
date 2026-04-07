@@ -10,11 +10,7 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-SMS_WEBHOOK_URL = getattr(
-    settings,
-    'N8N_SMS_WEBHOOK_URL',
-    'https://ekkoflow.app.n8n.cloud/webhook/sms'
-)
+SMS_WEBHOOK_URL = getattr(settings, 'N8N_SMS_WEBHOOK_URL', None)
 
 
 def _send_sms(phone: str, message: str, business_name: str):

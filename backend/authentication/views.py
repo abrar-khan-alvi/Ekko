@@ -232,7 +232,11 @@ class NotificationListView(generics.ListAPIView):
 
         def sync_n8n_data():
             try:
-                response = requests.get('https://ekkoflow.app.n8n.cloud/webhook/remider', timeout=5)
+                webhook_url = getattr(settings, 'N8N_NOTIFICATION_SYNC_URL', None)
+                if not webhook_url:
+                    logger.error("N8N_NOTIFICATION_SYNC_URL not configured.")
+                    return
+                response = requests.get(webhook_url, timeout=5)
                 if response.status_code == 200:
                     data = response.json()
                     

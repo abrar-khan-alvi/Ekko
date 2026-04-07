@@ -9,6 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.utils.dateparse import parse_datetime
 from .models import ConversationLog, Appointment, Review
+from authentication.models import BusinessProfile, Notification
 from .email_utils import send_thank_you_email
 from .whatsapp_utils import send_whatsapp_thank_you
 import logging
@@ -213,9 +214,17 @@ class SyncAppointmentsView(APIView):
                 })
 
             raw = response.json()
-            rows = raw if isinstance(raw, list) else raw.get('appointments', [])
+            # Support 'appointments', 'value', or root list
+            rows = []
+            if isinstance(raw, list):
+                rows = raw
+            elif isinstance(raw, dict):
+                rows = raw.get('appointments') or raw.get('value') or []
+            
+            logger.info(f"[sync-appointments] Received {len(rows)} potential rows from n8n.")
 
             if not isinstance(rows, list):
+                logger.error(f"[sync-appointments] Unexpected data format: {type(rows)}")
                 return Response({"error": "Invalid data format from external service."}, status=status.HTTP_502_BAD_GATEWAY)
 
             if not rows:
@@ -226,8 +235,56 @@ class SyncAppointmentsView(APIView):
                 })
 
             created_count = 0
+            notif_count = 0
+            
+            from authentication.models import Notification, User, BusinessProfile
+            
             for row in rows:
                 tool_call_id = row.get('toolCallId') or ''
+                
+                # 1. Handle Reminder Notification Sync (Automatic)
+                # If row is marked as SENT, it's a notification log
+                row_status = str(row.get('Status') or '').strip().upper()
+                
+                if row_status == 'SENT':
+                    logger.info(f"[sync-notifications] Found SENT row: {row}")
+                    biz_name = row.get('BusinessName')
+                    cust_name = row.get('customerName') or row.get('customer_name')
+                    appt_time = row.get('appointmentDateTime')
+                    cust_phone = str(row.get('customerPhone') or row.get('customer_phone') or '')
+                    
+                    # Try to find the user owner for this notification
+                    notif_user = None
+                    if biz_name:
+                        profile = BusinessProfile.objects.filter(business_name=biz_name).first()
+                        if profile:
+                            notif_user = profile.user
+                    
+                    notif_title = f"Reminder for {cust_name}"
+                    notif_message = f"Reminder sent to {cust_name} for their appointment at {biz_name} on {appt_time}."
+                    
+                    # Prevent duplicates
+                    notif_exists = Notification.objects.filter(
+                        title=notif_title,
+                        business_name=biz_name,
+                        customer_name=cust_name,
+                        appointment_time=appt_time
+                    ).exists()
+                    
+                    if not notif_exists:
+                        Notification.objects.create(
+                            user=notif_user,
+                            title=notif_title,
+                            message=notif_message,
+                            notification_type='reminder',
+                            business_name=biz_name,
+                            customer_name=cust_name,
+                            customer_phone=cust_phone,
+                            appointment_time=appt_time
+                        )
+                        notif_count += 1
+
+                # 2. Handle Appointment Sync
                 if not tool_call_id:
                     continue
 
@@ -258,11 +315,49 @@ class SyncAppointmentsView(APIView):
                 )
                 if created:
                     created_count += 1
+                    # 3. Create a 'New Booking' Notification
+                    b_name = row.get('BusinessName')
+                    c_name = row.get('customerName') or row.get('customer_name')
+                    a_time = row.get('appointmentDateTime')
+                    
+                    # Try to find user
+                    notif_owner = None
+                    if b_name:
+                        bp = BusinessProfile.objects.filter(business_name=b_name).first()
+                        if bp:
+                            notif_owner = bp.user
+                    
+                    Notification.objects.create(
+                        user=notif_owner,
+                        title="New Appointment!",
+                        message=f"New booking from {c_name} for {row.get('service')} on {a_time}.",
+                        notification_type='new_booking',
+                        business_name=b_name,
+                        customer_name=c_name,
+                        customer_phone=str(row.get('customerPhone') or ''),
+                        appointment_time=a_time
+                    )
+                    notif_count += 1
 
-            msg = f"{created_count} new appointments synced!" if created_count > 0 else "Appointments are already up to date."
+            # Debugging why notifications aren't showing
+            if notif_count == 0 and len(rows) > 0:
+                logger.info(f"[sync-notifications] No SENT rows found among {len(rows)} entries. First few statuses: {[r.get('Status') for r in rows[:3]]}")
+
+            # Create a combined success message
+            if created_count > 0 and notif_count > 0:
+                msg = f"Synced {created_count} new appointments and {notif_count} new notifications!"
+            elif created_count > 0:
+                msg = f"{created_count} new appointments synced!"
+            elif notif_count > 0:
+                msg = f"{notif_count} new notifications synced!"
+            else:
+                msg = "Data is already up to date."
+
+            logger.info(f"[sync-results] Appointments: {created_count}, Notifications: {notif_count}")
             return Response({
                 'status': 'success', 
                 'new_appointments_synced': created_count,
+                'new_notifications_synced': notif_count,
                 'message': msg
             })
 
@@ -862,6 +957,30 @@ class SyncReviewsView(APIView):
                 )
                 if created:
                     created_count += 1
+                    # 3. Create a 'New Review' Notification
+                    rev_biz_name = r.get('BusinessName')
+                    rev_cust_name = r.get('Name')
+                    rev_rating = r.get('Rating')
+                    
+                    # Try to find user
+                    rev_owner = None
+                    if rev_biz_name:
+                        profile = BusinessProfile.objects.filter(business_name=rev_biz_name).first()
+                        if profile:
+                            rev_owner = profile.user
+                    
+                    rev_notif_title = f"New {rev_rating}-Star Review!"
+                    rev_notif_msg = f"{rev_cust_name} just left a {rev_rating}-star review for {rev_biz_name}."
+                    
+                    Notification.objects.create(
+                        user=rev_owner,
+                        title=rev_notif_title,
+                        message=rev_notif_msg,
+                        notification_type='new_review',
+                        business_name=rev_biz_name,
+                        customer_name=rev_cust_name,
+                        customer_phone=r.get('Phone') or ''
+                    )
 
             msg = f"Successfully synced {created_count} new reviews!" if created_count > 0 else "Reviews are already up to date."
             return Response({

@@ -209,9 +209,6 @@ class n8nWebhookReceiverView(APIView):
         return Response({"message": f"Successfully processed {created_count} notifications"}, status=status.HTTP_201_CREATED)
 
 from rest_framework.pagination import PageNumberPagination
-import threading
-
-_n8n_sync_lock = threading.Lock()
 
 class NotificationPagination(PageNumberPagination):
     page_size = 10
@@ -223,70 +220,8 @@ class NotificationListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = NotificationPagination
     def get_queryset(self):
-        import requests
-        import threading
-        from django.utils import dateparse
-        from .models import Notification
-        
         user = self.request.user
-
-        def sync_n8n_data():
-            try:
-                webhook_url = getattr(settings, 'N8N_NOTIFICATION_SYNC_URL', None)
-                if not webhook_url:
-                    logger.error("N8N_NOTIFICATION_SYNC_URL not configured.")
-                    return
-                response = requests.get(webhook_url, timeout=5)
-                if response.status_code == 200:
-                    data = response.json()
-                    
-                    if not isinstance(data, list):
-                        data = [data]
-                        
-                    for item in data:
-                        raw_date = item.get('AppointmentTIme')
-                        parsed_date = dateparse.parse_datetime(raw_date) if raw_date else None
-                        appt_str = parsed_date.strftime("%b %d, %Y at %I:%M %p") if parsed_date else raw_date
-                        
-                        business_name = item.get('businessName', '')
-                        customer_name = item.get('customerName', '')
-                        
-                        title = f"Reminder for {customer_name}"
-                        message = f"Reminder sent to {customer_name} for their appointment at {business_name} on {appt_str}."
-                        
-                        exists = Notification.objects.filter(
-                            title=title, 
-                            business_name=business_name, 
-                            customer_name=customer_name,
-                            appointment_time=appt_str
-                        ).exists()
-                        
-                        if not exists:
-                            Notification.objects.create(
-                                title=title,
-                                message=message,
-                                notification_type='reminder',
-                                business_name=business_name,
-                                customer_name=customer_name,
-                                customer_phone=str(item.get('customerPhone', '')),
-                                appointment_time=appt_str
-                            )
-            except Exception as e:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Failed to sync n8n notifications: {e}")
-
-        def run_sync_with_lock():
-            if not _n8n_sync_lock.acquire(blocking=False):
-                return
-            try:
-                sync_n8n_data()
-            finally:
-                _n8n_sync_lock.release()
-
-        # Run the sync in the background so it doesn't block the page from loading instantly
-        threading.Thread(target=run_sync_with_lock).start()
-
+        
         # Admin users see all notifications
         if user.is_staff or user.is_superuser:
             return Notification.objects.all().order_by('-created_at')
@@ -348,7 +283,31 @@ class NotificationMarkAllReadView(APIView):
         # Exclude those already read by the user
         unread_notifications = notifications.exclude(read_by=user)
         
+        count = unread_notifications.count()
         for notif in unread_notifications:
             notif.read_by.add(user)
             
-        return Response({"status": "all_read", "marked_count": unread_notifications.count()}, status=status.HTTP_200_OK)
+        return Response({"status": "all_read", "marked_count": count}, status=status.HTTP_200_OK)
+
+class NotificationUnreadCountView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        
+        # Get all notifications the user currently has access to see
+        if user.is_staff or user.is_superuser:
+            notifications = Notification.objects.all()
+        else:
+            from .models import BusinessProfile
+            profile = BusinessProfile.objects.filter(user=user).first()
+            if profile and profile.business_name:
+                notifications = Notification.objects.filter(
+                    models.Q(user=user) | models.Q(business_name=profile.business_name)
+                )
+            else:
+                notifications = Notification.objects.filter(user=user)
+                
+        # Exclude those already read by the user
+        unread_count = notifications.exclude(read_by=user).count()
+        return Response({"unread_count": unread_count}, status=status.HTTP_200_OK)

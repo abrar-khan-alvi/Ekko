@@ -278,11 +278,12 @@ from .models import Notification
 
 class NotificationSerializer(serializers.ModelSerializer):
     is_read = serializers.SerializerMethodField()
+    created_at_human = serializers.SerializerMethodField()
 
     class Meta:
         model = Notification
         fields = [
-            'id', 'title', 'message', 'notification_type', 'is_read', 'created_at',
+            'id', 'title', 'message', 'notification_type', 'is_read', 'created_at', 'created_at_human',
             'business_name', 'customer_name', 'customer_phone', 'appointment_time'
         ]
         read_only_fields = fields
@@ -292,3 +293,11 @@ class NotificationSerializer(serializers.ModelSerializer):
         if not user.is_authenticated:
             return False
         return obj.read_by.filter(id=user.id).exists()
+
+    def get_created_at_human(self, obj):
+        from django.utils.timesince import timesince
+        from django.utils import timezone
+        try:
+            return timesince(obj.created_at, timezone.now()).split(',')[0] + " ago"
+        except Exception:
+            return "just now"

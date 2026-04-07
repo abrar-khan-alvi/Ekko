@@ -31,6 +31,18 @@ export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  const fetchUnreadCount = async () => {
+    try {
+      const data = await apiFetch('/api/auth/notifications/unread-count/');
+      if (data && typeof data.unread_count === 'number') {
+        setUnreadCount(data.unread_count);
+      }
+    } catch (err) {
+      console.error("Failed to fetch unread count", err);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,6 +59,12 @@ export default function DashboardLayout() {
       }
     };
     fetchUser();
+    
+    // Initial fetch and setup polling for unread count
+    fetchUnreadCount();
+    const intervalId = setInterval(fetchUnreadCount, 60000); // Check every minute
+    
+    return () => clearInterval(intervalId);
   }, []);
 
   // Close sidebar on route change (mobile)
@@ -143,7 +161,14 @@ export default function DashboardLayout() {
                     {({ isActive }) => (
                       <>
                         <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
-                        {item.label}
+                        <span className="flex-1">{item.label}</span>
+                        {item.label === "Notifications" && unreadCount > 0 && (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold shadow-sm ${
+                            isActive ? "bg-white text-[#3041F5]" : "bg-red-500 text-white"
+                          }`}>
+                            {unreadCount > 99 ? '99+' : unreadCount}
+                          </span>
+                        )}
                       </>
                     )}
                   </NavLink>

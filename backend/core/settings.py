@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-j+w4&xaih#ky=uf0gc(zf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = ['api.ekkoloop.co.uk', 'ekkoloop.co.uk', 'localhost', '127.0.0.1']
 
 
 # Security settings for production (HTTPS)
@@ -173,17 +173,21 @@ SIMPLE_JWT = {
 }
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    'CORS_ALLOWED_ORIGINS', 
-    'http://localhost:3000,http://localhost:5173'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173", # Vite default
+    "http://localhost:5174", # Vite port fallback
+    "http://localhost:5175", # Vite port fallback
+    "https://ekkoloop.co.uk",
+    "https://api.ekkoloop.co.uk",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF Settings
-CSRF_TRUSTED_ORIGINS = os.environ.get(
-    'CSRF_TRUSTED_ORIGINS', 
-    'http://localhost:3000,http://localhost:5173'
-).split(',')
+CSRF_TRUSTED_ORIGINS = [
+    "https://ekkoloop.co.uk",
+    "https://api.ekkoloop.co.uk",
+]
 
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

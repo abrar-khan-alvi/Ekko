@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     SignupView, UserProfileView, VerifyEmailView, 
     ForgotPasswordView, ResetPasswordView, MyTokenObtainPairView, ChangePasswordView,
     UserListView, UserDetailView, n8nWebhookReceiverView, 
-    NotificationListView, NotificationReadView, NotificationMarkAllReadView, NotificationUnreadCountView
+    NotificationListView, NotificationReadView, NotificationMarkAllReadView, NotificationUnreadCountView,
+    VapiProxyView
 )
 
 urlpatterns = [
@@ -25,4 +26,8 @@ urlpatterns = [
     path('notifications/unread-count/', NotificationUnreadCountView.as_view(), name='notification-unread-count'),
     path('notifications/<int:pk>/read/', NotificationReadView.as_view(), name='notification-read'),
     path('notifications/read-all/', NotificationMarkAllReadView.as_view(), name='notification-mark-all-read'),
+    
+    # Vapi Proxy
+    path('vapi/assistants/', VapiProxyView.as_view(), name='vapi-assistants'),
+    re_path(r'vapi/assistants/(?P<assistant_id>[^/]+)/$', VapiProxyView.as_view(), name='vapi-assistant-detail'),
 ]

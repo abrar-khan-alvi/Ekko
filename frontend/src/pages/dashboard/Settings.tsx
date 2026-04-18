@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Loader2, User, Briefcase, Lock, ShieldCheck, FileText } from 'lucide-react';
 import { apiFetch } from '../../utils/api';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import toast from 'react-hot-toast';
 
 interface UserProfile {

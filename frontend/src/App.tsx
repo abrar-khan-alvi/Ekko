@@ -21,6 +21,7 @@ import Notifications from './pages/dashboard/Notifications';
 import Settings from './pages/dashboard/Settings';
 import CustomerDetails from './pages/dashboard/CustomerDetails';
 import Reviews from './pages/dashboard/Reviews';
+import AIReceptionist from './pages/dashboard/AIReceptionist';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="settings" element={<Settings />} />
           <Route path="reviews" element={<Reviews />} />
+          <Route path="ai-receptionist" element={<AIReceptionist />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

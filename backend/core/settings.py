@@ -216,6 +216,10 @@ N8N_SMS_WEBHOOK_URL = os.environ.get('N8N_SMS_WEBHOOK_URL')
 N8N_ACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_ACTIVATE_BUSINESS_WEBHOOK_URL')
 N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_DEACTIVATE_BUSINESS_WEBHOOK_URL')
 N8N_UPDATE_BUSINESS_WEBHOOK_URL = os.environ.get('N8N_UPDATE_BUSINESS_WEBHOOK_URL')
+VAPI_API_KEY = os.environ.get('VAPI_API_KEY', '')
+# URL Vapi will POST to when the assistant calls the 'save_booking_data' function tool.
+# Must be a publicly accessible URL (not localhost). Use ngrok or your production domain.
+VAPI_TOOL_WEBHOOK_URL = os.environ.get('VAPI_TOOL_WEBHOOK_URL', 'https://api.ekkoloop.co.uk/api/vapi/tool-call/')
 
 # ─── Celery / Redis Settings ───────────────────────────────────────────────────
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0')

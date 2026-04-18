@@ -25,7 +25,7 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BusinessProfile
-        fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies', 'facebook_link', 'instagram_link', 'linkedin_link']
+        fields = ['business_name', 'business_hours', 'services_offered', 'booking_policies', 'facebook_link', 'instagram_link', 'linkedin_link', 'vapi_assistant_id', 'vapi_api_key']
 
     def validate_business_name(self, value):
         if value and len(value.strip()) > 100:
@@ -170,7 +170,9 @@ class UserSerializer(serializers.ModelSerializer):
                     "bookingPolicies": business.booking_policies if business else '',
                     "bookingFacebook": business.facebook_link if business else '',
                     "bookingInstagram": business.instagram_link if business else '',
-                    "bookingLinkedin": business.linkedin_link if business else ''
+                    "bookingLinkedin": business.linkedin_link if business else '',
+                    "vapiAssistantId": business.vapi_assistant_id if business else '',
+                    "vapiApiKey": business.vapi_api_key if business else ''
                 }
                 
                 headers = {
@@ -242,7 +244,9 @@ class AdminUserUpdateSerializer(serializers.ModelSerializer):
                         "bookingPolicies": business.booking_policies if business else '',
                         "bookingFacebook": business.facebook_link if business else '',
                         "bookingInstagram": business.instagram_link if business else '',
-                        "bookingLinkedin": business.linkedin_link if business else ''
+                        "bookingLinkedin": business.linkedin_link if business else '',
+                        "vapiAssistantId": business.vapi_assistant_id if business else '',
+                        "vapiApiKey": business.vapi_api_key if business else ''
                     }
                 
                 # Exclude the "x-admin-secret" headers as your tested payload didn't strictly require auth OR we can safely leave it.

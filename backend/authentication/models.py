@@ -48,6 +48,8 @@ class BusinessProfile(models.Model):
     facebook_link = models.URLField(max_length=500, blank=True)
     instagram_link = models.URLField(max_length=500, blank=True)
     linkedin_link = models.URLField(max_length=500, blank=True)
+    vapi_assistant_id = models.CharField(max_length=255, blank=True)
+    vapi_api_key = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.business_name

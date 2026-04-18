@@ -10,7 +10,8 @@ import {
   LogOut,
   Menu,
   X,
-  Star
+  Star,
+  Mic
 } from 'lucide-react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -78,6 +79,7 @@ export default function DashboardLayout() {
       items: [
         { icon: LayoutGrid, label: "Overview", path: "/dashboard", adminOnly: false },
         { icon: MessageSquare, label: "Conversations", path: "/dashboard/conversations", adminOnly: false },
+        { icon: Mic, label: "AI Receptionist", path: "/dashboard/ai-receptionist", adminOnly: false },
         { icon: Users, label: "Customers", path: "/dashboard/customers", adminOnly: true },
         { icon: Calendar, label: "Appointments", path: "/dashboard/appointments", adminOnly: false },
       ]
